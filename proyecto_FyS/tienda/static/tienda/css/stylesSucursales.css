@@ -1,0 +1,113 @@
+/*Diseño del main de la pagina sucursales*/
+#section_sucursales{
+    height: auto;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    background-color: var(--colorBlanco);
+}
+
+#contenedor_sucursales{
+    height: auto;
+    width: 100%;
+    margin: 60px ;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--colorNegro);
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-rows: 5% 1fr 1fr;
+    gap: 10px;
+    place-items: center;
+    border-radius: 15px;
+}
+
+#contenedor_titulo_sucursales{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin:0;
+    padding:0;
+}
+
+#contenedor_titulo_sucursales h1{
+    width:100%;
+    margin:0;
+    color: var(--colorBlanco);
+    font-weight: 100;
+}
+
+.contenedor_sucursal{
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #6D6D6D;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.contenedor_sucursal h2, .contenedor_sucursal p{
+    width: 100%;
+    text-align: left;
+    margin: 0;
+    color: var(--colorBlanco);
+}
+
+.contenedor_sucursal iframe{
+    height: 300px;
+    width: 100%;
+    margin: 0;
+    border-radius: 5px;
+}
+
+.contenedor_sucursal:hover{
+    background-color: var(--colorNaranja);
+    transition: 0.5s;
+}
+
+/*Mediasqueries*/
+/* pantallas de 1024 o menos px de ancho */
+@media (max-width: 1024px) {
+    #contenedor_sucursales{
+        margin: 40px ;
+    }
+}
+
+/* pantallas de 768 o menos px de ancho */
+@media (max-width: 768px) {
+    #contenedor_sucursales{
+        height: auto;
+        width: 100%;
+        margin: 20px ;
+        padding: 10px;
+    }
+
+    #contenedor_titulo_sucursales h1{
+        font-size: 1.5rem;
+    }
+
+    .contenedor_sucursal h2{
+        font-size: 1.2rem;
+    }
+    .contenedor_sucursal p{
+        font-size: 0.9rem;
+    }
+
+    .contenedor_sucursal iframe{
+        height: 200px;
+    }
+}
+
+/* pantallas de 480 o menos px de ancho */
+@media (max-width: 480px) {
+    #contenedor_sucursales{
+        margin: 0 ;
+    }
+}
