@@ -141,11 +141,10 @@
              </div>
            </div>
          </div>
-
-         <!--cargo el script, que dentro del archivo js explico-->
-         {% block extra_js %}
-            <script src="{% static 'tienda/js/scriptIndex.js' %}"></script>
-         {% endblock %}
       {% endif %}
+      <!--cargo el script, que dentro del archivo js explico-->
+      {% block extra_js %}
+         <script src="{% static 'tienda/js/scriptIndex.js' %}"></script>
+      {% endblock %}
    </main>
 {% endblock %}
