@@ -1,0 +1,295 @@
+/*diseño para el section del contenedor del login*/
+.contenedor_login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+/*diseño para el contenedor del login*/
+.contenedor_form_login{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    width: 100%;
+    max-width: 500px;
+    margin: 0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 13px;
+    background-color: #D3D3D3;
+}
+
+/*diseño para el titulo del login*/
+.contenedor_form_login h2{
+    margin:0;
+    padding:0;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 100;
+}
+
+/*diseño para el formulario de login*/
+#form_login{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    flex-direction:column ;
+    gap: 10px;
+}
+
+/*diseño para el contenedor del login*/
+.contenedor_field{
+    height:auto;
+    width:100%;
+    padding:5px 0;
+    box-sizing:border-box;
+}
+
+/*diseño para los labels del form*/
+.contenedor_field label {
+    display: block;
+    font-weight: 600;
+}
+
+/*diseño para los input del form*/
+.contenedor_field input {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid var(--colorNegro);
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: border 0.3s ease;
+}
+
+/*diseño para los input del form hover*/
+.contenedor_field input:focus {
+    border-color: var(--colorAzul);
+    outline: none;
+}
+
+/*diseño para la lista de errores*/
+.errorlist ul {
+    margin: 0;
+    padding: 0 5px;
+    list-style: disc inside;
+    font-size: 0.8rem;
+    color: var(--colorGrisOscuro);
+}
+
+/*diseño para el boton*/
+.contenedor_form_login button{
+    align-self: center;
+    height: auto;
+    width:100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color:var(--colorBlanco);
+    background-color: var(--colorCelesteOscuro);
+    cursor:pointer;
+    transition: background-color 0.3s ease;
+}
+
+/*diseño para el boton hover*/
+.contenedor_form_login button:hover{
+    background-color: var(--colorAzul);
+}
+
+/*diseño para errores de login*/
+.errorlist li{
+    padding: 10px 0;
+    color: var(--colorRojo);
+    list-style: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/*diseño para contenedor texto bottom (Iniciar Sesion y Registrate)*/
+.contenedor_texto_bottom{
+    display:flex;
+    justify-content:space-around;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+/*diseño para el parrafo del contenedor texto bottom (Iniciar Sesion y Registrarse)*/
+.contenedor_texto_bottom p{
+    font-size: 0.9rem;
+    color: var(--colorNegro);
+}
+
+/*diseño para el enlace del contenedor texto bottom (Iniciar Sesion y Registrarse)*/
+.contenedor_texto_bottom a{
+    font-size: 0.9rem;
+    color: var(--colorCelesteOscuro);
+    font-weight:900;
+    text-decoration:none;
+    transition:color 0.5s ease;
+}
+
+/*diseño para el enlace HOVER del contenedor texto bottom (Iniciar Sesion y Registrarse)*/
+.contenedor_texto_bottom a:hover{
+    color: var(--colorAzul);
+}
+
+/*diseño para la alerta para evitar que se suba el footer (Pagina Registro)*/
+body.swal2-shown {
+    overflow: auto !important;
+    padding-right: 0 !important;
+}
+
+/*diseño para los errores en el span debajo del input (Registro y Validar)*/
+.error_texto{
+    color: var(--colorRojo);
+    text-align: start;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+/*Estilo para errores en los input (Registro y Validar)*/
+.input_error{
+    border: 2px solid #FF0000 !important;
+}
+
+/*diseño pantalla de carga (Registro)*/
+#pantalla_carga {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* fondo gris oscuro*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+    z-index: 9999;
+    display: none; /* oculto por defecto */
+}
+
+/*parrafo de la pantalla de carga (Registro)*/
+#pantalla_carga p{
+    color:var(--colorNaranja);
+    font-size: 1rem;
+    font-weight:600;
+    padding: 10px;
+    box-sizing:border-box;
+}
+
+/*Diseño del componente de Bootstrap para no cargar todo Bootstrap*/
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/*keyframes para la rotacion del spinner*/
+@keyframes spinner-border {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*color del spinner*/
+.spinner-border.text-light {
+  color: var(--colorNaranja);
+}
+
+/*Medias queries*/
+@media (max-width: 1024px) {
+    /*diseño para el section del contenedor del login*/
+    .contenedor_login{
+        padding: 40px;
+    }
+
+    /*diseño para el titulo del login*/
+    .contenedor_form_login h2{
+        font-size: 1.6rem;
+    }
+
+    /*diseño para los labels del form*/
+    .contenedor_field label {
+        font-size: 1rem;
+    }
+
+    /*diseño para los input del form*/
+    .contenedor_field input {
+        font-size: 0.8rem;
+    }
+
+    /*diseño para el boton*/
+    .contenedor_form_login button{
+        font-size: 0.8rem;
+    }
+
+    /*diseño para errores de login*/
+    .errorlist li{
+        font-size: 0.7rem;
+    }
+
+    /*diseño para los errores en el span debajo del input (Registro)*/
+    .error_texto{
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 768px){
+    /*diseño para el titulo del login*/
+    .contenedor_form_login h2{
+        font-size: 1.5rem;
+    }
+
+    /*diseño para los labels del form*/
+    .contenedor_field label {
+        font-size: 0.9rem;
+    }
+
+    /*diseño para los input del form*/
+    .contenedor_field input {
+        font-size: 0.8rem;
+    }
+
+    /*diseño para el contenedor texto bottom (Iniciar Sesion y Registrarse)*/
+    .contenedor_texto_bottom{
+        padding:5px;
+    }
+
+}
+
+@media (max-width: 480px){
+    /*diseño para el section del contenedor del login*/
+    .contenedor_login{
+        padding: 40px 20px;
+    }
+
+    /*diseño para el titulo del login*/
+    .contenedor_form_login h2{
+        font-size: 1.4rem;
+    }
+
+    /*diseño para los labels del form*/
+    .contenedor_field label {
+        font-size: 0.9rem;
+    }
+
+    /*diseño para los input del form*/
+    .contenedor_field input {
+        font-size: 0.8rem;
+    }
+
+}

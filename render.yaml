@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: freshSimple
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn proyecto_FyS.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: proyecto_FyS.settings
+      - key: SECRET_KEY
+        fromEnv: SECRET_KEY
+      - key: DEBUG
+        fromEnv: DEBUG
+      - key: ALLOWED_HOSTS
+        fromEnv: ALLOWED_HOSTS
+      - key: EMAIL_HOST
+        fromEnv: EMAIL_HOST
+      - key: EMAIL_PORT
+        fromEnv: EMAIL_PORT
+      - key: EMAIL_HOST_USER
+        fromEnv: EMAIL_HOST_USER
+      - key: EMAIL_HOST_PASSWORD
+        fromEnv: EMAIL_HOST_PASSWORD
+      - key: EMAIL_USE_SSL
+        fromEnv: EMAIL_USE_SSL
+      - key: EMAIL_USE_TLS
+        fromEnv: EMAIL_USE_TLS
+      - key: DATABASE_URL
+        fromEnv: DATABASE_URL

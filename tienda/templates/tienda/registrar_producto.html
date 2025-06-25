@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Registrar Producto | Fresh & Simple{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesAgregarProducto.css' %}">
+{% endblock %}
+{% block content %}
+<section id="section_contenedor_volver">
+    <div id="contenedor_volver">
+        <a id="enlace_volver" href="{% url 'productos' %}">Volver</a>
+    </div>
+</section>
+<section id="contenedor_formulario">
+    <h3>Registra el nuevo producto</h3>
+    <form method="POST" id="form_producto">
+        {% csrf_token %}
+        {% for input in form %}
+            <div class="contenedor_input">
+                {{ input }}
+                <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
+            </div>
+        {% endfor %}
+    <button type="submit" id="boton_enviar_form">Registrar</button>
+    </form>
+</section>
+{% endblock %}
+{% block extra_js %}
+    <script type="module" src="{% static 'tienda/js/formAgregarProducto.js' %}"></script>
+{% endblock %}

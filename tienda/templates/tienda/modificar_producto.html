@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Modificar Producto | Fresh & Simple {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesModificarElemento.css' %}">
+{% endblock %}
+{% block content %}
+<section id="section_contenedor_volver">
+    <div id="contenedor_volver">
+        <a id="enlace_volver" href="{% url 'productos' %}">Volver</a>
+    </div>
+</section>
+<section class="section_contenedor_modificar_elemento">
+    <div class="contenedor_modificar_elemento">
+        <h2>Modificar Producto</h2>
+        <form method="POST" class="form_modificar_elemento" id="form_modificar_producto" novalidate>
+            {% csrf_token %}
+            {% for input in form %}
+                {% if input.name == "imagen"%}
+                {% elif input.name == "tipo" %}
+                    <div class="contenedor_input contenedor_deshabilitado">
+                        {{ input.label_tag }}
+                        {{ input }}
+                        <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
+                    </div>
+                {% else %}
+                    <div class="contenedor_input">
+                        {{ input.label_tag }}
+                        {{ input }}
+                        <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <button type="submit">Modificar Producto</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+    <script type="module" src="{% static 'tienda/js/modificarProducto.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,289 @@
+/*variables con los colores*/
+:root{
+    --colorAzul: #2E8A99;
+    --colorNaranja: #FF6363;
+    --colorBlanco: #F7F7F7;
+    --colorNegro: #4A4A4A;
+    --colorNegroOscuro: #000000;
+    --colorRojo: #E80000;
+    --colorRojoOscuro: #7C0002;
+    --colorCeleste:#51D1F6;
+    --colorCelesteOscuro:#00AAE4;
+    --colorAmarillo: #FADA28;
+    --colorAmarilloOscuro: #DDB148;
+    --colorGrisAzuladoClaro: #b9d1d9;
+    --colorGris: #fff;
+}
+
+/*diseño para el html y body*/
+html,body{
+    height: 100% !important;
+    margin: 0;
+    padding: 0;
+}
+
+/*Diseño para body*/
+body{
+    display:flex;
+    flex-direction: column;
+    font-family:'Nunito Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/*tipografia para titulos*/
+h1, h2, h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  margin: 0;
+  padding:0;
+}
+
+/*tipografia para inputs, textareas, selects y botones*/
+input, textarea, select, button {
+    font-family:'Nunito Sans', sans-serif;
+}
+
+p, ul{
+    margin: 0 !important;
+}
+
+/*diseño del header*/
+header{
+    position: relative;
+    height:15vh;
+    width:100%;
+    margin:0;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--colorAzul);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*diseño del nav*/
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+    width: 100%;
+    padding: 0 30px;
+    box-sizing:border-box;
+}
+
+/*diseño titulo header*/
+#titulo_nav{
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--colorNaranja);
+    font-size: 3rem;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+/*diseño lista del nav*/
+nav ul{
+    display: flex;
+    list-style-type: none;
+    gap: 60px;
+    padding: 0;
+}
+
+/*diseño enlaces de la lista*/
+nav li a {
+    position: relative;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--colorBlanco);
+    padding: 5px;
+    transition: color 0.5s ease;
+}
+
+/*diseño enlaces de la lista AFTER*/
+nav li a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background-color: var(--colorNaranja);
+    transition: width 0.5s ease, left 0.5s ease;
+}
+
+/*diseño enlaces de la lista HOVER*/
+nav li a:hover {
+    color: var(--colorNaranja);
+}
+
+/*diseño enlaces de la lista HOVER y AFTER*/
+nav li a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* diseño enlace activo (cuando esta en el path que le corresponde) */
+.enlace_activo {
+    color: var(--colorNaranja);
+}
+
+/* diseño enlace activo (cuando esta en el path que le corresponde) AFTER*/
+.enlace_activo::after {
+    width: 100%;
+    left: 0;
+    transition: none;
+}
+
+/* diseño enlace activo (cuando esta en el path que le corresponde) HOVER y AFTER*/
+.enlace_activo:hover::after {
+    width: 100%;
+    left: 0;
+    transition: none;
+}
+
+/*diseño para el menu hamburguesa (se ve unicamente en pantallas chicas)*/
+#menu_hamburguesa {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: var(--colorBlanco);
+  cursor: pointer;
+}
+
+/*diseño del main*/
+main{
+    flex: 1;
+    background-color: var(--colorBlanco);
+}
+
+/*diseño footer*/
+footer{
+    height: auto;
+    width: 100%;
+    background-color: var(--colorAzul);
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*diseño parrafo footer*/
+footer p{
+    color:var(--colorBlanco);
+    font-size:0.9rem;
+    margin: 0;
+    text-align:center;
+}
+
+/*Mediasqueries*/
+@media (max-width: 1024px) {
+    /*diseño titulo header*/
+    #titulo_nav{
+        font-size: 2.3rem;
+    }
+
+    /*diseño para los enlaces de los elementos*/
+    nav li a{
+        font-size:0.8rem;
+    }
+
+    /*diseño lista del nav*/
+    nav ul{
+        gap: 40px;
+    }
+
+    /*diseño parrafo footer*/
+    footer p{
+        font-size:0.8rem;
+    }
+}
+
+/* pantallas de 768 o menos px de ancho */
+@media (max-width: 768px) {
+    /*diseño titulo header*/
+    #titulo_nav {
+        font-size:2rem;
+    }
+
+    /*diseño menu hamburguesa (BUTTON)*/
+    #menu_hamburguesa {
+        font-size: 1.8rem;
+        display:block;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    /* Cuando el menu este abierto va a girar 90 grados */
+    #menu_hamburguesa.rotacion {
+        transform: rotate(90deg);
+        color: var(--colorNaranja);
+    }
+
+    /* Diseño lista del nav para que funcione como desplegable*/
+    nav ul {
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        background-color: var(--colorAzul);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        padding: 0 15px;
+        gap: 0;
+        box-sizing: border-box;
+        border-radius: 0 0 10px 10px;
+        transition: max-height 0.4s ease;
+    }
+
+    /* Diseño para el menu abierto */
+    nav ul.activo {
+        max-height: 50vh;
+    }
+
+    /*diseño para los elementos de la lista*/
+    nav li{
+        border-top: 2px solid var(--colorBlanco);
+        padding: 15px;
+        margin: 0;
+    }
+
+    nav li a::after {
+        display: none;
+    }
+
+    nav li a.enlace_activo::after {
+        display: none;
+    }
+
+    /*diseño parrafo del footer*/
+    footer p{
+        font-size:0.7rem;
+    }
+}
+
+/* pantallas de 480 o menos px de ancho */
+@media (max-width: 480px) {
+    /*diseño header*/
+    header{
+       height: 10vh;
+    }
+
+    /*diseño nav*/
+    nav{
+        padding: 0 10px;
+    }
+
+    #menu_hamburguesa{
+        font-size: 1.6rem;
+    }
+
+    /*diseño lista nav*/
+    nav ul {
+        padding: 0 15px;
+    }
+}

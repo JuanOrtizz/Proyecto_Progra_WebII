@@ -131,3 +131,20 @@ GitHub.sublime-settings
 
 #
 .idea/
+
+# Python
+__pycache__/
+*.pyo
+*.pyd
+
+# Entornos
+.venv/
+
+# Archivos de Django
+
+# Static/Media
+/staticfiles/
+/media/
+
+# Archivos de empaquetado
+build/

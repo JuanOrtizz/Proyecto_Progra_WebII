@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Fresh & Simple{% endblock %}
+{% block extra_css %}
+   <link rel="stylesheet" href="{% static 'tienda/css/stylesIndex.css' %}">
+{% endblock %}
+{% block content %}
+<section class="parallax">
+   <div>
+      <h1>Fácil de llevar, difícil de igualar.</h1>
+   </div>
+</section>
+
+<div id="txtMovimientoColeccion" class="contenedor_texto_movimiento">
+   <div id="txtIzquierda" class="contenedor_interno_texto">
+      <div class="texto">
+         {% for _ in repeticiones %}
+            <span>Nuevos productos en nuestras colecciones</span>
+         {% endfor %}
+      </div>
+  </div>
+</div>
+
+<section id="contenedor_nosotros">
+   <div id="contenedor_texto_nosotros">
+      <h2>¿Quiénes somos?</h2>
+      <p>En Fresh & Simple creemos que el estilo no tiene que ser complicado.
+      Somos una marca de ropa urbana pensada para quienes buscan expresarse con frescura, autenticidad y comodidad. Nos mueve lo simple, lo real, lo que se siente bien sin necesidad de exagerar.
+      Diseñamos para una generación que elige su propio camino, que combina lo casual con lo único, y que se viste como quiere, no como le dicen.
+      Cada prenda está hecha para acompañarte, no para disfrazarte.
+      Fácil de llevar, difícil de igualar. Siempre con estilo.</p>
+   </div>
+   <div id="contenedor_imagen_nosotros">
+      <img src="{% static 'tienda/img/imagen_quienes_somos.webp'%}" alt="Imagen_Sobre_Nosotros">
+   </div>
+</section>
+
+<!--div con el texto en movimiento-->
+<div id="txtMovimientoMarca" class="contenedor_texto_movimiento">
+   <div id="txtDerecha" class="contenedor_interno_texto">
+      <div class="texto">
+         {% for _ in repeticiones %}
+            <span>La marca del momento, conocé nuestras colecciones</span>
+         {% endfor %}
+      </div>
+  </div>
+</div>
+
+<section class="section_contenedores_index contenedor_izquierda">
+   <div class="contenedor_texto">
+      <h3>Nuestras colecciones</h3>
+      <p>Descubre nuestros productos frescos, cómodos y con estilo para esta temporada.</p>
+   </div>
+   <div class="contenedor_enlace">
+      <a href="{% url 'colecciones' %}">Ver Colecciones</a>
+   </div>
+</section>
+
+<section class="section_contenedores_index contenedor_izquierda">
+   <div class="contenedor_texto">
+      <h3>Contacta con nosotros</h3>
+      <p>¿Tienes alguna duda, sugerencia o necesitas ayuda? Estamos aquí para responder tus preguntas. Escríbenos y te responderemos lo antes posible.</p>
+   </div>
+   <div class="contenedor_enlace">
+      <a href="{% url 'contacto' %}">Contactanos</a>
+   </div>
+</section>
+
+<div class="contenedor_frase_motivadora">
+   <h2>La frase que te motiva a vestirte bien</h2>
+   <p id="frase_motivadora"></p>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+   <script src="{% static 'tienda/js/index.js' %}"></script>
+   <script src="{% static 'tienda/js/APIFraseMotivadora.js' %}"></script>
+{% endblock %}

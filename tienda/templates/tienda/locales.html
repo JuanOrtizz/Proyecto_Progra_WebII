@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%} Sucursales | Fresh & Simple {% endblock %}
+{% block extra_css%}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesSucursales.css' %}">
+{% endblock %}
+{% block content %}
+<section id="section_sucursales">
+    <div id="contenedor_sucursales">
+        <div id="contenedor_titulo_sucursales">
+            <h1>Locales</h1>
+        </div>
+        <div class="contenedor_sucursal">
+            <h2>Villa Dolores, Córdoba</h2>
+            <p>Juan José Paso 384</p>
+            <iframe class="mapas" style="border:0;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=-31.9471626,-65.1971637&z=15&output=embed"></iframe>
+        </div>
+        <div class="contenedor_sucursal">
+            <h2>Mina Clavero, Córdoba</h2>
+            <p>Av. San Martín 1520</p>
+            <iframe class="mapas" style="border:0;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=-31.7273939,-65.0041896&z=15&output=embed"></iframe>
+        </div>
+    </div>
+</section>
+{% endblock %}
