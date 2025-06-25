@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Colecciones | Fresh & Simple{% endblock %}
+{% block extra_css %}
+   <link rel="stylesheet" href="{% static 'tienda/css/stylesColecciones.css' %}">
+{% endblock %}
+{% block content %}
+<section id="section_contenedor_colecciones">
+   <div id="contenedor_colecciones">
+      <h1>Explora nuestros productos</h1>
+      <a href="{% url 'coleccion_filtrada' 'pantalones' %}" class="enlace_coleccion">PANTALONES</a>
+      <a href="{% url 'coleccion_filtrada' 'remeras' %}" class="enlace_coleccion">REMERAS</a>
+      <a href="{% url 'coleccion_filtrada' 'tops' %}" class="enlace_coleccion">TOPS</a>
+      <a href="{% url 'coleccion_filtrada' 'vestidos' %}" class="enlace_coleccion">VESTIDOS</a>
+      <a href="{% url 'coleccion_filtrada' 'buzos' %}" class="enlace_coleccion">BUZOS</a>
+      <a href="{% url 'coleccion_filtrada' 'camperas' %}" class="enlace_coleccion">CAMPERAS</a>
+      <a href="{% url 'coleccion_filtrada' 'accesorios' %}" class="enlace_coleccion">ACCESORIOS</a>
+   </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

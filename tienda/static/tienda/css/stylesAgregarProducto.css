@@ -1,0 +1,216 @@
+/*diseño para el section de volver*/
+#section_contenedor_volver{
+    display:flex;
+    justify-content: center;
+    height:auto;
+    width:auto;
+    box-sizing:border-box;
+}
+
+/*diseño para el contenedor de volver*/
+#contenedor_volver{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height: auto;
+    width: 100%;
+    padding:10px 20px;
+    box-sizing:border-box;
+    gap: 10px;
+    background-color: #B3B3B3;
+}
+
+/*Diseño para el <a> (enlace) volver para simular un boton*/
+#enlace_volver{
+    width:auto;
+    padding: 5px 15px;
+    border-radius: 5px;
+    box-sizing:border-box;
+    color:var(--colorBlanco);
+    text-decoration:none;
+    font-weight: 500;
+    font-size: 1rem;
+    background-color: var(--colorNegro);
+    transition: background-color 0.3s ease;
+}
+
+/*diseño para el <a> (enlace) volver hover*/
+#enlace_volver:hover{
+    background-color: var(--colorNegroOscuro);
+}
+
+/*diseño del section del formulario de registro del nuevo producto*/
+#contenedor_formulario{
+    height: auto;
+    width: 100%;
+    padding: 70px;
+    box-sizing: border-box;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+/*diseño del formulario de contacto*/
+#contenedor_formulario form{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto ;
+    width: 100%;
+    padding: 0 20px 40px 20px;
+    box-sizing:border-box;
+    gap: 10px;
+    background-color:var(--colorGrisAzuladoClaro);
+    border-radius:0 0 5px 5px;
+}
+
+/*diseño del titulo del formulario*/
+#contenedor_formulario h3{
+    text-align:center;
+    width: 100%;
+    font-size: 2rem;
+    font-weight: 200;
+    color: var(--colorNegroOscuro);
+    margin: 0;
+    padding:10px;
+    box-sizing:border-box;
+    background-color: var(--colorGrisAzuladoClaro);
+    border-radius: 5px 5px 0 0;
+}
+
+/*diseño para los inputs del formulario*/
+.contenedor_input input,
+.contenedor_input select{
+    width: 100%;
+    height: 40px;
+}
+
+/*diseño para los errores en el span debajo del input*/
+.error_texto{
+    color: var(--colorRojo);
+    text-align: start;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+/*Estilo para errores en los input*/
+.input_error{
+    border: 2px solid #FF0000 !important;
+}
+
+/*Diseño para los campos del formulario*/
+#contenedor_formulario input,
+#contenedor_formulario select,
+#contenedor_formulario textarea{
+    font-size: 0.9rem;
+    padding:8px;
+    border: 2px solid var(--colorNegro);
+    border-radius: 5px;
+    box-sizing:border-box;
+}
+
+/*Diseño para los campos del formulario cuando tienen el foco*/
+#contenedor_formulario input:focus,
+#contenedor_formulario select:focus,
+#contenedor_formulario textarea:focus{
+    border: 2px solid var(--colorAzul);
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/*diseño para agregarle un color de texto a los placeholders*/
+#contenedor_formulario input::placeholder,
+#contenedor_formulario select:invalid {
+  color: var(--colorNegro); /* gris claro para "Tipo de empleo" */
+}
+
+/*diseño para los input cuando esten seleccionados*/
+/*diseño para agregarle un color al fondo del input cuando tenga texto*/
+#contenedor_formulario input:not(:placeholder-shown),
+#contenedor_formulario textarea:not(:placeholder-shown){
+  background-color: #E8F0FE;
+}
+
+/*diseño para agregarle un color al fondo del select cuando tenga una opcion valida*/
+.select_seleccionado{
+    background-color: #E8F0FE;
+}
+
+/*diseño del boton Enviar*/
+#boton_enviar_form{
+    height: 40px;
+    padding:8px;
+    box-sizing:border-box;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color:var(--colorNegro);
+    color: var(--colorBlanco);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+/*diseño para el boton enviar hover*/
+#boton_enviar_form:hover{
+    background-color:var(--colorNegroOscuro);
+}
+
+/*Media queries*/
+@media (max-width: 1024px){
+    /*Diseño para el <a> (enlace) volver para simular un boton*/
+    #enlace_volver{
+        font-size: 0.9rem;
+    }
+
+    /*diseño del section del formulario de registro del nuevo producto*/
+    #contenedor_formulario{
+        padding: 60px;
+    }
+
+    /*diseño del titulo del formulario*/
+    #contenedor_formulario h3{
+        font-size: 2rem;
+    }
+
+    /*diseño del boton Enviar*/
+    #boton_enviar_form{
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px){
+    /*Diseño para el <a> (enlace) volver para simular un boton*/
+    #enlace_volver{
+        font-size: 0.8rem;
+    }
+
+    /*diseño del section del formulario de registro del nuevo producto*/
+    #contenedor_formulario{
+        padding: 60px 30px;
+    }
+
+    /*diseño del titulo del formulario*/
+    #contenedor_formulario h3{
+        font-size: 1.8rem;
+    }
+
+    /*diseño del boton Enviar*/
+    #boton_enviar_form{
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px){
+    /*diseño del section del formulario de registro del nuevo producto*/
+    #contenedor_formulario{
+        padding: 60px 20px;
+    }
+
+    /*diseño del titulo del formulario*/
+    #contenedor_formulario h3{
+        font-size: 1.6rem;
+    }
+}

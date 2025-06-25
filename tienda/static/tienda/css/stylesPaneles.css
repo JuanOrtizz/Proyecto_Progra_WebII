@@ -1,0 +1,393 @@
+/*diseño para el section de volver*/
+#section_contenedor_volver{
+    display:flex;
+    justify-content: center;
+    height:auto;
+    width:auto;
+    box-sizing:border-box;
+}
+
+/*diseño para el contenedor de volver*/
+#contenedor_volver{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height: auto;
+    width: 100%;
+    padding:10px 20px;
+    box-sizing:border-box;
+    gap: 10px;
+    background-color: #B3B3B3;
+}
+
+/*Diseño para el <a> (enlace) volver para simular un boton*/
+#enlace_volver{
+    width:auto;
+    padding: 5px 15px;
+    border-radius: 5px;
+    box-sizing:border-box;
+    color:var(--colorBlanco);
+    text-decoration:none;
+    font-weight: 500;
+    font-size: 1rem;
+    background-color: var(--colorNegro);
+    transition: background-color 0.3s ease;
+}
+
+/*diseño para el <a> (enlace) volver hover*/
+#enlace_volver:hover{
+    background-color: var(--colorNegroOscuro);
+}
+
+/* diseño para el section de consultas */
+.section_contenedor_panel {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction:column;
+    gap:20px;
+    padding: 50px 10px;
+    box-sizing: border-box;
+}
+
+/*diseño para el contenedor de los contadores de consultas (PAGINA CONSULTAS)*/
+.contenedor_contadores{
+    width: 100%;
+    padding:20px;
+    box-sizing: border-box;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    gap: 5px;
+    background-color:var(--colorGrisAzuladoClaro);
+}
+
+/*diseño para el titulo de cantidad de consultas*/
+.contenedor_contadores h2{
+    width: 100%;
+    font-size: 1.8rem;
+    font-weight: 100;
+    text-align:center;
+}
+
+/*diseño para el contenedor de cada contador*/
+.contenedor_contador_consultas{
+    width:auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 10px;
+}
+
+/*diseño para los parrafos de cada contador*/
+.contenedor_contador_consultas p{
+    font-size:0.9rem;
+}
+
+/*diseño para el titulo del contador*/
+.titulo_contador{
+    font-weight: 700;
+}
+
+/* contenedor para el panel */
+.contenedor_panel{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
+    gap: 10px;
+    border-radius: 10px;
+    background-color: #E6E6E6;
+}
+
+/* titulo de las consultas */
+.contenedor_panel h2 {
+    font-size: 1.7rem;
+    font-weight: 200;
+    margin: 0;
+    padding: 0;
+}
+
+/* diseño del contenedor de la tabla */
+.contenedor_tabla {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+/* diseño de la tabla */
+.contenedor_tabla table {
+    table-layout: fixed;
+    min-width: 900px; /*fuerza  un scroll horizontal en pantallas pequeñas*/
+    width: 100%;
+    border: 2px solid var(--colorNegro);
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* diseño para los titulos y los campos de la tabla */
+.contenedor_panel th,
+.contenedor_panel td {
+    font-size: 0.9rem;
+    border: 1px solid var(--colorNegro);
+    padding: 8px;
+    text-align: center;
+}
+
+/*diseño para los titulos de la tabla*/
+.contenedor_panel th {
+    background-color: var(--colorNaranja);
+    color: var(--colorNegroOscuro);
+}
+
+/*diseño para los campos de la tabla*/
+.contenedor_panel tr {
+    background-color: var(--colorBlanco);
+    transition: background-color 0.5s ease;
+}
+
+/*diseño para los campos de la tabla hover*/
+.contenedor_tabla table tr:hover {
+    background-color: var(--colorGrisAzuladoClaro);
+}
+
+/*diseño para el contenedor dentro de cada campo. Permite un scroll si los campos tienen mucho contenido*/
+.contenido_td {
+    max-height: 100px;
+    overflow-y: auto;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/*diseño para la seccion de acciones*/
+.contenedor_tabla table th:last-child,
+.contenedor_tabla table td:last-child {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+/* diseño para el contenedor de acciones */
+.contenedor_acciones {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+    box-sizing:border-box;
+}
+
+/* diseño para los botones Contactar y Modificar */
+.boton_contactar,
+.boton_modificar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    padding: 5px;
+    border-radius: 5px;
+    border:none;
+    text-decoration: none;
+    color: var(--colorNegroOscuro);
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+/*diseño para el boton contactar*/
+.boton_contactar {
+    background-color: var(--colorCeleste);
+}
+
+/*diseño para el boton modificar*/
+.boton_modificar {
+    background-color: var(--colorAmarillo);
+}
+
+/*diseño para el boton eliminar*/
+.boton_eliminar {
+    width: 50%;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--colorRojo);
+    color: var(--colorBlanco);
+    font-weight: 600;
+    transition: background-color 0.3s;
+    cursor:pointer;
+}
+
+/*diseño para el boton contactar hover*/
+.boton_contactar:hover {
+    background-color: var(--colorCelesteOscuro);
+}
+
+/*diseño para el boton modificar hover*/
+.boton_modificar:hover {
+    background-color: var(--colorAmarilloOscuro);
+}
+
+/*diseño para el boton eliminar hover*/
+.boton_eliminar:hover {
+    background-color: var(--colorRojoOscuro);
+}
+
+/*Diseño del formulario para filtrar y crear nuevo producto (Pagina productos)*/
+.form_filtro_productos{
+    display:flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height:auto;
+    width: 30%;
+    padding:5px;
+    box-sizing:border-box;
+    gap: 30px;
+}
+
+/*diseño para el select de filtro y el enlace nuevo producto (Pagina productos)*/
+.form_filtro_productos select,
+.form_filtro_productos a {
+    flex: 1;
+    padding: 5px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/*diseño para el enlace nuevo producto (Pagina Productos)*/
+.form_filtro_productos a {
+    color: var(--colorBlanco);
+    background-color: var(--colorCelesteOscuro);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.5s ease;
+}
+
+/*diseño para el enlace nuevo producto (Pagina Productos) HOVER*/
+.form_filtro_productos a:hover {
+    background-color: var(--colorAzul);
+}
+
+/*medias query*/
+@media (max-width: 1024px) {
+    /*Diseño para el <a> (enlace) volver para simular un boton*/
+    #enlace_volver{
+        font-size: 0.9rem;
+    }
+
+    /* diseño para el section de consultas */
+    .section_contenedor_panel {
+        padding: 40px;
+    }
+
+    /*diseño para el titulo de cantidad de consultas*/
+    .contenedor_contadores h2{
+        font-size: 1.5rem;
+    }
+
+    /*diseño para los parrafos de cada contador*/
+    .contenedor_contador_consultas p{
+        font-size:0.9rem;
+    }
+
+    /* titulo de las consultas */
+    .contenedor_panel h2 {
+        font-size: 1.5rem;
+    }
+
+    /* diseño para los botones Contactar, Modificar y Eliminar*/
+    .boton_contactar,
+    .boton_modificar,
+    .boton_eliminar {
+        font-size: 0.9rem;
+    }
+
+    /*Diseño del formulario para filtrar y crear nuevo producto (Pagina productos)*/
+    .form_filtro_productos{
+        width: 40%;
+        padding:5px;
+        gap: 25px;
+    }
+
+    /*diseño para el select de filtro y el enlace nuevo producto (Pagina productos)*/
+    .form_filtro_productos select,
+    .form_filtro_productos a {
+        padding: 3px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /*Diseño para el <a> (enlace) volver para simular un boton*/
+    #enlace_volver{
+        font-size: 0.8rem;
+    }
+
+    /* diseño para el section de consultas */
+    .section_contenedor_panel {
+        padding: 30px;
+    }
+
+    /*diseño para el titulo de cantidad de consultas*/
+    .contenedor_contadores h2{
+        font-size: 1.2rem;
+    }
+
+    /*diseño para los parrafos de cada contador*/
+    .contenedor_contador_consultas p{
+        font-size:0.8rem;
+    }
+
+    /* titulo de las consultas */
+    .contenedor_panel h2 {
+        font-size: 1.2rem;
+    }
+
+    /* diseño para los botones Contactar, Modificar y Eliminar*/
+    .boton_modificar,
+    .boton_contactar,
+    .boton_eliminar {
+        font-size: 0.8rem;
+    }
+
+    /*Diseño del formulario para filtrar y crear nuevo producto (Pagina productos)*/
+    .form_filtro_productos{
+        width: 80%;
+        padding:0;
+        gap: 25px;
+    }
+
+    /*diseño para el select de filtro y el enlace nuevo producto (Pagina productos)*/
+    .form_filtro_productos select,
+    .form_filtro_productos a {
+        padding: 3px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+   /* diseño para el section de consultas */
+    .section_contenedor_panel {
+        padding: 20px;
+    }
+
+    /* contenedor para el panel */
+    .contenedor_panel {
+        padding: 5px;
+    }
+
+    /*Diseño del formulario para filtrar y crear nuevo producto (Pagina productos)*/
+    .form_filtro_productos{
+        width: 100%;
+    }
+}

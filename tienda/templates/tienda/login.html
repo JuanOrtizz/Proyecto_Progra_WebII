@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Inicio de Sesión | Fresh & Simple{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesLogin.css' %}">
+{% endblock %}
+{% block content %}
+<section class="contenedor_login">
+    <div class="contenedor_form_login">
+        <h2>Iniciar Sesión</h2>
+        <form method="POST" class="form_login">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="errorlist">
+                    <ul>
+                      {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                      {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+             {% for field in form %}
+                <div class = "contenedor_field">
+                  {{ field.label_tag }}
+                  {{ field.errors }}
+                  {{ field }}
+                  {% if field.help_text %}
+                    <span>{{ field.help_text }}</span>
+                  {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">Ingresar</button>
+        </form>
+        <div class="contenedor_texto_bottom">
+            <p>¿No tenés cuenta?</p>
+            <a href="{% url 'registro' %}">Registrate</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block extra_js %}{% endblock %}

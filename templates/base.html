@@ -1,0 +1,26 @@
+{% load static %}
+<!doctype html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'img/logo_fys.webp' %}" type="image/png">
+    <title>{% block title%} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/globalStyles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+    {% block extra_css %} {% endblock %}
+</head>
+<body>
+    {% include 'header.html' %}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    {% include 'footer.html' %}
+    <script src="{% static 'js/header.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% block extra_js %} {% endblock %}
+</body>
+</html>

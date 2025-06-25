@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Contacto | Fresh & Simple{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesContacto.css' %}">
+{% endblock %}
+{% block content %}
+<section id="contenedor_formulario">
+    <h3>Contacta con nosotros, llenando el siguiente formulario</h3>
+    <form method="POST" id="form_contacto" novalidate>
+        {% csrf_token %}
+        {% for input in form %}
+            {% if input.name == 'mensaje' %}
+                <div class="contenedor_textarea">
+                    {{ input }}
+                    <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
+                </div>
+            {% else %}
+                <div class="contenedor_input">
+                    {{ input }}
+                    <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
+                </div>
+            {% endif %}
+        {% endfor %}
+    <button type="submit" id="boton_enviar_form">Enviar</button>
+    </form>
+</section>
+<div id="pantalla_carga">
+    <p>Estamos procesando tu consulta</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
+{% endblock %}
+{% block extra_js %}
+    <script type="module" src="{% static 'tienda/js/formContacto.js' %}"></script>
+{% endblock %}
