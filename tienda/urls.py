@@ -20,7 +20,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='tienda/login.html'), name='login'),  # path para el login
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # path para el logout
     path('registro/', views.registro, name="registro"), #path para el registro
-    path('validar', views.validar_registro, name="validar_registro"), #path para validar el registro
+    path('validar/', views.validar_registro, name="validar_registro"), #path para validar el registro
     path('dashboard/', views.dashboard, name='dashboard'),  # path para el dashboard
     path('dashboard/consultas/', views.consultas, name='consultas'),#path para las consultas desde el dashboard
     path('dashboard/productos/', views.productos, name='productos'), #path para los productos desde el dashboard

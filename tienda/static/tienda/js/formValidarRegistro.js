@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 // funcion async para utilizar await y manejar asincronia
 async function enviarFormulario(formData, csrfToken, formularioValidarRegistro){
+    const overlay = document.getElementById("pantalla_carga") // Obtiene el overlay (pantalla de carga)
+    overlay.style.display = "flex" // Muestra el overlay (pantalla de carga)
     // hago fetch del formulario
     try
     {
@@ -40,10 +42,13 @@ async function enviarFormulario(formData, csrfToken, formularioValidarRegistro){
                 window.location.href = data.redirect_url
             }, 4000)
         }else{
+            formularioValidarRegistro.reset()
             generarAlertError(data.errors)
         }
     }catch(error){
         console.error("Error en La validación: ", error)
         generarAlertError("Ocurrió un error inesperado, intenta de nuevo mas tarde.")
+    }finally {
+        overlay.style.display = "none" // oculta el overlay (pantalla de carga)
     }
 }
