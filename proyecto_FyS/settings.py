@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
-from decouple import config
+from decouple import config, Csv
 
 #Configuro el servidor smtp
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 #configuro media para archivos cargados por el usuario
 MEDIA_URL = '/media/'
