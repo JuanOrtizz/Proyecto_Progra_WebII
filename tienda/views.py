@@ -155,6 +155,10 @@ def registro(request):
                                     Para activar tu cuenta, utiliza el siguiente código de validación:<br>
                                     <span style="display: inline-block; margin: 20px auto; padding: 15px 25px; font-size: 22px; font-weight: bold; color: #FF6363; border: 2px dashed #FF6363; border-radius: 8px;">{permitido.codigo_validacion}</span><br><br>
                                     Ingresa este código en el sitio para completar la validación de tu cuenta.<br><br>
+                                    <a href="https://freshandsimple.onrender.com/validar/" 
+                                       style="display: inline-block; background-color: #2E8A99; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                                        Ir a la página de validación
+                                    </a><br><br>
                                     Si no solicitaste este registro, ignora este correo.<br><br>
                                     ¡Gracias por elegirnos!<br><br>
                                     <strong style="color: #FF6363;">Fresh & Simple</strong>

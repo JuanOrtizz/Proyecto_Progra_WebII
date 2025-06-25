@@ -16,6 +16,10 @@ El diseño se basa en la paleta y tipografías de marca, buscando transmitir una
 - Django
 - PostgreSQL
 ---
+## Credenciales SuperUsuario Django
+- **Usuario:** AdminFyS
+- **Contraseña:** F&S2025+Admin
+---
 ## Api externa utilizada
 - ZenQuotes.io
 - [URL](https://zenquotes.io/)
