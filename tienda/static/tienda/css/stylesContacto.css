@@ -1,0 +1,244 @@
+/*diseño del section del formulario de contacto*/
+#contenedor_formulario{
+    height: 100%;
+    width: 100%;
+    padding: 50px 0;
+    box-sizing: border-box;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+/*diseño del formulario de contacto*/
+#contenedor_formulario form{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto ;
+    width: 80%;
+    padding: 10px;
+    box-sizing:border-box;
+    gap: 10px;
+}
+
+/*diseño del titulo del formulario*/
+#contenedor_formulario h3{
+    text-align:center;
+    width: 80%;
+    font-size: 2rem;
+    font-weight: 200;
+    color: var(--colorNegroOscuro);
+    margin: 0;
+}
+
+/*diseño para los inputs del formulario*/
+.contenedor_input input,
+.contenedor_input select{
+    width: 100%;
+    height: 40px;
+}
+
+/*diseño para los errores en el span debajo del input*/
+.error_texto{
+    color: var(--colorRojo);
+    text-align: start;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+/*Estilo para errores en los input*/
+.input_error{
+    border: 2px solid #FF0000 !important;
+}
+
+/*Diseño para los campos del formulario*/
+#contenedor_formulario input,
+#contenedor_formulario textarea{
+    font-size: 0.9rem;
+    padding:8px;
+    border: 2px solid var(--colorNegro);
+    border-radius: 5px;
+    box-sizing:border-box;
+}
+
+/*Diseño para los campos del formulario cuando tienen el foco*/
+#contenedor_formulario input:focus,
+#contenedor_formulario textarea:focus{
+    border: 2px solid var(--colorAzul);
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/*diseño del contenedor del textarea*/
+.contenedor_textarea{
+    width:100%;
+    grid-row: span 2;
+}
+
+/*diseño para el textarea*/
+.contenedor_textarea textarea{
+    width:100%;
+    resize:none;
+    overflow: auto;
+}
+
+/*diseño para agregarle un color a los placeholders*/
+#contenedor_formulario input::placeholder,
+#contenedor_formulario textarea::placeholder{
+    color: var(--colorNegro);
+}
+
+/*diseño para agregarle un color al fondo del input cuando tenga texto*/
+#contenedor_formulario input:not(:placeholder-shown),
+#contenedor_formulario textarea:not(:placeholder-shown){
+    background-color: #E8F0FE;
+}
+
+/*diseño del boton Enviar*/
+#boton_enviar_form{
+    height: 40px;
+    padding:8px;
+    box-sizing:border-box;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color:var(--colorNegro);
+    color: var(--colorBlanco);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+/*diseño para el boton enviar hover*/
+#boton_enviar_form:hover{
+    background-color:var(--colorNegroOscuro);
+}
+
+/*diseño para la alerta para evitar que se suba el footer*/
+body.swal2-shown {
+    overflow: auto !important;
+    padding-right: 0 !important;
+}
+
+/*diseño pantalla de carga*/
+#pantalla_carga {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* fondo gris oscuro*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+    z-index: 9999;
+    display: none; /* oculto por defecto */
+}
+
+/*parrafo de la pantalla de carga*/
+#pantalla_carga p{
+    color:var(--colorNaranja);
+    font-size: 1rem;
+    font-weight:600;
+    padding: 10px;
+    box-sizing:border-box;
+}
+
+/*Diseño del componente de Bootstrap para no cargar todo Bootstrap*/
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/*keyframes para la rotacion del spinner*/
+@keyframes spinner-border {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*color del spinner*/
+.spinner-border.text-light {
+  color: var(--colorNaranja);
+}
+
+/*Mediasqueries*/
+@media (max-width: 1024px) {
+    /*diseño del titulo del formulario*/
+    #contenedor_formulario h3{
+        font-size: 1.4rem;
+    }
+
+    /*diseño para los errores en el span debajo del input*/
+    .error_texto{
+        font-size: 0.7rem;
+    }
+
+    /*diseño del boton*/
+    #boton_enviar_form{
+        padding:8px;
+        font-size: 0.9rem;
+    }
+
+}
+
+@media (max-width: 768px) {
+    /*diseño del section del formulario de contacto*/
+    #contenedor_formulario{
+        padding: 40px 0;
+    }
+
+    /*diseño del titulo del formulario*/
+    #contenedor_formulario h3{
+        font-size: 1.3rem;
+    }
+
+    /*diseño del formulario de contacto*/
+    #contenedor_formulario form{
+        grid-template-columns: 1fr;
+        width: 90%;
+        padding: 20px 10px;
+    }
+
+    /*Diseño para los campos del formulario*/
+    #contenedor_formulario input,
+    #contenedor_formulario select,
+    #contenedor_formulario textarea{
+        font-size: 0.8rem;
+    }
+
+    /*Diseño del textarea*/
+    .contenedor_textarea{
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    /*diseño del boton enviar*/
+    #boton_enviar_form{
+        grid-column: span 1;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /*diseño seccion "formulario"*/
+    #contenedor_formulario{
+        height: 100%;
+        padding: 30px 0;
+        justify-content:start;
+    }
+
+    /*diseño formulario de contacto*/
+    #contenedor_formulario form {
+        padding: 30px 10px;
+    }
+}

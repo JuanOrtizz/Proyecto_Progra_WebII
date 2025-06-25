@@ -1,0 +1,114 @@
+/* diseño seccion "colecciones"*/
+#section_contenedor_colecciones{
+    height: auto;
+    width: 100%;
+    padding: 80px;
+    box-sizing: border-box;
+}
+
+/*diseño contenedor colecciones*/
+#contenedor_colecciones{
+    height: 100%;
+    width:100%;
+    padding: 20px;
+    border-radius:5px;
+    box-sizing: border-box;
+    background-color:var(--colorGrisAzuladoClaro);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/*Diseño titulo colecciones*/
+#contenedor_colecciones h1{
+    width: 100%;
+    text-align:center;
+    font-size: 2.5rem;
+    font-weight: 200;
+    color: var(--colorNegro);
+}
+
+/*diseño para el enlace de la coleccion (Simula boton)*/
+.enlace_coleccion{
+    /*diseños relacionados al hover*/
+    display: inline-block;
+    background: linear-gradient(to bottom, var(--colorNaranja), var(--colorNaranja));
+    background-size: 100% 0%;
+    background-repeat: no-repeat;
+    /*diseños relacionados a la fuente*/
+    text-align: center;
+    text-decoration: none;
+    color: var(--colorNaranja);
+    font-weight: 600;
+    font-size: 1.5rem;
+    /*diseño box model*/
+    height: 100%;
+    width: 40%;
+    margin: 0;
+    padding: 20px;
+    border: 2px solid var(--colorNaranja);
+    border-radius: 5px;
+    transition: background-size 0.6s ease, color 0.6s ease;
+}
+
+/*diseño para el enlace de la coleccion (Simula boton) hover*/
+.enlace_coleccion:hover{
+     background-size: 100% 100%;
+     color: var(--colorBlanco);
+}
+
+/*Medias queries*/
+@media (max-width: 1024px) {
+    /* diseño seccion "colecciones"*/
+    #section_contenedor_colecciones{
+        padding: 70px;
+    }
+
+    /*Diseño titulo colecciones*/
+    #contenedor_colecciones h1{
+        font-size: 2rem;
+    }
+
+    /*diseño para el enlace de la coleccion (Simula boton)*/
+    .enlace_coleccion{
+        font-size: 1.3rem;
+        width: 40%;
+    }
+}
+
+@media (max-width: 768px){
+    /* diseño seccion "colecciones"*/
+    #section_contenedor_colecciones{
+        padding: 60px;
+    }
+
+    /*Diseño titulo colecciones*/
+    #contenedor_colecciones h1{
+        font-size: 1.8rem;
+    }
+
+    /*diseño para el enlace de la coleccion (Simula boton)*/
+    .enlace_coleccion{
+        font-size: 1rem;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px){
+        /* diseño seccion "colecciones"*/
+    #section_contenedor_colecciones{
+        padding: 60px 20px;
+    }
+
+    /*Diseño titulo colecciones*/
+    #contenedor_colecciones h1{
+        font-size: 1.8rem;
+    }
+
+    /*diseño para el enlace de la coleccion (Simula boton)*/
+    .enlace_coleccion{
+        padding:15px;
+    }
+}

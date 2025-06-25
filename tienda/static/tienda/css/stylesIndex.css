@@ -1,0 +1,394 @@
+/*diseño Contenedor parallax para poner hero*/
+.parallax {
+    background-image:url('/static/tienda/img/imagen_hero.webp');
+    height: 70vh;
+    min-height: 50vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/*diseño del contenedor paralax para el h1*/
+.parallax div{
+    height: 100%;
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/*diseño titulo del paralax*/
+.parallax h1{
+    font-size: 5rem;
+    color:var(--colorNegroOscuro);
+}
+
+/*estilos para los textos con movimiento*/
+/*diseño texto en movimiento*/
+.contenedor_texto_movimiento {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/*diseño texto en movimiento (COLECCION)*/
+#txtMovimientoColeccion{
+  background-color: var(--colorNegroOscuro);
+  color: var(--colorNaranja);
+   margin-top: 70px;
+}
+
+/*diseño texto en movimiento (MARCA)*/
+#txtMovimientoMarca{
+  background-color: var(--colorNegroOscuro);
+  color: var(--colorCelesteOscuro);
+  margin-bottom: 70px;
+}
+
+/*diseño contenedor del contenedor del texto*/
+.contenedor_interno_texto {
+  display: flex;
+  width: fit-content;
+}
+
+/*texto izquierda*/
+#txtIzquierda{
+    animation: scroll-left 30s linear infinite;
+}
+
+/*texto derecha*/
+#txtDerecha{
+    animation: scroll-right 30s linear infinite;
+}
+
+/*diseño para el contenedor texto*/
+.texto {
+  display: flex;
+}
+
+/*diseño para el texto (SPAN) del contenedor*/
+.texto span {
+  margin-right: 50px;
+  white-space: nowrap;
+}
+
+/* animacion del texto para izquierda */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* animacion del texto para derecha*/
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+/*Diseño seccion quienes somos*/
+#contenedor_nosotros{
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    grid-template-rows: 1fr;
+    height: auto;
+    width: 100%;
+    margin:0;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: var(--colorNegro);
+    gap: 10px;
+}
+
+/*diseño de la seccion "nosotros"*/
+#contenedor_texto_nosotros{
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    color: var(--colorBlanco);
+}
+
+/*diseño del titulo quienes somos (NOSOTROS)*/
+#contenedor_texto_nosotros h2{
+    font-size: 3rem;
+    font-weight: 200;
+}
+
+/*diseño del parrafo quienes somos (NOSOTROS)*/
+#contenedor_texto_nosotros p{
+    font-size: 1rem;
+}
+
+/*diseño del contenedor de la imagen quienes somos (NOSOTROS)*/
+#contenedor_imagen_nosotros{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    box-sizing:border-box;
+}
+
+/*diseño de la imagen quienes somos (NOSOTROS)*/
+#contenedor_imagen_nosotros img{
+    max-height: 120px;
+    max-width: 120px;
+    border-radius: 5px;
+}
+
+/*diseño contenedores de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+.section_contenedores_index{
+    height: auto;
+    width: 100%;
+    padding:20px;
+    margin-bottom: 80px;
+    box-sizing:border-box;
+    display:flex;
+    justify-content:start;
+    align-items:center;
+    gap:10px;
+    background-color: var(--colorNaranja);
+}
+
+/*diseño contenedor texto de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+.contenedor_texto{
+    height:100%;
+    width: 50%;
+    padding:20px;
+    box-sizing:border-box;
+    display:flex;
+    justify-content:center;
+    align-items:start;
+    flex-direction:column;
+}
+
+/*diseño del titulo de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+.contenedor_texto h3{
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 300;
+}
+
+/*diseño del parrafo de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+.contenedor_texto p{
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/*diseño del contenedor del enlace (Nuestras colecciones y Contacta con nosotros)*/
+.contenedor_enlace{
+    height:100%;
+    width: 50%;
+    padding:20px;
+    box-sizing:border-box;
+    display:flex;
+    justify-content:center;
+    align-items:start;
+    flex-direction:column;
+}
+
+/*diseño de los enlaces (Nuestras colecciones y Contacta con nosotros)*/
+.contenedor_enlace a {
+    display: inline-block;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid var(--colorAzul);
+    background: linear-gradient(to right, var(--colorAzul) 100%, var(--colorAzul) 100%) left;
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+    background-color: var(--colorBlanco);
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--colorAzul);
+    transition: background-size 0.6s ease, color 0.6s ease;
+    box-sizing:border-box;
+}
+
+/*diseño de los enlaces HOVER (Nuestras colecciones y Contacta con nosotros)*/
+.contenedor_enlace a:hover {
+    background-size: 100% 100%;
+    color: var(--colorBlanco);
+}
+
+/*Diseño para la animacion de entrada de los contenedores*/
+.contenedor_izquierda {
+    opacity: 0;
+    transition: all 1s ease-out;
+}
+
+/*Diseño para el contenedor que entra de la izquierda*/
+.contenedor_izquierda {
+    transform: translateX(-50px);
+}
+
+/* clase y su diseño para que aparezca el contenedor*/
+.aparecer{
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/*diseño para el contenedor de frase motivadora*/
+.contenedor_frase_motivadora{
+    width:100%;
+    background-color:var(--colorGrisAzuladoClaro);
+    padding:30px 10px;
+    box-sizing:border-box;
+    margin-bottom: 80px;
+}
+
+/*Diseño titulo frase motivadora*/
+.contenedor_frase_motivadora h2{
+    width:100%;
+    padding:10px;
+    box-sizing:border-box;
+    text-align:center;
+    font-size: 1.6rem;
+    font-weight:200;
+}
+
+/*Diseño parrafo frase motivadora*/
+#frase_motivadora{
+    text-align:center;
+    font-size: 0.9rem;
+    color:var(--colorNegro);
+}
+
+/*Mediasqueries*/
+/* pantallas de 1024 o menos px de ancho */
+@media (max-width: 1024px) {
+    /* diseño Contenedor parallax para poner hero*/
+    .parallax {
+        padding: 30px;
+    }
+
+    /*diseño del contenedor paralax para el h1*/
+    .parallax div{
+        height: 100%;
+        width: 60%;
+        padding: 5px;
+    }
+
+    /*diseño titulo del paralax*/
+    .parallax h1{
+        font-size: 5rem;
+    }
+}
+
+/* pantallas de 768 o menos px de ancho */
+@media (max-width: 768px) {
+    /*diseño titulo del paralax*/
+    .parallax h1{
+        font-size: 3.5rem;
+    }
+
+    /*diseño del titulo quienes somos (NOSOTROS)*/
+    #contenedor_texto_nosotros h2{
+        font-size: 2rem;
+    }
+
+    /*diseño del parrafo quienes somos (NOSOTROS)*/
+    #contenedor_texto_nosotros p{
+        font-size: 0.8rem;
+    }
+
+    /*diseño contenedores de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+    .section_contenedores_index{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    /*diseño contenedor texto de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+    .contenedor_texto{
+        width: 100%;
+        padding:10px 20px;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+    }
+
+    /*diseño del titulo de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+    .contenedor_texto h3{
+        font-size: 1.8rem;
+        text-align:center;
+    }
+
+    /*diseño del parrafo de las secciones (Nuestras colecciones y Contacta con nosotros)*/
+    .contenedor_texto p{
+        font-size: 0.9rem;
+        text-align:center;
+    }
+
+    /*diseño del contenedor del enlace (Nuestras colecciones y Contacta con nosotros)*/
+    .contenedor_enlace{
+        width: 100%;
+        padding:0 20px;
+    }
+
+    /*diseño de los enlaces (Nuestras colecciones y Contacta con nosotros)*/
+    .contenedor_enlace a {
+        padding: 5px;
+        font-size: 0.9rem;
+    }
+
+
+    /*Diseño titulo frase motivadora*/
+    .contenedor_frase_motivadora h2{
+        padding:5px;
+        font-size: 1.4rem;
+    }
+}
+
+/* pantallas de 480 o menos px de ancho */
+@media (max-width: 480px) {
+    /*diseño Contenedor parallax para poner hero*/
+    .parallax {
+        padding: 20px;
+        background-size: content;
+    }
+
+    /*diseño del contenedor paralax para el h1*/
+    .parallax div{
+        height: 100%;
+        width: 55%;
+        padding: 5px;
+    }
+
+    /*diseño titulo del paralax*/
+    .parallax h1{
+        font-size: 3rem;
+    }
+
+    /*diseño de la seccion "nosotros"*/
+    #contenedor_nosotros {
+        grid-template-columns:1fr;
+        grid-template-rows:auto;
+    }
+
+    /*diseño de la imagen quienes somos (NOSOTROS)*/
+    #contenedor_imagen_nosotros img{
+        max-height: 80px;
+        max-width: 80px;
+    }
+}

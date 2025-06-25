@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Validar Registro | Fresh & Simple {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesLogin.css' %}">
+{% endblock %}
+{% block content %}
+<section class="contenedor_login">
+    <div class="contenedor_form_login">
+        <h2>Validar Cuenta</h2>
+        <form method="POST" id="form_login" novalidate>
+            {% csrf_token %}
+            {% for input in form %}
+                <div class="contenedor_field">
+                    {{ input }}
+                    <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
+                </div>
+            {% endfor %}
+            <button type="submit">Validar</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+    <script type="module" src="{% static 'tienda/js/formValidarRegistro.js' %}"></script>
+{% endblock %}

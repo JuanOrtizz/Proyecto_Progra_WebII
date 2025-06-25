@@ -1,0 +1,207 @@
+/*diseño para el section de volver*/
+#section_contenedor_volver{
+    display:flex;
+    justify-content: center;
+    height:auto;
+    width:auto;
+    box-sizing:border-box;
+}
+
+/*diseño para el contenedor de volver*/
+#contenedor_volver{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height: auto;
+    width: 100%;
+    padding:10px 20px;
+    box-sizing:border-box;
+    gap: 10px;
+    background-color: #B3B3B3;
+}
+
+/*Diseño para el <a> (enlace) volver para simular un boton*/
+#enlace_volver{
+    width:auto;
+    padding: 5px 15px;
+    border-radius: 5px;
+    box-sizing:border-box;
+    color:var(--colorBlanco);
+    text-decoration:none;
+    font-weight: 500;
+    font-size: 1rem;
+    background-color: var(--colorNegro);
+    transition: background-color 0.3s ease;
+}
+
+/*diseño para el <a> (enlace) volver hover*/
+#enlace_volver:hover{
+    background-color: var(--colorNegroOscuro);
+}
+
+/*diseño para el section del contenedor modificar consulta*/
+.section_contenedor_modificar_elemento{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+/*diseño para el contenedor modificar consulta*/
+.contenedor_modificar_elemento{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--colorGrisAzuladoClaro);
+    box-shadow: 0 0 10px 1px var(--colorNegro);
+}
+
+/*diseño para el titulo del contenedor modificar consulta*/
+.contenedor_modificar_elemento h2{
+    margin:0;
+    text-align: center;
+    font-weight: 200;
+    font-size: 2rem;
+}
+
+/*diseño para el formulario de modificar consulta*/
+.form_modificar_elemento {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:auto;
+    gap: 15px;
+}
+
+/*diseño para label y textarea*/
+.form_modificar_elemento label,
+.form_modificar_elemento textarea {
+    display: block;
+    width: 100%;
+}
+
+/*diseño para los campos del formulario (Input y Select)*/
+.form_modificar_elemento input,
+.form_modificar_elemento select{
+    height: 40px;
+    width: 100%;
+    padding: 0 10px;
+}
+
+/*diseño para los campos del formulario */
+.form_modificar_elemento input,
+.form_modificar_elemento select,
+.form_modificar_elemento textarea {
+    border: 2px solid var(--colorNegro);
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+
+/*diseño para el textarea*/
+.form_modificar_elemento textarea {
+    padding: 10px;
+    resize:none;
+    overflow: auto;
+}
+
+/*diseño para los campos del formulario cuando tengan foco*/
+.form_modificar_elemento input:focus,
+.form_modificar_elemento select:focus{
+    border: 2px solid var(--colorAzul);
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/*diseño para con campos del formulario que no son editables*/
+.contenedor_deshabilitado input,
+.contenedor_deshabilitado select,
+.contenedor_deshabilitado textarea{
+    pointer-events: none;
+    opacity: 0.6;
+    background-color: #ced1d3;
+}
+
+/*diseño para el boton modificar consulta*/
+.form_modificar_elemento button{
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid var(--colorAzul);
+    box-sizing:border-box;
+    background-color:var(--colorBlanco);
+    color:var(--colorAzul);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor:pointer;
+}
+
+/*diseño para el boton modificar consulta hover*/
+.form_modificar_elemento button:hover{
+    background-color: var(--colorAzul);
+    color: var(--colorBlanco);
+}
+
+/*diseño para los span debajo de los input (errores)*/
+.error_texto{
+    color: var(--colorRojo);
+    text-align: start;
+    font-size: 0.8rem;
+    padding-left: 5px;
+    box-sizing:border-box;
+    font-weight: 600;
+}
+
+/*Estilo para errores en los input*/
+.input_error{
+    border: 2px solid #FF0000 !important;
+}
+
+/*Media queries*/
+@media (max-width: 1024px){
+    /*Diseño para el <a> (enlace) volver para simular un boton*/
+    #enlace_volver{
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px){
+    /*Diseño para el <a> (enlace) volver para simular un boton*/
+    #enlace_volver{
+        font-size: 0.8rem;
+    }
+
+    /*diseño para el titulo del contenedor modificar consulta*/
+    .contenedor_modificar_elemento h2{
+        font-size: 1.8rem;
+    }
+
+    /*diseño para los campos del formulario*/
+    .form_modificar_elemento input,
+    .form_modificar_elemento select {
+        font-size: 0.8rem;
+    }
+
+    /*diseño para el boton modificar consulta*/
+    .form_modificar_elemento button{
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px){
+    /*diseño para el titulo del contenedor modificar consulta*/
+    .contenedor_modificar_elemento h2{
+        font-size: 1.6rem;
+    }
+
+    /*diseño para el section del contenedor modificar consulta*/
+    .section_contenedor_modificar_elemento{
+        padding: 50px 20px;
+    }
+}

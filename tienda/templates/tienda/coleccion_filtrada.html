@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ tipo }} | Fresh & Simple{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'tienda/css/stylesColeccionFiltrada.css' %}">
+{% endblock %}
+{% block content %}
+<section id="section_contenedor_colecciones">
+    <div id="contenedor_colecciones">
+        <h1>{{ tipo }}</h1>
+        <div class="productos">
+            {% for prenda in prendas %}
+                <div class="card">
+                    <div class="image">
+                        <img src="{{ prenda.imagen_url_final }}" alt="{{ prenda.nombre }}">
+                    </div>
+                    <h3 class="title">{{ prenda.nombre }}</h3>
+                    <p class="price">${{ prenda.precio }}</p>
+                </div>
+            {% empty %}
+                <p id="parrafo_empty_productos">No hay productos disponibles en esta colección.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

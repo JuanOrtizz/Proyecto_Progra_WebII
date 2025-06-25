@@ -1,0 +1,158 @@
+/*diseño para el section del contenedor logout*/
+#section_contenedor_logout{
+    display:flex;
+    justify-content: center;
+    height:auto;
+    width:auto;
+    box-sizing:border-box;
+}
+
+/*diseño para el contenedor del logout*/
+#contenedor_logout{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 10px;
+    height: auto;
+    width: 100%;
+    padding:10px 30px;
+    box-sizing:border-box;
+    background-color: #B3B3B3;
+}
+
+/*diseño para el div vacio de relleno en el contenedor*/
+#relleno_div{
+    flex: 1;
+    height: 100%;
+}
+
+/*diseño del titulo de bienvenida en el contenedor logout*/
+#contenedor_logout h1{
+    flex: 1;
+    padding:0;
+    margin:0;
+    font-size: 2rem;
+    font-weight: 500;
+    text-align:center;
+}
+
+/*diseño del formulario donde se encuentra el boton para cerrar sesion*/
+#contenedor_logout form{
+    flex: 1;
+    display:flex;
+    justify-content:end;
+    align-items:center;
+    box-sizing:border-box;
+}
+
+/*diseño para el boton cerrar sesion*/
+#contenedor_logout button{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:5px;
+    border: none;
+    border-radius: 10px;
+    background-color:var(--colorRojo);
+    color:var(--colorBlanco);
+    font-size:1rem;
+    font-weight:700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/*diseño para el boton cerrar sesion con hover*/
+#contenedor_logout button:hover{
+    background-color: var(--colorRojoOscuro);
+}
+
+/*diseño para el logo de cerrar sesion */
+#contenedor_logout span{
+    font-size:1.5rem;
+}
+
+/*diseño para el section de categorias del dashboard*/
+#section_contenedor_paneles{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    gap: 30px;
+    height:auto;
+    width:auto;
+    padding: 100px;
+    box-sizing:border-box;
+}
+
+/*Diseño para cada contenedor (Productos y Consultas)*/
+.contenedor_panel{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    height:auto;
+    width:100%;
+}
+
+/*Diseño para cada <a> (enlace) para que tenga diseño como si fuera un boton*/
+.contenedor_panel a{
+    display: inline-block;
+    background: linear-gradient(to right, var(--colorNaranja) 50%, var(--colorNaranja) 50%) center;
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+    width:80%;
+    padding: 30px;
+    border-radius: 5px;
+    border: 2px solid var(--colorNaranja);
+    text-decoration: none;
+    text-align:center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--colorNaranja);
+    transition: background-size 0.6s ease, color 0.6s ease;
+}
+
+/*Diseño para cada <a> (enlace) en hover*/
+.contenedor_panel a:hover{
+    background-size: 100% 100%;
+    color: var(--colorBlanco);
+}
+
+/*medias query*/
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 768px) {
+    /*diseño del titulo de bienvenida en el contenedor logout*/
+    #contenedor_logout h1{
+        font-size: 1.4rem;
+    }
+
+    /*diseño para el section de categorias*/
+    #section_contenedor_paneles{
+        flex-direction: column;
+        padding: 60px;
+    }
+
+    /*Diseño para cada <a> (enlace) para que tenga diseño como si fuera un boton*/
+    .contenedor_panel a{
+        width:90%;
+    }
+}
+
+@media (max-width: 480px) {
+    /*diseño para el logo de cerrar sesion */
+    #contenedor_logout span{
+        font-size: 1.2rem;
+    }
+
+    /*diseño para el section de categorias de datos del dashboard*/
+    #section_contenedor_paneles{
+        padding: 40px;
+    }
+
+    /*Diseño para cada <a> (enlace) para que tenga diseño como si fuera un boton*/
+    .contenedor_panel a{
+        width:100%;
+        padding: 20px;
+    }
+}

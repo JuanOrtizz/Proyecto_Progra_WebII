@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Panel Productos | Fresh & Simple{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPaneles.css' %}">
+{% endblock %}
+{% block content %}
+<section id="section_contenedor_volver">
+    <div id="contenedor_volver">
+        <a id="enlace_volver" href="{% url 'dashboard' %}">Volver</a>
+    </div>
+</section>
+<section class="section_contenedor_panel">
+    <div class="contenedor_panel">
+        <h2>Panel de Productos</h2>
+        <form method="GET" action="{% url 'productos' %}" class="form_filtro_productos">
+            <select name="tipo" id="filtro_tipo">
+                <option value="" {% if not tipo_filtro %}selected{% endif %}>Todos</option>
+                <option value="1" {% if tipo_filtro == "1" %}selected{% endif %}>Pantalones</option>
+                <option value="2" {% if tipo_filtro == "2" %}selected{% endif %}>Remeras</option>
+                <option value="3" {% if tipo_filtro == "3" %}selected{% endif %}>Tops</option>
+                <option value="4" {% if tipo_filtro == "4" %}selected{% endif %}>Vestidos</option>
+                <option value="5" {% if tipo_filtro == "5" %}selected{% endif %}>Buzos</option>
+                <option value="6" {% if tipo_filtro == "6" %}selected{% endif %}>Camperas</option>
+                <option value="7" {% if tipo_filtro == "7" %}selected{% endif %}>Accesorios</option>
+            </select>
+            <a href="{% url 'agregar_producto' %}" class="boton_nuevo_producto">Nuevo Producto</a>
+        </form>
+        <div class="contenedor_tabla">
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+                {% for producto in productos %}
+                <tr id="producto-{{ producto.id }}">
+                    <td><div class="contenido_td">{{ producto.nombre }}</div></td>
+                    <td><div class="contenido_td">${{ producto.precio }}</div></td>
+                    <td>
+                        <div class="contenido_td">
+                            {% if producto.tipo == "1" %}
+                                Pantalon
+                            {% elif producto.tipo == "2" %}
+                                Remera
+                            {% elif producto.tipo == "3" %}
+                                Top
+                            {% elif producto.tipo == "4" %}
+                                Vestido
+                            {% elif producto.tipo == "5" %}
+                                Buzo
+                            {% elif producto.tipo == "6" %}
+                                Campera
+                            {% else %}
+                                Accesorio
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="contenedor_acciones">
+                            <a class="boton_modificar" href="{% url 'modificar_producto' producto.id %}">
+                                Modificar
+                            </a>
+                            <button class="boton_eliminar" data-id ="{{ producto.id }}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+    <script type = module src="{% static 'tienda/js/eliminarProducto.js' %}"></script>
+    <script  src="{% static 'tienda/js/productos.js' %}"></script>
+{% endblock %}
