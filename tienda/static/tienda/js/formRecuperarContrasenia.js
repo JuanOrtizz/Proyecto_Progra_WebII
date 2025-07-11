@@ -1,26 +1,26 @@
-import {validarFormulario} from './validacionesFormRegistro.js'
+import {validarFormulario} from './validacionesFormsContrasenia.js'
 import {generarAlertExito, generarAlertError} from './alertas.js'
 
 document.addEventListener('DOMContentLoaded', ()=>{
     // capturo el formulario y el token
-    const formularioValidarRegistro = document.getElementById("form_login")
+    const formularioRecuperarContraseña = document.getElementById("form_recuperacion")
     const csrfToken = document.querySelector('[name = csrfmiddlewaretoken]').value
 
     // Evento para evitar que se mande el form
-    formularioValidarRegistro.addEventListener('submit', (e) =>{
+    formularioRecuperarContraseña.addEventListener('submit', (e) =>{
             // evita recargar la pagina al mandar el formulario
             e.preventDefault()
             // captura los datos del formulario
-            const formData = new FormData(formularioValidarRegistro)
+            const formData = new FormData(formularioRecuperarContraseña)
             // valida los campos
             if(validarFormulario(formData)){
-                enviarFormulario(formData, csrfToken, formularioValidarRegistro)
+                enviarFormulario(formData, csrfToken, formularioRecuperarContraseña)
             }
         })
 })
 
 // funcion async para utilizar await y manejar asincronia
-async function enviarFormulario(formData, csrfToken, formularioValidarRegistro){
+async function enviarFormulario(formData, csrfToken, formularioRecuperarContraseña){
     const overlay = document.getElementById("pantalla_carga") // Obtiene el overlay (pantalla de carga)
     overlay.style.display = "flex" // Muestra el overlay (pantalla de carga)
     // hago fetch del formulario
@@ -36,17 +36,13 @@ async function enviarFormulario(formData, csrfToken, formularioValidarRegistro){
         const data = await response.json()
         if(data.success){
             generarAlertExito(data.message)
-            formularioValidarRegistro.reset()
-            //redirecciono despues de 4 segundos al html para iniciar sesion
-            setTimeout(() => {
-                window.location.href = data.redirect_url
-            }, 4000)
+            formularioRecuperarContraseña.reset()
         }else{
-            formularioValidarRegistro.reset()
+            formularioRecuperarContraseña.reset()
             generarAlertError(data.errors)
         }
     }catch(error){
-        console.error("Error en La validación: ", error)
+        console.error("Error en la Recuperación: ", error)
         generarAlertError("Ocurrió un error inesperado. Intentá más tarde.")
     }finally {
         overlay.style.display = "none" // oculta el overlay (pantalla de carga)

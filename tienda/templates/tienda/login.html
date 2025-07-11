@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Inicio de Sesión | Fresh & Simple{% endblock %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'tienda/css/stylesLogin.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesFormsAcceso.css' %}">
 {% endblock %}
 {% block content %}
 <section class="contenedor_login">
@@ -31,7 +31,10 @@
             {% endfor %}
             <button type="submit">Ingresar</button>
         </form>
-        <div class="contenedor_texto_bottom">
+        <div class="contenedor_texto_bottom_recuperacion">
+            <a href="{% url 'recuperar_contraseña' %}">Olvidé mi contraseña</a>
+        </div>
+        <div class="contenedor_texto_bottom_acceso">
             <p>¿No tenés cuenta?</p>
             <a href="{% url 'registro' %}">Registrate</a>
         </div>

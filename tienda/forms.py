@@ -82,3 +82,15 @@ class RegistroForm(forms.Form):
 # Formulario para validar el registro con el codigo
 class ValidarCodigoForm(forms.Form):
     codigo = forms.CharField(max_length=6,widget = forms.TextInput(attrs={'placeholder': 'Colocá el código acá', 'id': 'código'}),)
+
+# Formulario para el registro
+class RecuperarContraseñaForm(forms.Form):
+    email = forms.EmailField(
+        max_length=320,
+        widget = forms.EmailInput(attrs={'placeholder': 'Email', 'id': 'email'}),
+    )
+
+# Formulario para el registro
+class CambiarContraseñaForm(forms.Form):
+    contraseña = forms.CharField( max_length=20, widget=forms.PasswordInput(attrs={'placeholder' : 'Contraseña', 'id' : 'contraseña'}))
+    confirmar_contraseña = forms.CharField( max_length=20, widget=forms.PasswordInput(attrs={'placeholder' : 'Confirmar contraseña', 'id' : 'confirmar_contraseña'}))
