@@ -52,8 +52,8 @@ async function enviarFormulario(formData, csrfToken, formularioProducto){
             generarAlertError(formatearErrores(data.errors))
         }
     }catch(error){
-        console.error("Error en la Consulta: ", error)
-        generarAlertError("Ocurrió un error inesperado, intenta de nuevo mas tarde.")
+        console.error("Error en el Registro: ", error)
+        generarAlertError("Ocurrió un error inesperado. Intentá más tarde.")
     }
 }
 

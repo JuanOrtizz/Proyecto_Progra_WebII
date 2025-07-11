@@ -44,7 +44,7 @@ async function enviarFormulario(formData, csrfToken, formularioContacto){
         }
     }catch(error){
         console.error("Error en la Consulta: ", error)
-        generarAlertError("Ocurrió un error inesperado, intenta de nuevo mas tarde.")
+        generarAlertError("Ocurrió un error inesperado. Intentá más tarde.")
     }finally {
         overlay.style.display = "none" // oculta el overlay (pantalla de carga)
     }

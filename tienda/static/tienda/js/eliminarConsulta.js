@@ -17,13 +17,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
             consultaIdAEliminar = boton.getAttribute('data-id') // Obtiene el data-id (Consulta)
             if(consultaIdAEliminar){
                 Swal.fire({ // Muestra alerta
-                  title: "¿Estas seguro que querés eliminar esta consulta?",
+                  title: "¿Estás seguro que querés eliminar esta consulta?",
                   text: "No podrás revertir esto",
                   icon: "warning",
                   showCancelButton: true,
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
-                  confirmButtonText: "Si Eliminar",
+                  confirmButtonText: "Sí Eliminar",
                   didOpen: () =>{ // agrego esto ya que sino recalcula con esta clase y sube el footer para evitar scroll
                     document.body.classList.remove('swal2-height-auto')
                     document.body.style.overflow = 'auto'
