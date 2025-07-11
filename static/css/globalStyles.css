@@ -7,12 +7,13 @@
     --colorNegroOscuro: #000000;
     --colorRojo: #E80000;
     --colorRojoOscuro: #7C0002;
+    --colorRojoClaro: #f33232;
     --colorCeleste:#51D1F6;
     --colorCelesteOscuro:#00AAE4;
     --colorAmarillo: #FADA28;
     --colorAmarilloOscuro: #DDB148;
-    --colorGrisAzuladoClaro: #b9d1d9;
-    --colorGris: #fff;
+    --colorGrisAzuladoClaro: #B9D1D9;
+    --colorGris: #737373;
 }
 
 /*diseño para el html y body*/
@@ -49,7 +50,8 @@ p, ul{
 /*diseño del header*/
 header{
     position: relative;
-    height:15vh;
+    height:15dvh;
+    min-height: 90px;
     width:100%;
     margin:0;
     padding: 10px;
@@ -90,14 +92,23 @@ nav ul{
     padding: 0;
 }
 
+/*diseño items de la lista (LI)*/
+nav li{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
 /*diseño enlaces de la lista*/
 nav li a {
     position: relative;
     font-weight: 500;
     font-size: 0.9rem;
+    text-align:center;
     text-decoration: none;
     color: var(--colorBlanco);
     padding: 5px;
+    box-sizing:border-box;
     transition: color 0.5s ease;
 }
 
@@ -143,14 +154,120 @@ nav li a:hover::after {
     transition: none;
 }
 
+/*Diseño para la el elemento (LI) de la lista que contiene el div y tambien el dropdown*/
+#usuario_dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+/*diseño contenedor usuario (si esta logeado, contiene el logo y el nombre del usuario)*/
+#contenedor_usuario {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    position: relative;
+    transition: color 0.5s ease;
+    padding: 5px;
+    box-sizing:border-box;
+}
+
+/*diseño contenedor usuario AFTER (dibuja la linea debajo del div)*/
+#contenedor_usuario::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background-color: var(--colorNaranja);
+    transition: width 0.5s ease, left 0.5s ease;
+}
+
+/*diseño contenedor usuario HOVER y AFTER */
+#contenedor_usuario:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/*diseño parrafo del contenedor usuario (Nombre del usuario)*/
+#contenedor_usuario p{
+    color: var(--colorBlanco);
+    transition: color 0.5s ease;
+    font-size: 0.9rem;
+}
+
+/*diseño span del contenedor usuario (Icon usuario)*/
+#contenedor_usuario span{
+    color: var(--colorBlanco);
+    font-weight: 100;
+    transition: color 0.5s ease;
+}
+
+/*diseño para el parrafo y el span de contenedor usuario HOVER*/
+#contenedor_usuario:hover p,
+#contenedor_usuario:hover span {
+    color: var(--colorNaranja);
+}
+
+/*Diseño para la flecha dropdown, solo se visualiza en pantallas chicas*/
+#flecha_usuario{
+    display: none;
+}
+
+/*diseño para el menu (Dropdown) del div contenedor_usuario*/
+#menu_usuario {
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease;
+    padding: 15px 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    padding: 15px 5px;
+    gap: 15px;
+    box-sizing: border-box;
+    border-radius: 0 0 10px 10px;
+    list-style: none;
+    background-color: var(--colorGris);
+    display:flex;
+    flex-direction:column;
+}
+
+/*diseño para el elemento de la lista (LI) HOVER y menu usuario, para que se abra al hacer HOVER*/
+#usuario_dropdown:hover #menu_usuario {
+    transform: scaleY(1);
+}
+
+/*diseño para el boton cerrar sesion del formulario*/
+.cerrar_sesion {
+    display:flex;
+    justify-content:start;
+    align-items:center;
+    width: 100%;
+    font-size: 0.9rem;
+    background-color:transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--colorBlanco);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+/*diseño para el boton cerrar sesion Hover*/
+.cerrar_sesion:hover {
+    color: var(--colorRojoClaro);
+}
+
 /*diseño para el menu hamburguesa (se ve unicamente en pantallas chicas)*/
 #menu_hamburguesa {
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: var(--colorBlanco);
-  cursor: pointer;
+    display: none;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: var(--colorBlanco);
+    cursor: pointer;
 }
 
 /*diseño del main*/
@@ -194,7 +311,22 @@ footer p{
 
     /*diseño lista del nav*/
     nav ul{
-        gap: 40px;
+        gap: 30px;
+    }
+
+    /*diseño parrafo del contenedor usuario (Nombre del usuario)*/
+    #contenedor_usuario p{
+        font-size: 0.7rem;
+    }
+
+    /*diseño span del contenedor usuario (Icon usuario)*/
+    #contenedor_usuario span{
+        font-size:1.3rem;
+    }
+
+    /*diseño para el boton cerrar sesion del formulario*/
+    .cerrar_sesion {
+        font-size: 0.8rem;
     }
 
     /*diseño parrafo footer*/
@@ -225,11 +357,12 @@ footer p{
 
     /* Diseño lista del nav para que funcione como desplegable*/
     nav ul {
-        max-height: 0;
-        overflow: hidden;
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.3s ease;
+        position: absolute;
         flex-direction: column;
         background-color: var(--colorAzul);
-        position: absolute;
         top: 100%;
         right: 0;
         width: 100%;
@@ -237,27 +370,82 @@ footer p{
         gap: 0;
         box-sizing: border-box;
         border-radius: 0 0 10px 10px;
-        transition: max-height 0.4s ease;
     }
 
     /* Diseño para el menu abierto */
     nav ul.activo {
-        max-height: 50vh;
+        transform: scaleY(1);
     }
 
     /*diseño para los elementos de la lista*/
     nav li{
+        justify-content:start;
         border-top: 2px solid var(--colorBlanco);
         padding: 15px;
         margin: 0;
     }
 
-    nav li a::after {
+    /*diseño para los enlaces en la lista y el contenedor_usuario AFTER*/
+    nav li a::after,
+    #contenedor_usuario::after,
+    nav li a.enlace_activo::after {
         display: none;
     }
 
-    nav li a.enlace_activo::after {
+    /*Diseño para la el elemento (LI) de la lista que contiene el div y tambien el dropdown*/
+    #usuario_dropdown {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        position: relative;
+        padding: 15px;
+        box-sizing:border-box;
+    }
+
+    /*diseño contenedor usuario (si esta logeado, contiene el logo y el nombre del usuario)*/
+    #contenedor_usuario {
+        justify-content: start;
+        width: 100%;
+    }
+
+    /*Diseño para la flecha dropdown*/
+    #flecha_usuario{
+        display: inline-block;
+        margin-left: auto;
+        transition: transform 0.3s ease;
+    }
+
+    /*Diseño para la flecha dropdown cuando este abierta*/
+    #flecha_usuario.abierta {
+        transform: rotate(180deg);
+    }
+
+    /*diseño para el menu cerrado (Dropdown) del div contenedor_usuario*/
+    #menu_usuario {
         display: none;
+        transform: none;
+        position: static;
+        background-color: var(--colorAzul);
+        padding: 10px 0;
+        border-radius: 0 0 10px 10px;
+    }
+
+    /*diseño para el menu abierto del div contenedor_usuario*/
+    #menu_usuario.abierto {
+        display: flex;
+        flex-direction: column;
+        gap:0;
+        padding:0;
+    }
+
+    /*diseño para los elementos del menu del div contenedor_usuario*/
+    #menu_usuario li {
+        padding: 10px 15px;
+    }
+
+    /*diseño para el boton cerrar sesion del formulario*/
+    .cerrar_sesion {
+        padding: 5px;
     }
 
     /*diseño parrafo del footer*/

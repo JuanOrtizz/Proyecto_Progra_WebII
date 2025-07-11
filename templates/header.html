@@ -7,7 +7,30 @@
             <li><a href="{% url 'colecciones' %}">Colecciones</a></li>
             <li><a href="{% url 'contacto' %}">Contacto</a></li>
             <li><a href="{% url 'locales' %}">Locales</a></li>
-            <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+            {% if request.user.is_authenticated %}
+                <li id="usuario_dropdown">
+                    <div id="contenedor_usuario">
+                        <span class="material-symbols-outlined">
+                            account_circle
+                        </span>
+                        <p>{{ request.user.first_name }}</p>
+                        <span class="material-symbols-outlined"  id="flecha_usuario">arrow_drop_down</span>
+                    </div>
+
+                    <ul id="menu_usuario">
+                        <li><a href="{% url 'cambiar_contraseña' %}" id="enlace_cambiar_contraseña">Cambiar Contraseña</a></li>
+                        <li><a href="{% url 'dashboard' %}">Panel</a></li>
+                        <li>
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="cerrar_sesion">Cerrar Sesión</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+            {% endif %}
         </ul>
     </nav>
 </header>
