@@ -38,7 +38,7 @@ async function enviarFormulario(formData, csrfToken, formularioRegistro){
         if(data.success){
             generarAlertExito(data.message)
             formularioRegistro.reset()
-            //redirecciono despues de 4 segundos al html para iniciar sesion
+            //redirecciono despues de 4 segundos al html para validar la cuenta
             setTimeout(() => {
                 window.location.href = data.redirect_url
             }, 4000)
@@ -48,7 +48,7 @@ async function enviarFormulario(formData, csrfToken, formularioRegistro){
         }
     }catch(error){
         console.error("Error en el registro: ", error)
-        generarAlertError("Ocurrió un error inesperado, intenta de nuevo mas tarde.")
+        generarAlertError("Ocurrió un error inesperado. Intentá más tarde.")
     }finally {
         overlay.style.display = "none" // oculta el overlay (pantalla de carga)
     }
