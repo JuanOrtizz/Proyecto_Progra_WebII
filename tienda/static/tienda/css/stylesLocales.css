@@ -1,0 +1,134 @@
+/*Diseño del section de la pagina sucursales*/
+#section_sucursales{
+    height: auto;
+    width: 100%;
+    padding: 80px;
+    box-sizing:border-box;
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    background-color: var(--colorBlanco);
+}
+
+/*diseño del contenedor sucursales*/
+#contenedor_sucursales{
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--colorNegro);
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-rows: 5% 1fr 1fr;
+    gap: 10px;
+    place-items: center;
+    border-radius: 15px;
+}
+
+/*diseño contenedor titulo de sucursales*/
+#contenedor_titulo_sucursales{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin:0;
+    padding:0;
+}
+
+/*diseño titulo sucursales*/
+#contenedor_titulo_sucursales h1{
+    font-size: 2rem;
+    width:100%;
+    color: var(--colorBlanco);
+    font-weight: 100;
+}
+
+/*diseño contenedor sucursal*/
+.contenedor_sucursal{
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: var(--colorAzul);
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    transition:background-color 0.5s ease;
+}
+
+/*diseño titulo y parrafo sucursal*/
+.contenedor_sucursal h2,
+.contenedor_sucursal p{
+    width: 100%;
+    text-align: left;
+    color: var(--colorBlanco);
+}
+
+/*diseño para el titulo de la sucursal(Ubicacion [Ciudad/Provincia])*/
+.contenedor_sucursal h2{
+    font-size: 1.6rem;
+    font-weight: 200;
+}
+
+/*diseño para el parrafo de la sucursal (Direccion/numero)*/
+.contenedor_sucursal p{
+    font-size: 0.9rem;
+    padding: 5px;
+}
+
+/*diseño iframe (mapa)*/
+.contenedor_sucursal iframe{
+    height: 300px;
+    width: 100%;
+    margin: 0;
+    border-radius: 5px;
+}
+
+/*diseño contenedor sucursal HOVER*/
+.contenedor_sucursal:hover{
+    background-color: var(--colorNaranja);
+}
+
+/*Mediasqueries*/
+@media (max-width: 1024px) {
+    /*Diseño section sucursales*/
+    #section_sucursales {
+        padding: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    /*Diseño section sucursales*/
+    #section_sucursales {
+        padding: 40px;
+    }
+
+    /*diseño titulo sucursales*/
+    #contenedor_titulo_sucursales h1{
+        font-size: 1.6rem;
+    }
+
+    /*diseño titulo sucursal*/
+    .contenedor_sucursal h2{
+        font-size: 1.2rem;
+    }
+
+    /*diseño parrafo sucursal*/
+    .contenedor_sucursal p{
+        font-size: 0.8rem;
+    }
+
+    /*diseño iframe (mapa)*/
+    .contenedor_sucursal iframe{
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    /*Diseño section sucursales*/
+    #section_sucursales {
+        padding: 40px 15px;
+    }
+}

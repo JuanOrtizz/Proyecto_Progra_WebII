@@ -19,7 +19,7 @@ export function validarFormulario(formData){
         }else{
             valor = valor.trim()
             if(!valor){
-                textoErrorInput(input, "El campo esta vacío")
+                textoErrorInput(input, "El campo está vacío")
                 esValido = false
             }
             else if (llave === "nombre"){
@@ -59,15 +59,15 @@ function eliminarErrorInput(input) {
 // Validaciones propias para cada campo
 // validar input nombre
 function validarInputNombre(input, valor){
-    const patron = /^[a-záéíóúñ]+(?:\s[a-záéíóúñ]+)*$/i // verifica si es un nombre con solo letras Upper y Lower y espacios
+    const patron = /^[a-záéíóúñ0-9]+(?:\s[a-záéíóúñ0-9]+)*$/i // verifica si es un nombre con solo letras Upper y Lower, numeros y espacios
     if(valor.length >= 2 && valor.length <= 100){
         if (!patron.test(valor)){
-            textoErrorInput(input, "El nombre es invalido")
+            textoErrorInput(input, "El nombre no es válido")
             console.log("error")
             return false
         }
     }else{
-        textoErrorInput(input, "Nombre: 2 a 100 caracteres")
+        textoErrorInput(input, "Nombre: de 2 a 100 caracteres")
         return false
     }
     return true
@@ -75,17 +75,18 @@ function validarInputNombre(input, valor){
 
 // validar input precio producto
 function validarInputPrecio(input, valor){
-    const valorNumerico = parseFloat(valor, 10.2)
-    if (!isNaN(valorNumerico)){
+    const regexPrecio = /^\d{1,7}(\.\d{1,2})?$/;
+    if (regexPrecio.test(valor)){
+        const valorNumerico = parseFloat(valor)
         if(valorNumerico < 1){
-            textoErrorInput(input, "Precio minimo: $1")
+            textoErrorInput(input, "Precio mínimo: $1")
             return false
         }else if (valorNumerico > 9999999.99){
-            textoErrorInput(input, "Precio Máximo: $9,999,999.99")
+            textoErrorInput(input, "Precio máximo: $9.999.999,99")
             return false
         }
     }else{
-        textoErrorInput(input, "Precio invalido")
+        textoErrorInput(input, "El precio no es válido (Máximo 2 decimales)")
         return false
     }
     return true
@@ -117,7 +118,7 @@ function validarInputImagen(input) {
         return false
     }
     else if (imagen.size > maxTamanoMB * 1024 * 1024) {
-        textoErrorInput(input, "La imagen no puede superar los " + maxTamanoMB + " MB")
+        textoErrorInput(input, `La imagen no puede superar los ${maxTamanoMB} MB`)
         return false
     }
     return true
