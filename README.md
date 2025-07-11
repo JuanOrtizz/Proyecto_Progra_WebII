@@ -20,6 +20,10 @@ El diseño se basa en la paleta y tipografías de marca, buscando transmitir una
 - **Usuario:** AdminFyS
 - **Contraseña:** F&S2025+Admin
 ---
+## Endpoints Consultas y Productos
+- Estos endpoints están protegidos mediante la autenticación basada en sesiones de Django (cookies). Por esta razón, no se pueden acceder directamente desde Postman sin configuración adicional para manejar cookies y sesión.
+- En el futuro se implementará autenticación mediante tokens JWT para mantener la seguridad y permitir el acceso a los endpoints desde clientes externos, como Postman o aplicaciones móviles.
+---
 ## Api externa utilizada
 - ZenQuotes.io
 - [URL](https://zenquotes.io/)
