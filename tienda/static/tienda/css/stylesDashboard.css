@@ -10,7 +10,7 @@
 /*diseño para el contenedor del logout*/
 #contenedor_logout{
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
     gap: 10px;
     height: auto;
@@ -18,12 +18,6 @@
     padding:10px 30px;
     box-sizing:border-box;
     background-color: #B3B3B3;
-}
-
-/*diseño para el div vacio de relleno en el contenedor*/
-#relleno_div{
-    flex: 1;
-    height: 100%;
 }
 
 /*diseño del titulo de bienvenida en el contenedor logout*/
@@ -34,41 +28,6 @@
     font-size: 2rem;
     font-weight: 500;
     text-align:center;
-}
-
-/*diseño del formulario donde se encuentra el boton para cerrar sesion*/
-#contenedor_logout form{
-    flex: 1;
-    display:flex;
-    justify-content:end;
-    align-items:center;
-    box-sizing:border-box;
-}
-
-/*diseño para el boton cerrar sesion*/
-#contenedor_logout button{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:5px;
-    border: none;
-    border-radius: 10px;
-    background-color:var(--colorRojo);
-    color:var(--colorBlanco);
-    font-size:1rem;
-    font-weight:700;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-/*diseño para el boton cerrar sesion con hover*/
-#contenedor_logout button:hover{
-    background-color: var(--colorRojoOscuro);
-}
-
-/*diseño para el logo de cerrar sesion */
-#contenedor_logout span{
-    font-size:1.5rem;
 }
 
 /*diseño para el section de categorias del dashboard*/
@@ -140,11 +99,6 @@
 }
 
 @media (max-width: 480px) {
-    /*diseño para el logo de cerrar sesion */
-    #contenedor_logout span{
-        font-size: 1.2rem;
-    }
-
     /*diseño para el section de categorias de datos del dashboard*/
     #section_contenedor_paneles{
         padding: 40px;
