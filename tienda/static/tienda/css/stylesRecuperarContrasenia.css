@@ -1,0 +1,114 @@
+/*diseño para el section del contenedor del login*/
+.contenedor_recuperar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+/*diseño para el contenedor del login*/
+.contenedor_form_recuperar{
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    width: 100%;
+    max-width: 500px;
+    margin: 0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 13px;
+    background-color: #D3D3D3;
+}
+
+/*diseño para el titulo del login*/
+.contenedor_form_recuperar h2{
+    margin:0;
+    padding:0;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 100;
+}
+
+/*diseño para el formulario de login*/
+#form_recuperar{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    flex-direction:column ;
+    gap: 10px;
+}
+
+/*diseño para el contenedor del login*/
+.contenedor_field{
+    height:auto;
+    width:100%;
+    padding:5px 0;
+    box-sizing:border-box;
+}
+
+/*diseño para los labels del form*/
+.contenedor_field label {
+    display: block;
+    font-weight: 600;
+}
+
+/*diseño para los input del form*/
+.contenedor_field input {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid var(--colorNegro);
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: border 0.3s ease;
+}
+
+/*diseño para los input del form hover*/
+.contenedor_field input:focus {
+    border-color: var(--colorAzul);
+    outline: none;
+}
+
+/*diseño para la lista de errores*/
+.errorlist ul {
+    margin: 0;
+    padding: 0 5px;
+    list-style: disc inside;
+    font-size: 0.8rem;
+    color: var(--colorGrisOscuro);
+}
+
+/*diseño para el boton*/
+.contenedor_form_recuperar button{
+    align-self: center;
+    height: auto;
+    width:100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color:var(--colorBlanco);
+    background-color: var(--colorCelesteOscuro);
+    cursor:pointer;
+    transition: background-color 0.3s ease;
+}
+
+/*diseño para el boton hover*/
+.contenedor_form_recuperar button:hover{
+    background-color: var(--colorAzul);
+}
+
+/*diseño para errores de login*/
+.errorlist li{
+    padding: 10px 0;
+    color: var(--colorRojo);
+    list-style: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}

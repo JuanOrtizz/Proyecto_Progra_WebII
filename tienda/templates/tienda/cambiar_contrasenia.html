@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Registro | Fresh & Simple{% endblock %}
+{% block title %}Recuperar Contraseña | Fresh & Simple {% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesFormsAcceso.css' %}">
 {% endblock %}
 {% block content %}
-<section class="contenedor_login">
-    <div class="contenedor_form_login">
-        <h2>Registrate</h2>
-        <form method="POST" id="form_login" novalidate>
+<section class="contenedor_recuperacion">
+    <div class="contenedor_form_recuperacion">
+        <h2>Cambiá tu contraseña</h2>
+        <form method="POST" id="form_recuperacion" novalidate>
             {% csrf_token %}
             {% for input in form %}
                 <div class="contenedor_field">
@@ -16,19 +16,15 @@
                     <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
                 </div>
             {% endfor %}
-            <button type="submit">Registrarse</button>
+            <button type="submit">Cambiar contraseña</button>
         </form>
-        <div class="contenedor_texto_bottom_acceso">
-            <p>¿Ya tenés cuenta?</p>
-            <a href="{% url 'login' %}">Iniciar Sesión</a>
-        </div>
     </div>
 </section>
 <div id="pantalla_carga">
-    <p>Verificando...</p>
+    <p>Actualizando...</p>
     <div class="spinner-border text-light" role="status"></div>
 </div>
 {% endblock %}
 {% block extra_js %}
-     <script type="module" src="{% static 'tienda/js/formRegistro.js' %}"></script>
+    <script type="module" src="{% static 'tienda/js/formCambiarContrasenia.js' %}"></script>
 {% endblock %}

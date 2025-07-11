@@ -3,21 +3,11 @@
 {% block title %}Dashboard | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesDashboard.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=logout" />
 {% endblock %}
 {% block content %}
 <section id="section_contenedor_logout">
     <div id="contenedor_logout">
-        <div id="relleno_div"></div>
         <h1>Bienvenido {{ user.first_name }}</h1>
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">
-                <span class="material-symbols-outlined">
-                    logout
-                </span>
-            </button>
-        </form>
     </div>
 </section>
 <section id="section_contenedor_paneles">

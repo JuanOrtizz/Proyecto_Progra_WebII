@@ -1,19 +1,25 @@
-import os
-
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
+from django.contrib.messages import success
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseForbidden
 from rest_framework.permissions import IsAuthenticated
-from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm, RecuperarContraseñaForm, \
+    CambiarContraseñaForm
 from .models import Consultas, Productos, UsuariosPermitidos
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import ConsultasSerializer, ProductosSerializer
 from django.contrib.auth.models import User
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import requests
 import os
+from django.contrib import messages
+from django.shortcuts import redirect
 
 #Vista index
 def pagina_index(request):
@@ -128,17 +134,21 @@ def registro(request):
             # Obtengo los datos del formulario
             nombre = form.cleaned_data["nombre"]
             email = form.cleaned_data["email"]
-            contraseña = request.POST.get("contraseña")
+            contrasenia = request.POST.get("contraseña")
 
-            # Guardo datos en sesion
-            datos_registro = form.cleaned_data.copy()
-            datos_registro['contraseña'] = contraseña
-            request.session['registro_data'] = datos_registro
+            #valido si ya hay un usuario registrado con ese email
+            if User.objects.filter(email__iexact=email).exists():
+                return JsonResponse({"success":False, "errors": "Ya hay un usuario registrado con este email."})
 
+            #Verifica en la tabla si hay un usuario permitido con ese email
             try:
                 permitido = UsuariosPermitidos.objects.get(email=email)
+                # Guardo datos en sesion
+                datos_registro = form.cleaned_data.copy()
+                datos_registro['contraseña'] = contrasenia
+                request.session['registro_data'] = datos_registro
             except UsuariosPermitidos.DoesNotExist:
-                return JsonResponse({"success": False, "errors": f"Acceso Restringido. No estas autorizado"})
+                return JsonResponse({"success": False, "errors": "Acceso restringido. No estás autorizado."})
 
             # enviar mail con el codigo
             try:
@@ -179,7 +189,7 @@ def registro(request):
                     fail_silently=False,
                     html_message=cuerpoMensajeHtml
                 )
-                return JsonResponse({'success': True, 'message': "Te enviamos un código de verificación de cuenta. A continuación te redireccionaremos a la página...", 'redirect_url': reverse('validar_registro')})
+                return JsonResponse({'success': True, 'message': "Te enviamos un código de verificación de cuenta. A continuación te redirigiremos a la página...", 'redirect_url': reverse('validar_registro')})
             except Exception as e:
                 return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
     else:
@@ -202,8 +212,11 @@ def validar_registro(request):
         if form.is_valid():
             codigo = form.cleaned_data['codigo']
 
-            if not UsuariosPermitidos.objects.filter(email=datos['email'], codigo_validacion=codigo).exists():
-                return JsonResponse({'success': False, 'errors': "Código inválido"})
+            if User.objects.filter(email__iexact=datos['email']).exists():
+                return JsonResponse({'success': False, 'errors': "Ya hay una cuenta registrada con este email."})
+
+            if not UsuariosPermitidos.objects.filter(email__iexact=datos['email'], codigo_validacion=codigo).exists():
+                return JsonResponse({'success': False, 'errors': "Código inválido."})
 
             # Creo el usuario de Django
             user = User.objects.create_user(
@@ -213,11 +226,111 @@ def validar_registro(request):
                 first_name=datos['nombre'],
                 last_name=datos['apellido'],
             )
-            return JsonResponse({'success': True, 'message': "Cuenta validada. Ya podés iniciar sesión con tu email y contraseña.",'redirect_url': reverse('login')})
+            #Vacio los datos de sesion
+            del request.session['registro_data']
+
+            return JsonResponse({'success': True, 'message': "Cuenta validada. Ya podés iniciar sesión con tu email y contraseña. A continuación te redirigiremos a la página...",'redirect_url': reverse('login')})
 
     else:
         form = ValidarCodigoForm()
     return render(request, 'tienda/validar_registro.html', {'form': form})
+
+#Vista para recuperar la contraseña
+def recuperar_contraseña(request):
+    if request.method == 'POST':
+        form = RecuperarContraseñaForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+
+            if not User.objects.filter(email__iexact=email).exists():
+                return JsonResponse({'success': False, 'errors': "No hay ninguna cuenta registrada con este email."})
+            else:
+                datos_registro = form.cleaned_data.copy()
+                request.session['registro_data'] = datos_registro
+                usuario = User.objects.get(email__iexact=email)
+                # enviar mail con el codigo
+                try:
+                    asunto = "Recuperación de cuenta - Fresh & Simple"
+                    mensaje_texto = f"El enlace para cambiar tu contraseña es: https://freshandsimple.onrender.com/cambiar_contraseña/"
+                    cuerpoMensajeHtml = f"""
+                                   <html>
+                                       <body style="font-family: Arial, sans-serif; background-color: #F7F7F7; padding: 30px;">
+                                           <div style="max-width: 600px; margin: auto; background-color: #FFFFFF; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
+                                               <h2 style="color: #2E8A99; text-align: center;">Recuperar contraseña. Fresh & Simple</h2>
+                                               <p style="font-size: 16px; color: #4A4A4A; text-align: center;">
+                                                   Hola {usuario.first_name}!<br><br>
+                                                   Para recuperar tu cuenta ingresá al siguiente enlace:<br><br>
+                                                   <a href="https://freshandsimple.onrender.com/cambiar_contraseña/" 
+                                                      style="display: inline-block; background-color: #2E8A99; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                                                      Cambiar Contraseña
+                                                   </a><br><br>
+                                                   Si no fuiste vos, contactanos.<br><br>
+                                                   <strong style="color: #FF6363;">Fresh & Simple</strong>
+                                               </p>
+                                               <p style="margin-top: 40px; font-size: 12px; text-align: center; color: #888888;">
+                                                   Este es un correo automático, por favor no respondas a este mensaje.
+                                               </p>
+                                           </div>
+                                       </body>
+                                   </html>
+                               """
+                    destinatario = email
+                    send_mail(
+                        asunto,
+                        mensaje_texto,
+                        settings.EMAIL_HOST_USER,
+                        [destinatario],
+                        fail_silently=False,
+                        html_message=cuerpoMensajeHtml
+                    )
+                    return JsonResponse({'success': True, 'message': f"Te enviamos los pasos para cambiar tu contraseña al email {email}."})
+                except Exception as e:
+                    return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
+    else:
+        form = RecuperarContraseñaForm()
+    return render(request, 'tienda/recuperar_cuenta.html', {'form': form})
+
+#Vista para recuperar la contraseña
+def cambiar_contrasenia(request):
+    #Si el usuario esta logeado y quiere cambiar su contraseña
+    if request.user.is_authenticated:
+        email = request.user.email #Si es desde la sesion lo guardo
+        esRecuperacion = False
+    else:
+        # si no hay datos en la sesion denego el acceso (Es decir no selecciono Olvide mi contraseña)
+        datos = request.session.get('registro_data')
+        if not datos:
+            return HttpResponseForbidden("Acceso no autorizado.")
+        email = datos.get('email') # Si es desde la recuperacion lo guardo
+        esRecuperacion = True
+
+    # verifica si el email esta autorizado sino denego acceso
+    if not UsuariosPermitidos.objects.filter(email=email).exists():
+        return HttpResponseForbidden("Acceso no autorizado.")
+
+    if request.method == 'POST':
+        form = CambiarContraseñaForm(request.POST)
+        if form.is_valid():
+            contrasenia = form.cleaned_data['contraseña']
+            confirmarContrasenia = form.cleaned_data['confirmar_contraseña']
+
+            if not User.objects.filter(email__iexact=email).exists():
+                return JsonResponse({'success': False, 'errors': "No hay ninguna cuenta registrada con este email."})
+            else:
+                if contrasenia != confirmarContrasenia:
+                    return JsonResponse({'success': False, 'errors': "Las contraseñas no coinciden."})
+                else:
+                    usuario = User.objects.get(email__iexact = email)
+                    usuario.set_password(contrasenia)
+                    usuario.save()
+                    # Si uso recuperacion, vacio los datos de sesion
+                    if esRecuperacion and 'registro_data' in request.session:
+                        del request.session['registro_data']
+                    return JsonResponse({'success': True, 'message': "Cambiaste tu contraseña con éxito. A continuación te redirigiremos al login...",'redirect_url': reverse('login')})
+    else:
+        form = CambiarContraseñaForm()
+    return render(request, 'tienda/cambiar_contrasenia.html', {'form': form})
+
 
 #Vista Dashboard
 @login_required()
@@ -269,7 +382,7 @@ def registrar_producto(request):
             if imagen:
                 if imagen.size > 1 * 1024 * 1024:
                     return JsonResponse(
-                        {"success": False, "errors": "La imagen no puede pesar más de 1MB."})
+                        {"success": False, "errors": "La imagen no puede pesar más de 1 MB."})
                 if imagen.content_type not in ["image/webp"]:
                     return JsonResponse({"success": False, "errors": "Solo se permiten imágenes WEBP."})
 
@@ -288,7 +401,7 @@ def registrar_producto(request):
             producto.save()
 
             return JsonResponse({"success": True,
-                                 "message": f"Se registro con éxito el producto {nombre}"})
+                                 "message": f"Se registró con éxito el producto {nombre}"})
         else:
             return JsonResponse({"success": False, "errors": form.errors})
 
@@ -314,11 +427,11 @@ def modificar_producto(request, producto_id):
             producto.precio = form.cleaned_data["precio"]
 
             if producto.nombre == nombreAntiguo and producto.precio == precioAntiguo:
-                return JsonResponse({"success": False, "errors": "No realizaste modificaciones"})
+                return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
             else:
                 # actualizo los valores de la consulta
                 producto.save()
-            return JsonResponse({"success": True, "message": "Producto modificado con éxito"})
+            return JsonResponse({"success": True, "message": "Producto modificado con éxito."})
         else:
             return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
@@ -369,11 +482,11 @@ def modificar_consulta(request, consulta_id):
             consulta.telefono = form.cleaned_data["telefono"]
 
             if consulta.email == emailAntiguo and consulta.telefono == telefonoAntiguo:
-                return JsonResponse({"success": False, "errors": "No realizaste modificaciones"})
+                return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
             else:
                 # actualizo los valores de la consulta
                 consulta.save()
-            return JsonResponse({"success": True, "message": "Consulta modificada con éxito"})
+            return JsonResponse({"success": True, "message": "Consulta modificada con éxito."})
         else:
             return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
@@ -413,28 +526,6 @@ def eliminar_consulta(request, consulta_id):
 
     return JsonResponse({"success": True, 'totalConsultas': contadorConsultasTotal, 'consultasComerciales': contadorConsultasComerciales, 'consultasTecnicas': contadorConsultasTecnicas, 'consultasRRHH' : contadorConsultasRrhh, 'consultasGenerales' :contadorConsultasGenerales})
 
-#Vista para obtener datos de la api ya que con JS no me permitia por seguridad de CORS en mi local
-def obtener_frase(request):
-    # obtengo frase
-    url = "https://zenquotes.io/api/quotes/"
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return JsonResponse({"error": "No se pudo obtener la frase"}, status=500)
-
-    data = response.json()
-
-    if not data or not isinstance(data, list):
-        return JsonResponse({"error": "Respuesta invalida de la API"}, status=500)
-
-    frase_obj = data[0]
-    frase = frase_obj.get('q')
-
-    # devuevlo la respuesta
-    return JsonResponse({
-        "frase": frase,
-    })
-
 # Funcion auxiliar para clasificar mensaje en la vista Contacto
 def clasificar_mensaje(mensaje):
     mensaje = mensaje.lower()
@@ -459,3 +550,42 @@ class ProductosViewSet(viewsets.ModelViewSet):
     queryset =  Productos.objects.all()
     serializer_class = ProductosSerializer
     permission_classes = [IsAuthenticated] #Protejo los endpoint, si no esta logeado desde dashboard no puede acceder en un futuro se usara JWT
+
+#Clase para obtener datos de la api ZenQuotes (frases)
+class ObtenerFraseAPIView(APIView):
+    def get(self, request):
+        # obtengo frase
+        url = "https://zenquotes.io/api/quotes/"
+        response = requests.get(url)
+
+        # Si no pudo obtener la frase
+        if response.status_code != 200:
+            return Response({"error": "No se pudo obtener la frase"}, status=500)
+
+        # Transformo la data a json
+        data = response.json()
+
+        # Si la api da una respuesta invalida
+        if not data or not isinstance(data, list):
+            return Response({"error": "Respuesta inválida de la API"}, status=500)
+
+        # Obtengo la data en un objeto frase
+        frase_obj = data[0]
+        frase = frase_obj.get('q') # Obtengo la frase
+
+        # devuelo la respuesta (frase) al frontend
+        return Response({"frase": frase})
+
+class CustomLoginView(LoginView):
+    template_name = 'tienda/login.html'
+    authentication_form = AuthenticationForm  # puede ser AuthenticationForm también
+    success_url = reverse_lazy('home')  # ajusta según tu app
+
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('username')  # por defecto LoginView usa 'username'
+
+        if '@' in email and not User.objects.filter(email=email).exists():
+            messages.error(request, "Este correo no está registrado. Puedes crear una cuenta.")
+            return redirect('registro')  # o vuelve a login con error
+
+        return super().post(request, *args, **kwargs)
