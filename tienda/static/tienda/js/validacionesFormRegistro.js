@@ -16,7 +16,7 @@ export function validarFormulario(formData){
 
         valor = valor.trim()
         if(!valor){
-            textoErrorInput(input, "El campo esta vacío")
+            textoErrorInput(input, "El campo está vacío")
             esValido = false
         }
         else if (llave === "nombre"){
@@ -63,12 +63,12 @@ function validarInputNombreCompleto(input, valor){
     const patron = /^[a-záéíóúñ]+(?:\s[a-záéíóúñ]+)*$/i // verifica si es un nombre con solo letras Upper y Lower y espacios
     if(valor.length >= 2 && valor.length <= 100){
         if (!patron.test(valor)){
-            textoErrorInput(input, `El ${input.name} es invalido`)
+            textoErrorInput(input, `El ${input.name} no es válido`)
             console.log("error")
             return false
         }
     }else{
-        textoErrorInput(input, `Campo ${input.name}: 2 a 100 caracteres`)
+        textoErrorInput(input, `Campo ${input.name}: de 2 a 100 caracteres`)
         return false
     }
     return true
@@ -79,11 +79,11 @@ function validarInputEmail(input, valor){
     const patron = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/ // verifica si es un email valido
     if(valor.length >= 6 && valor.length <= 100){
         if (!patron.test(valor)){
-            textoErrorInput(input, "El email es invalido")
+            textoErrorInput(input, "El email no es válido")
             return false
         }
     }else{
-        textoErrorInput(input, "Email: 6 a 100 caracteres")
+        textoErrorInput(input, "Email: de 6 a 100 caracteres")
         return false
     }
     return true
