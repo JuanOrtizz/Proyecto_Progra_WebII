@@ -52,11 +52,17 @@ async function enviarFormulario(formData, csrfToken, formularioProducto){
             window.location.href = "/dashboard/productos/" //redirige a productos.html
         }else{
             const errores = data.errors //capturo los errores
-            for (let campo in errores) {
-                const mensaje = errores[campo][0]
-                const input = document.getElementById(campo)
-                if(input) {
-                    textoErrorInput(input, mensaje)
+            //Si los errores son string (provenientes de la vista)
+            if (typeof errores === "string") {
+                generarAlertError(data.errors)//Muestro una alerta
+            }
+            else{ // Sino (errores en formulario), muestro mediante un for estos errores provenientes de forms.py
+                for (let campo in errores) {
+                    const mensaje = errores[campo][0]
+                    const input = document.getElementById(input)
+                    if (input) {
+                        textoErrorInput(input, mensaje)
+                    }
                 }
             }
         }
