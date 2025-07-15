@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView, PasswordResetView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponseForbidden
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
@@ -44,10 +44,10 @@ def contacto(request):
         #Verifico si el form es valido
         if form.is_valid():
             #Obtengo los datos del formulario
-            nombre = form.cleaned_data["nombre"]
-            email = form.cleaned_data["email"]
-            telefono = form.cleaned_data["telefono"]
-            mensaje = form.cleaned_data["mensaje"]
+            nombre = form.cleaned_data["nombre"].strip()
+            email = form.cleaned_data["email"].strip()
+            telefono = form.cleaned_data["telefono"].strip()
+            mensaje = form.cleaned_data["mensaje"].strip()
             # Verifico que categoria de mensaje es, con la funcion clasificar_mensaje
             categoria_mensaje = clasificar_mensaje(mensaje)
 
@@ -117,15 +117,19 @@ def coleccion_filtrada(request, tipo):
 
 #Vista registro
 def registro(request):
+    #redirige al inicio si esta logeado
+    if request.user.is_authenticated:
+        return redirect('index') #redirige a index.html
+
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
 
             # Obtengo los datos del formulario
-            nombre = form.cleaned_data["nombre"]
-            apellido = form.cleaned_data["apellido"]
-            email = form.cleaned_data["email"]
-            contrasenia = form.cleaned_data["contrasenia"]
+            nombre = form.cleaned_data["nombre"].strip()
+            apellido = form.cleaned_data["apellido"].strip()
+            email = form.cleaned_data["email"].strip()
+            contrasenia = form.cleaned_data["contrasenia"].strip()
 
             # Verifica en la tabla si hay un usuario permitido con ese email
             try:
@@ -182,6 +186,10 @@ def registro(request):
 
 #Vista validar registro
 def validar_registro(request):
+    #redirige al inicio si esta logeado
+    if request.user.is_authenticated:
+        return redirect('index') #redirige a index.html
+
     id_usuario = request.session.get('usuario_a_validar')
 
     # si no hay datos en la sesion denego el acceso
@@ -191,7 +199,7 @@ def validar_registro(request):
     if request.method == 'POST':
         form = ValidarCodigoForm(request.POST)
         if form.is_valid():
-            codigo = form.cleaned_data['codigo'] #Capturo el codigo del formulario
+            codigo = form.cleaned_data['codigo'].strip() #Capturo el codigo del formulario
 
             #Obtengo el usuario
             usuario_validado = User.objects.get(id=id_usuario)
@@ -235,7 +243,7 @@ def consultas(request):
     contador_consultas_rrhh = 0
     contador_consultas_generales = 0
     for consulta in consultas_lista:
-        categoria = consulta.categoria_detectada.lower()
+        categoria = consulta.categoria_detectada.strip().lower()
         contador_consultas_total+=1
         match categoria:
             case "consulta comercial":
@@ -268,10 +276,10 @@ def registrar_producto(request):
         if form.is_valid():
 
             #Obtengo los datos del formulario
-            nombre = form.cleaned_data["nombre"]
-            precio = form.cleaned_data["precio"]
-            tipo = form.cleaned_data["tipo"]
-            imagen = form.cleaned_data['imagen']
+            nombre = form.cleaned_data["nombre"].strip()
+            precio = form.cleaned_data["precio"].strip()
+            tipo = form.cleaned_data["tipo"].strip()
+            imagen = form.cleaned_data['imagen'].strip()
 
             if Productos.objects.filter(nombre = nombre).exists():
                 return JsonResponse({"success": False, "errors": "Ya existe un producto con ese nombre."})
@@ -306,8 +314,8 @@ def modificar_producto(request, producto_id):
             precio_antiguo = producto.precio
 
             # obtengo los datos del formulario que pudo haber realizado cambios
-            producto.nombre = form.cleaned_data["nombre"]
-            producto.precio = form.cleaned_data["precio"]
+            producto.nombre = form.cleaned_data["nombre"].strip()
+            producto.precio = form.cleaned_data["precio"].strip()
 
             if producto.nombre == nombre_antiguo and producto.precio == precio_antiguo:
                 return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
@@ -362,8 +370,8 @@ def modificar_consulta(request, consulta_id):
             telefono_antiguo = consulta.telefono
 
             # obtengo los datos del formulario que puede cambiar (actuales)
-            consulta.email = form.cleaned_data["email"]
-            consulta.telefono = form.cleaned_data["telefono"]
+            consulta.email = form.cleaned_data["email"].strip()
+            consulta.telefono = form.cleaned_data["telefono"].strip()
 
             if consulta.email == email_antiguo and consulta.telefono == telefono_antiguo:
                 return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
@@ -449,8 +457,15 @@ class ObtenerFraseAPIView(APIView):
 #Sobreescribo la clase PasswordResetView de Autenticacion de Django para personalizacion (Actua como recuperar cuenta)
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'tienda/recuperar_cuenta.html' # plantilla que usa
+
+    #funcion para redirigir a inicio si esta logeado
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')  # redirige a index.html
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form): # funcion para validar el formulario
-        email = form.cleaned_data['email'] #obtengo el email
+        email = form.cleaned_data['email'].strip() #obtengo el email
         self.request.session['reset_email'] = email #lo guardo en la sesion
 
         # Busco el usuario con ese email
@@ -498,6 +513,12 @@ class CustomPasswordResetView(PasswordResetView):
 #Sobreescribo la clase PasswordResetConfirmView de Autenticacion de Django para personalizacion (Actua como Cambiar contraseña "Recuperar cuenta")
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'tienda/cambiar_contrasenia.html'
+
+    #funcion para redirigir a inicio si esta logeado
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')  # redirige a index.html
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.save()
