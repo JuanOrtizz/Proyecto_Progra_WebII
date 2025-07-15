@@ -1,25 +1,29 @@
 from django.conf import settings
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView
-from django.contrib.messages import success
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView, PasswordResetView
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseForbidden
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm, RecuperarContraseñaForm, \
-    CambiarContraseñaForm
+from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm
 from .models import Consultas, Productos, UsuariosPermitidos
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import ConsultasSerializer, ProductosSerializer
 from django.contrib.auth.models import User
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 import requests
 import os
-from django.contrib import messages
-from django.shortcuts import redirect
+from django.templatetags.static import static
+from django.conf import settings
+from django.http import HttpResponse, Http404
+from django.views import View
+import mimetypes
 
 #Vista index
 def pagina_index(request):
@@ -34,7 +38,7 @@ def locales(request):
     return render(request, 'tienda/locales.html')
 
 #Vista Contacto (Formulario)
-def contacto (request):
+def contacto(request):
     if request.method == "POST":  # Si el metodo de respuesta es post
         form = ContactoForm(request.POST)
         #Verifico si el form es valido
@@ -44,58 +48,44 @@ def contacto (request):
             email = form.cleaned_data["email"]
             telefono = form.cleaned_data["telefono"]
             mensaje = form.cleaned_data["mensaje"]
+            # Verifico que categoria de mensaje es, con la funcion clasificar_mensaje
             categoria_mensaje = clasificar_mensaje(mensaje)
-            #Verifico que categoria de mensaje es
 
             #Guardo en la DB
-            consultas = Consultas(
+            consulta = Consultas(
                 nombre = nombre,
                 telefono = telefono,
                 email = email,
                 mensaje = mensaje,
                 categoria_detectada = categoria_mensaje
             )
-            consultas.save()
+            consulta.save()
 
             #try-catch para enviar el mail
             try:
+                # Renderizo el template del email con contexto para mandar por el email
+                context = {
+                    'nombre': nombre,
+                    'email': email,
+                    'telefono': telefono,
+                    'categoria_mensaje': categoria_mensaje,
+                    'mensaje': mensaje
+                }
+
                 # declaro variables con los valores para el mail
                 asunto = f"Recibimos tu {categoria_mensaje}. Fresh & Simple"
-                mensajeEmail = "Si no se visualiza correctamente contacta con nosotros"
-                cuerpoMensajeHtml = f"""
-                    <html>
-                        <body style="font-family: Arial, sans-serif; background-color: #F7F7F7; padding: 30px;">
-                            <div style="max-width: 600px; margin: auto; background-color: #FFFFFF; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
-                                <h2 style="color: #2E8A99; text-align: center;">¡Hola {nombre}!</h2>
-                                <p style="font-size: 16px; color: #4A4A4A; text-align: center;">
-                                    Hemos recibido tu consulta y nuestro equipo se pondrá en contacto contigo a la brevedad.<br><br>
-                                    <strong>Email:</strong> {email}<br><br>
-                                    <strong>Teléfono:</strong> {telefono}<br><br>
-                                    <strong>Categoría del mensaje:</strong> {categoria_mensaje}<br><br>
-                                    <strong>Mensaje enviado:</strong><br>
-                                    <em style="display:inline-block; margin-top:10px;">{mensaje}</em>
-                                </p>
-                                <p style="font-size: 15px; color: #4A4A4A; text-align: center;">
-                                     Gracias por comunicarte con <strong style="color: #FF6363;">Fresh & Simple</strong>.
-                                </p>
-                                <p style="margin-top: 40px; font-size: 12px; text-align: center; color: #888888;">
-                                    Si no realizaste esta consulta o necesitas ayuda, por favor contáctanos.
-                                </p>
-                            </div>
-                        </body>
-                    </html>
-                    """
+                mensaje_email = "Si no se visualiza correctamente contacta con nosotros"
+                # obtengo el mensaje html mediante la plantilla y le paso todas las variables que necesita la plantilla por el contexto
+                mensaje_html = render_to_string('tienda/emails/contacto_email.html', context)
                 destinatario = email
                 # envio el mail
-                send_mail(asunto, mensajeEmail, settings.EMAIL_HOST_USER, [destinatario], fail_silently=False,html_message=cuerpoMensajeHtml)
+                send_mail(asunto, mensaje_email, settings.EMAIL_HOST_USER, [destinatario], fail_silently=False, html_message=mensaje_html)
             except Exception as e:
                 return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
 
-            return JsonResponse({"success": True,
-                                 "message": f"Recibimos tu mensaje y te estaremos contactando al email {email}"})
+            return JsonResponse({"success": True,"message": f"Recibimos tu mensaje y te estaremos contactando al email {email}"})
         else:
-            return JsonResponse({"success": False,
-                                 "errors": "Error al mandar la consulta, intenta de nuevo"})
+            return JsonResponse({"success": False,"errors": form.errors})
     else:
         form = ContactoForm()
 
@@ -115,13 +105,13 @@ def coleccion_filtrada(request, tipo):
     tipo_singular = valores.get(tipo.lower())
     prendas = Productos.objects.filter(tipo=tipo_singular) #Filtro productos por tipo
 
-    # Agrego una imagen default si el path de la imagen es invalido o no existe la imagen en media
+    #Agrego una imagen default si el path de la imagen es invalido o no existe la imagen en media
     for prenda in prendas:
-        imagen_path = os.path.join(settings.MEDIA_ROOT, prenda.imagen.name) if prenda.imagen else None
-        if prenda.imagen and os.path.exists(imagen_path):
-            prenda.imagen_url_final = prenda.imagen.url
-        else:
-            prenda.imagen_url_final = '/static/tienda/img/default_prenda.webp'
+        prenda.imagen_url_final = '/static/tienda/img/default_prenda.webp' #Agrego una imagen default al principio
+        if prenda.imagen:
+            imagen_path = os.path.join(settings.MEDIA_ROOT, prenda.imagen.name)
+            if os.path.exists(imagen_path):
+                prenda.imagen_url_final = prenda.imagen.url #Agrego la imagen que le corresponde si existe
 
     return render(request, 'tienda/coleccion_filtrada.html', {'prendas': prendas,'tipo': tipo.capitalize()})
 
@@ -133,242 +123,141 @@ def registro(request):
 
             # Obtengo los datos del formulario
             nombre = form.cleaned_data["nombre"]
+            apellido = form.cleaned_data["apellido"]
             email = form.cleaned_data["email"]
-            contrasenia = request.POST.get("contraseña")
+            contrasenia = form.cleaned_data["contrasenia"]
+
+            # Verifica en la tabla si hay un usuario permitido con ese email
+            try:
+                usuario_permitido = UsuariosPermitidos.objects.get(email=email)
+            except UsuariosPermitidos.DoesNotExist: # Si no existe devuelve el error informando que no esta autorizado al registro
+                return JsonResponse({"success": False, "errors": "Acceso restringido. No estás autorizado."})
 
             #valido si ya hay un usuario registrado con ese email
-            if User.objects.filter(email__iexact=email).exists():
+            if User.objects.filter(email__iexact=email, is_active=True).exists():
                 return JsonResponse({"success":False, "errors": "Ya hay un usuario registrado con este email."})
+            elif User.objects.filter(email__iexact=email, is_active=False).exists(): #Usuario nuevo que no completo su validacion.
+                usuario = User.objects.get(email__iexact=email) #obtengo el usuario que ya se habia registrado pero no validado
+                #le asigno los nuevos valores del formulario por si realiza modificaciones
+                usuario.first_name = nombre
+                usuario.last_name = apellido
+                usuario.set_password(contrasenia)
+            else:# Usuario nuevo (no existe en la DB)
+                # Creo el usuario de Django
+                usuario = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=contrasenia,
+                    first_name=nombre,
+                    last_name=apellido,
+                    is_active=False  # le pongo asi para que no pueda iniciar sesion hasta que no valide
+                )
 
-            #Verifica en la tabla si hay un usuario permitido con ese email
-            try:
-                permitido = UsuariosPermitidos.objects.get(email=email)
-                # Guardo datos en sesion
-                datos_registro = form.cleaned_data.copy()
-                datos_registro['contraseña'] = contrasenia
-                request.session['registro_data'] = datos_registro
-            except UsuariosPermitidos.DoesNotExist:
-                return JsonResponse({"success": False, "errors": "Acceso restringido. No estás autorizado."})
+            usuario.save()
+            request.session['usuario_a_validar'] = usuario.id  # guardo el id en sesion
 
             # enviar mail con el codigo
             try:
+                # Renderizo el template del email con contexto para mandar por el email
+                context = {
+                    'nombre': nombre,
+                    'codigo' : usuario_permitido.codigo_validacion
+                }
+
+                # declaro variables con los valores para el mail
                 asunto = "Validación de cuenta - Fresh & Simple"
-                mensaje_texto = f"Tu código de validación es: {permitido.codigo_validacion}\n\nPor favor, ingresa este código en el sitio para validar tu cuenta."
-                cuerpoMensajeHtml = f"""
-                    <html>
-                        <body style="font-family: Arial, sans-serif; background-color: #F7F7F7; padding: 30px;">
-                            <div style="max-width: 600px; margin: auto; background-color: #FFFFFF; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
-                                <h2 style="color: #2E8A99; text-align: center;">Validación de cuenta Fresh & Simple</h2>
-                                <p style="font-size: 16px; color: #4A4A4A; text-align: center;">
-                                    Hola {nombre}<br><br>
-                                    Gracias por registrarte en Fresh & Simple.<br>
-                                    Para activar tu cuenta, utiliza el siguiente código de validación:<br>
-                                    <span style="display: inline-block; margin: 20px auto; padding: 15px 25px; font-size: 22px; font-weight: bold; color: #FF6363; border: 2px dashed #FF6363; border-radius: 8px;">{permitido.codigo_validacion}</span><br><br>
-                                    Ingresa este código en el sitio para completar la validación de tu cuenta.<br><br>
-                                    <a href="https://freshandsimple.onrender.com/validar/" 
-                                       style="display: inline-block; background-color: #2E8A99; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
-                                        Ir a la página de validación
-                                    </a><br><br>
-                                    Si no solicitaste este registro, ignora este correo.<br><br>
-                                    ¡Gracias por elegirnos!<br><br>
-                                    <strong style="color: #FF6363;">Fresh & Simple</strong>
-                                </p>
-                                <p style="margin-top: 40px; font-size: 12px; text-align: center; color: #888888;">
-                                    Este es un correo automático, por favor no respondas a este mensaje.
-                                </p>
-                            </div>
-                        </body>
-                    </html>
-                """
+                mensaje_texto = f"Tu código de validación es: {usuario_permitido.codigo_validacion}\n\nPor favor, ingresa este código en el sitio para validar tu cuenta."
+                # obtengo el mensaje html mediante la plantilla y le paso todas las variables que necesita la plantilla por el contexto
+                mensaje_html = render_to_string('tienda/emails/registro_email.html', context)
                 destinatario = email
-                send_mail(
-                    asunto,
-                    mensaje_texto,
-                    settings.EMAIL_HOST_USER,
-                    [destinatario],
-                    fail_silently=False,
-                    html_message=cuerpoMensajeHtml
-                )
-                return JsonResponse({'success': True, 'message': "Te enviamos un código de verificación de cuenta. A continuación te redirigiremos a la página...", 'redirect_url': reverse('validar_registro')})
+                send_mail(asunto, mensaje_texto, settings.EMAIL_HOST_USER, [destinatario], fail_silently=False, html_message=mensaje_html)
+                return JsonResponse({'success': True, 'message': "Te enviamos un código de verificación de cuenta. A continuación te redirigiremos a la verificación de cuenta...", 'redirect_url': reverse('validar-registro')})
             except Exception as e:
                 return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
+        else:
+            return JsonResponse({"success": False, "errors": form.errors})
     else:
         form = RegistroForm()
     return render(request, 'tienda/registro.html', {'form': form})
 
 #Vista validar registro
 def validar_registro(request):
-    datos = request.session.get('registro_data')
-    # si no hay datos en la sesion denego el acceso
-    if not datos:
-        return HttpResponseForbidden("Acceso no autorizado.")
+    id_usuario = request.session.get('usuario_a_validar')
 
-    # verifica si el email esta autorizado sino denego acceso
-    if not UsuariosPermitidos.objects.filter(email=datos['email']).exists():
+    # si no hay datos en la sesion denego el acceso
+    if not id_usuario:
         return HttpResponseForbidden("Acceso no autorizado.")
 
     if request.method == 'POST':
         form = ValidarCodigoForm(request.POST)
         if form.is_valid():
-            codigo = form.cleaned_data['codigo']
+            codigo = form.cleaned_data['codigo'] #Capturo el codigo del formulario
 
-            if User.objects.filter(email__iexact=datos['email']).exists():
+            #Obtengo el usuario
+            usuario_validado = User.objects.get(id=id_usuario)
+            if not usuario_validado:
+                return JsonResponse({"success": False, "errors": "Usuario inválido."})
+
+            #Si el usuario ya esta registrado
+            if usuario_validado.is_active:
                 return JsonResponse({'success': False, 'errors': "Ya hay una cuenta registrada con este email."})
 
-            if not UsuariosPermitidos.objects.filter(email__iexact=datos['email'], codigo_validacion=codigo).exists():
+            #Si el codigo no es valido
+            if not UsuariosPermitidos.objects.filter(email__iexact = usuario_validado.email , codigo_validacion=codigo).exists():
                 return JsonResponse({'success': False, 'errors': "Código inválido."})
 
-            # Creo el usuario de Django
-            user = User.objects.create_user(
-                username=datos['email'],
-                email=datos['email'],
-                password=datos['contraseña'],
-                first_name=datos['nombre'],
-                last_name=datos['apellido'],
-            )
+            # Actualizo el usuario en la DB como activo
+            usuario_validado.is_active=True
+            usuario_validado.save()
+
             #Vacio los datos de sesion
-            del request.session['registro_data']
+            del request.session['usuario_a_validar']
 
-            return JsonResponse({'success': True, 'message': "Cuenta validada. Ya podés iniciar sesión con tu email y contraseña. A continuación te redirigiremos a la página...",'redirect_url': reverse('login')})
-
+            return JsonResponse({'success': True, 'message': "Cuenta validada. Ya podés iniciar sesión con tu email y contraseña. A continuación te redirigiremos al login...",'redirect_url': reverse('login')})
+        else:
+            return JsonResponse({"success": False, "errors": form.errors})
     else:
         form = ValidarCodigoForm()
     return render(request, 'tienda/validar_registro.html', {'form': form})
 
-#Vista para recuperar la contraseña
-def recuperar_contraseña(request):
-    if request.method == 'POST':
-        form = RecuperarContraseñaForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-
-            if not User.objects.filter(email__iexact=email).exists():
-                return JsonResponse({'success': False, 'errors': "No hay ninguna cuenta registrada con este email."})
-            else:
-                datos_registro = form.cleaned_data.copy()
-                request.session['registro_data'] = datos_registro
-                usuario = User.objects.get(email__iexact=email)
-                # enviar mail con el codigo
-                try:
-                    asunto = "Recuperación de cuenta - Fresh & Simple"
-                    mensaje_texto = f"El enlace para cambiar tu contraseña es: https://freshandsimple.onrender.com/cambiar_contraseña/"
-                    cuerpoMensajeHtml = f"""
-                                   <html>
-                                       <body style="font-family: Arial, sans-serif; background-color: #F7F7F7; padding: 30px;">
-                                           <div style="max-width: 600px; margin: auto; background-color: #FFFFFF; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
-                                               <h2 style="color: #2E8A99; text-align: center;">Recuperar contraseña. Fresh & Simple</h2>
-                                               <p style="font-size: 16px; color: #4A4A4A; text-align: center;">
-                                                   Hola {usuario.first_name}!<br><br>
-                                                   Para recuperar tu cuenta ingresá al siguiente enlace:<br><br>
-                                                   <a href="https://freshandsimple.onrender.com/cambiar_contraseña/" 
-                                                      style="display: inline-block; background-color: #2E8A99; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
-                                                      Cambiar Contraseña
-                                                   </a><br><br>
-                                                   Si no fuiste vos, contactanos.<br><br>
-                                                   <strong style="color: #FF6363;">Fresh & Simple</strong>
-                                               </p>
-                                               <p style="margin-top: 40px; font-size: 12px; text-align: center; color: #888888;">
-                                                   Este es un correo automático, por favor no respondas a este mensaje.
-                                               </p>
-                                           </div>
-                                       </body>
-                                   </html>
-                               """
-                    destinatario = email
-                    send_mail(
-                        asunto,
-                        mensaje_texto,
-                        settings.EMAIL_HOST_USER,
-                        [destinatario],
-                        fail_silently=False,
-                        html_message=cuerpoMensajeHtml
-                    )
-                    return JsonResponse({'success': True, 'message': f"Te enviamos los pasos para cambiar tu contraseña al email {email}."})
-                except Exception as e:
-                    return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
-    else:
-        form = RecuperarContraseñaForm()
-    return render(request, 'tienda/recuperar_cuenta.html', {'form': form})
-
-#Vista para recuperar la contraseña
-def cambiar_contrasenia(request):
-    #Si el usuario esta logeado y quiere cambiar su contraseña
-    if request.user.is_authenticated:
-        email = request.user.email #Si es desde la sesion lo guardo
-        esRecuperacion = False
-    else:
-        # si no hay datos en la sesion denego el acceso (Es decir no selecciono Olvide mi contraseña)
-        datos = request.session.get('registro_data')
-        if not datos:
-            return HttpResponseForbidden("Acceso no autorizado.")
-        email = datos.get('email') # Si es desde la recuperacion lo guardo
-        esRecuperacion = True
-
-    # verifica si el email esta autorizado sino denego acceso
-    if not UsuariosPermitidos.objects.filter(email=email).exists():
-        return HttpResponseForbidden("Acceso no autorizado.")
-
-    if request.method == 'POST':
-        form = CambiarContraseñaForm(request.POST)
-        if form.is_valid():
-            contrasenia = form.cleaned_data['contraseña']
-            confirmarContrasenia = form.cleaned_data['confirmar_contraseña']
-
-            if not User.objects.filter(email__iexact=email).exists():
-                return JsonResponse({'success': False, 'errors': "No hay ninguna cuenta registrada con este email."})
-            else:
-                if contrasenia != confirmarContrasenia:
-                    return JsonResponse({'success': False, 'errors': "Las contraseñas no coinciden."})
-                else:
-                    usuario = User.objects.get(email__iexact = email)
-                    usuario.set_password(contrasenia)
-                    usuario.save()
-                    # Si uso recuperacion, vacio los datos de sesion
-                    if esRecuperacion and 'registro_data' in request.session:
-                        del request.session['registro_data']
-                    return JsonResponse({'success': True, 'message': "Cambiaste tu contraseña con éxito. A continuación te redirigiremos al login...",'redirect_url': reverse('login')})
-    else:
-        form = CambiarContraseñaForm()
-    return render(request, 'tienda/cambiar_contrasenia.html', {'form': form})
-
-
 #Vista Dashboard
 @login_required()
 def dashboard (request):
-    return render(request, 'tienda/dashboard.html', {'consultas': consultas})
+    return render(request, 'tienda/dashboard.html')
 
 #vista Consultas
 @login_required()
 def consultas(request):
-    consultas = Consultas.objects.all()
-    contadorConsultasTotal = 0
-    contadorConsultasComerciales = 0
-    contadorConsultasTecnicas = 0
-    contadorConsultasRrhh = 0
-    contadorConsultasGenerales = 0
-    for consulta in consultas:
+    consultas_lista = Consultas.objects.all()
+    contador_consultas_total = 0
+    contador_consultas_comerciales = 0
+    contador_consultas_tecnicas = 0
+    contador_consultas_rrhh = 0
+    contador_consultas_generales = 0
+    for consulta in consultas_lista:
         categoria = consulta.categoria_detectada.lower()
-        contadorConsultasTotal+=1
+        contador_consultas_total+=1
         match categoria:
             case "consulta comercial":
-                contadorConsultasComerciales+=1
+                contador_consultas_comerciales+=1
             case "consulta técnica":
-                contadorConsultasTecnicas+=1
+                contador_consultas_tecnicas+=1
             case "consulta de rrhh":
-                contadorConsultasRrhh+=1
+                contador_consultas_rrhh+=1
             case _:
-                contadorConsultasGenerales+=1
-    return render(request, 'tienda/consultas.html', {'consultas': consultas, 'totalConsultas': contadorConsultasTotal, 'consultasComerciales': contadorConsultasComerciales, 'consultasTecnicas': contadorConsultasTecnicas, 'consultasRRHH' : contadorConsultasRrhh, 'consultasGenerales' :contadorConsultasGenerales})
+                contador_consultas_generales+=1
+    return render(request, 'tienda/consultas.html', {'consultas': consultas_lista, 'total_consultas': contador_consultas_total, 'consultas_comerciales': contador_consultas_comerciales, 'consultas_tecnicas': contador_consultas_tecnicas, 'consultas_rrhh' : contador_consultas_rrhh, 'consultas_generales' :contador_consultas_generales})
 
 #Vista Productos
 @login_required()
 def productos(request):
+    #Filtro para filtrar mediante el select los productos registrados
     tipo_filtro = request.GET.get('tipo', '')
-    productos = Productos.objects.all()
+    productos_lista = Productos.objects.all()
     if tipo_filtro:
-        productos = productos.filter(tipo=tipo_filtro)
+        productos_lista = productos_lista.filter(tipo=tipo_filtro)
 
-    return render(request, 'tienda/productos.html', {'productos': productos, 'tipo_filtro': tipo_filtro})
+    return render(request, 'tienda/productos.html', {'productos': productos_lista, 'tipo_filtro': tipo_filtro})
 
 #Vista registrar producto
 @login_required()
@@ -377,19 +266,15 @@ def registrar_producto(request):
         form = ProductoForm(request.POST, request.FILES)
         #Verifico si el form es valido
         if form.is_valid():
-            imagen = request.FILES.get('imagen')
-            # Validaciones manuales en la vista
-            if imagen:
-                if imagen.size > 1 * 1024 * 1024:
-                    return JsonResponse(
-                        {"success": False, "errors": "La imagen no puede pesar más de 1 MB."})
-                if imagen.content_type not in ["image/webp"]:
-                    return JsonResponse({"success": False, "errors": "Solo se permiten imágenes WEBP."})
 
             #Obtengo los datos del formulario
             nombre = form.cleaned_data["nombre"]
             precio = form.cleaned_data["precio"]
             tipo = form.cleaned_data["tipo"]
+            imagen = form.cleaned_data['imagen']
+
+            if Productos.objects.filter(nombre = nombre).exists():
+                return JsonResponse({"success": False, "errors": "Ya existe un producto con ese nombre."})
 
             #Guardo en la DB
             producto = Productos(
@@ -400,11 +285,9 @@ def registrar_producto(request):
             )
             producto.save()
 
-            return JsonResponse({"success": True,
-                                 "message": f"Se registró con éxito el producto {nombre}"})
+            return JsonResponse({"success": True,"message": f"Se registró con éxito el producto {nombre}"})
         else:
             return JsonResponse({"success": False, "errors": form.errors})
-
     else:
         form = ProductoForm()
     return render (request, 'tienda/registrar_producto.html', {'form': form})
@@ -415,26 +298,27 @@ def modificar_producto(request, producto_id):
     producto = get_object_or_404(Productos, id=producto_id) # obtengo el Producto
 
     if request.method == 'POST':
-        form = ProductoForm(request.POST)
+        form = ProductoForm(request.POST, files=request.FILES, imagen_actual=producto.imagen)
         form.fields['imagen'].required = False
         if form.is_valid():
             #obtengo los valores (antiguos) del formulario
-            nombreAntiguo = producto.nombre
-            precioAntiguo = producto.precio
+            nombre_antiguo = producto.nombre
+            precio_antiguo = producto.precio
 
-            # obtengo los datos del formulario que puede cambiar (actuales)
+            # obtengo los datos del formulario que pudo haber realizado cambios
             producto.nombre = form.cleaned_data["nombre"]
             producto.precio = form.cleaned_data["precio"]
 
-            if producto.nombre == nombreAntiguo and producto.precio == precioAntiguo:
+            if producto.nombre == nombre_antiguo and producto.precio == precio_antiguo:
                 return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
+            elif Productos.objects.filter(nombre=producto.nombre).exclude(id=producto.id).exists():
+                return JsonResponse({"success": False, "errors": "Ya existe un producto con ese nombre."})
             else:
                 # actualizo los valores de la consulta
                 producto.save()
             return JsonResponse({"success": True, "message": "Producto modificado con éxito."})
         else:
-            return JsonResponse({"success": False, "errors": form.errors}, status=400)
-
+            return JsonResponse({"success": False, "errors": form.errors})
     else:
         #lleno el formulario con los datos actuales del producto
         form = ProductoForm(initial={
@@ -445,7 +329,7 @@ def modificar_producto(request, producto_id):
         })
 
         #Le pongo al campo tipo un atributo readonly para evitar su modificacion
-        form.fields["tipo"].widget.attrs['readonly'] = True
+        form.fields['tipo'].readonly = True
 
     return render(request, 'tienda/modificar_producto.html', {'form': form})
 
@@ -474,22 +358,21 @@ def modificar_consulta(request, consulta_id):
         form = ContactoForm(request.POST)
         if form.is_valid():
             #obtengo los valores (antiguos) del formulario
-            emailAntiguo = consulta.email
-            telefonoAntiguo = consulta.telefono
+            email_antiguo = consulta.email
+            telefono_antiguo = consulta.telefono
 
             # obtengo los datos del formulario que puede cambiar (actuales)
             consulta.email = form.cleaned_data["email"]
             consulta.telefono = form.cleaned_data["telefono"]
 
-            if consulta.email == emailAntiguo and consulta.telefono == telefonoAntiguo:
+            if consulta.email == email_antiguo and consulta.telefono == telefono_antiguo:
                 return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
             else:
                 # actualizo los valores de la consulta
                 consulta.save()
             return JsonResponse({"success": True, "message": "Consulta modificada con éxito."})
         else:
-            return JsonResponse({"success": False, "errors": form.errors}, status=400)
-
+            return JsonResponse({"success": False, "errors": form.errors})
     else:
         #lleno el formulario con los datos actuales de la consulta
         form = ContactoForm(initial={
@@ -518,32 +401,19 @@ def eliminar_consulta(request, consulta_id):
     consulta.delete() #elimino la consulta
 
     #Actualizo los contadores
-    contadorConsultasTotal = Consultas.objects.count()
-    contadorConsultasComerciales = Consultas.objects.filter(categoria_detectada="Consulta Comercial").count()
-    contadorConsultasTecnicas = Consultas.objects.filter(categoria_detectada="Consulta Técnica").count()
-    contadorConsultasRrhh = Consultas.objects.filter(categoria_detectada="Consulta de RRHH").count()
-    contadorConsultasGenerales = Consultas.objects.filter(categoria_detectada="Consulta General").count()
+    contador_consultas_total = Consultas.objects.count()
+    contador_consultas_comerciales = Consultas.objects.filter(categoria_detectada="Consulta Comercial").count()
+    contador_consultas_tecnicas = Consultas.objects.filter(categoria_detectada="Consulta Técnica").count()
+    contador_consultas_rrhh = Consultas.objects.filter(categoria_detectada="Consulta de RRHH").count()
+    contador_consultas_generales = Consultas.objects.filter(categoria_detectada="Consulta General").count()
 
-    return JsonResponse({"success": True, 'totalConsultas': contadorConsultasTotal, 'consultasComerciales': contadorConsultasComerciales, 'consultasTecnicas': contadorConsultasTecnicas, 'consultasRRHH' : contadorConsultasRrhh, 'consultasGenerales' :contadorConsultasGenerales})
-
-# Funcion auxiliar para clasificar mensaje en la vista Contacto
-def clasificar_mensaje(mensaje):
-    mensaje = mensaje.lower()
-    categorias = {
-        "Consulta Comercial": ["precio", "costo", "tarifa", "compra"],
-        "Consulta Técnica": ["soporte", "error", "problema", "ayuda"],
-        "Consulta de RRHH": ["trabajo", "cv", "empleo", "linkedin"]
-    }
-    for categoria, palabras in categorias.items():
-        if any(palabra in mensaje for palabra in palabras):
-            return categoria
-    return "Consulta General"
+    return JsonResponse({"success": True, 'total_consultas': contador_consultas_total, 'consultas_comerciales': contador_consultas_comerciales, 'consultas_tecnicas': contador_consultas_tecnicas, 'consultas_rrhh' : contador_consultas_rrhh, 'consultas_generales' :contador_consultas_generales})
 
 # clase para el viewSet de Consultas
 class ConsultasViewSet(viewsets.ModelViewSet):
     queryset =  Consultas.objects.all()
     serializer_class = ConsultasSerializer
-    permission_classes = [IsAuthenticated] #Protejo los endpoint, si no esta logeado desde dashboard no puede acceder en un futuro se usara JWT
+    permission_classes = [IsAuthenticated] #Protejo los endpoint, si no elogeado desde dashboard no puede acceder en un futuro se usara JWT
 
 # clase para el viewSet de Productos
 class ProductosViewSet(viewsets.ModelViewSet):
@@ -576,16 +446,96 @@ class ObtenerFraseAPIView(APIView):
         # devuelo la respuesta (frase) al frontend
         return Response({"frase": frase})
 
-class CustomLoginView(LoginView):
-    template_name = 'tienda/login.html'
-    authentication_form = AuthenticationForm  # puede ser AuthenticationForm también
-    success_url = reverse_lazy('home')  # ajusta según tu app
+#Sobreescribo la clase PasswordResetView de Autenticacion de Django para personalizacion (Actua como recuperar cuenta)
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'tienda/recuperar_cuenta.html' # plantilla que usa
+    def form_valid(self, form): # funcion para validar el formulario
+        email = form.cleaned_data['email'] #obtengo el email
+        self.request.session['reset_email'] = email #lo guardo en la sesion
 
-    def post(self, request, *args, **kwargs):
-        email = request.POST.get('username')  # por defecto LoginView usa 'username'
+        # Busco el usuario con ese email
+        users = User.objects.filter(email=email, is_active=True)
+        if not users.exists(): # Si el usuario no existe o su cuenta no esta activa
+            return JsonResponse({'success': False, 'errors': f"No hay ningún usuario registrado con ese email."})
 
-        if '@' in email and not User.objects.filter(email=email).exists():
-            messages.error(request, "Este correo no está registrado. Puedes crear una cuenta.")
-            return redirect('registro')  # o vuelve a login con error
+        #Si existe, obtengo el usuario
+        usuario = users.first()
 
-        return super().post(request, *args, **kwargs)
+        # Genero los tokens para el link para mayor seguridad
+        uid = urlsafe_base64_encode(force_bytes(str(usuario.pk)))
+        token = default_token_generator.make_token(usuario)
+
+        # Renderizo el template del email con contexto para mandar por el email
+        context = {
+            'usuario': usuario,
+            'protocolo': 'https' if self.request.is_secure() else 'http',
+            'dominio': self.request.get_host(),
+            'uid': uid,
+            'token': token,
+        }
+
+        logo_url = f"{context['protocolo']}://{context['dominio']}{static('img/logo_fys.webp')}"
+        context['logoUrl'] = logo_url
+        # Mando el mail
+        try:
+            # obtengo el mensaje html mediante la plantilla y le paso todas las variables que necesita la plantilla por el contexto
+            message_html = render_to_string('tienda/emails/cambiar_contrasenia_email.html', context)
+            send_mail(
+                subject='Recuperar contraseña - Fresh & Simple',
+                message='',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+                html_message=message_html,
+            )
+            return JsonResponse({'success': True, 'message': f"Te enviamos los pasos para cambiar tu contraseña al email {email}."})
+        except Exception as e:
+            return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
+
+    def form_invalid(self, form):
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+#Sobreescribo la clase PasswordResetConfirmView de Autenticacion de Django para personalizacion (Actua como Cambiar contraseña "Recuperar cuenta")
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'tienda/cambiar_contrasenia.html'
+
+    def form_valid(self, form):
+        form.save()
+        return JsonResponse({'success': True,'message': "Cambiaste tu contraseña con éxito. A continuación te redirigiremos al login...",'redirect_url': reverse('login')})
+
+    def form_invalid(self, form):
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+#Sobreescribo la clase PasswordResetView de Autenticacion de Django para personalizacion (Actua como cambiar contraseña (Desde el perfil))
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'tienda/cambiar_contrasenia.html'
+
+    def form_valid(self, form):
+        form.save()
+        return JsonResponse({'success': True,'message': "Cambiaste tu contraseña con éxito. A continuación te redirigiremos al login...",'redirect_url': reverse('login')})
+
+    def form_invalid(self, form):
+        return JsonResponse({'success': False, 'errors': form.errors})
+
+#Clase para servir los archivos con DEBUG=FALSE en produccion
+class MediaServeView(View):
+    def get(self, request, path):
+        full_path = os.path.join(settings.MEDIA_ROOT, path)
+        if os.path.exists(full_path):
+            with open(full_path, 'rb') as f:
+                mime_type, _ = mimetypes.guess_type(full_path)
+                return HttpResponse(f.read(), content_type=mime_type)
+        raise Http404()
+
+# Funcion auxiliar para clasificar mensaje en la vista Contacto
+def clasificar_mensaje(mensaje):
+    mensaje = mensaje.lower()
+    categorias = {
+        "Consulta Comercial": ["precio", "costo", "tarifa", "compra"],
+        "Consulta Técnica": ["soporte", "error", "problema", "ayuda"],
+        "Consulta de RRHH": ["trabajo", "cv", "empleo", "linkedin"]
+    }
+    for categoria, palabras in categorias.items():
+        if any(palabra in mensaje for palabra in palabras):
+            return categoria
+    return "Consulta General"
