@@ -39,7 +39,7 @@
     background-color: var(--colorNegroOscuro);
 }
 
-/*diseño para el section del contenedor modificar consulta*/
+/*diseño para el section del contenedor modificar consulta y modificar producto*/
 .section_contenedor_modificar_elemento{
     display: flex;
     justify-content: center;
@@ -49,7 +49,7 @@
     box-sizing: border-box;
 }
 
-/*diseño para el contenedor modificar consulta*/
+/*diseño para el contenedor modificar consulta y producto*/
 .contenedor_modificar_elemento{
     display:grid;
     grid-template-columns: 1fr;
@@ -63,7 +63,7 @@
     box-shadow: 0 0 10px 1px var(--colorNegro);
 }
 
-/*diseño para el titulo del contenedor modificar consulta*/
+/*diseño para el titulo del contenedor modificar consulta y producto*/
 .contenedor_modificar_elemento h2{
     margin:0;
     text-align: center;
@@ -71,7 +71,7 @@
     font-size: 2rem;
 }
 
-/*diseño para el formulario de modificar consulta*/
+/*diseño para el formulario de modificar consulta y producto*/
 .form_modificar_elemento {
     display: grid;
     grid-template-columns: 1fr;
@@ -103,8 +103,7 @@
     font-size: 0.9rem;
 }
 
-
-/*diseño para el textarea*/
+/*diseño para el textarea Consulta*/
 .form_modificar_elemento textarea {
     padding: 10px;
     resize:none;
@@ -128,7 +127,7 @@
     background-color: #ced1d3;
 }
 
-/*diseño para el boton modificar consulta*/
+/*diseño para el boton modificar*/
 .form_modificar_elemento button{
     padding: 10px;
     margin: 10px 0;
@@ -142,7 +141,7 @@
     cursor:pointer;
 }
 
-/*diseño para el boton modificar consulta hover*/
+/*diseño para el boton modificar hover*/
 .form_modificar_elemento button:hover{
     background-color: var(--colorAzul);
     color: var(--colorBlanco);
@@ -177,7 +176,7 @@
         font-size: 0.8rem;
     }
 
-    /*diseño para el titulo del contenedor modificar consulta*/
+    /*diseño para el titulo del contenedor modificar consulta y producto*/
     .contenedor_modificar_elemento h2{
         font-size: 1.8rem;
     }
@@ -188,20 +187,20 @@
         font-size: 0.8rem;
     }
 
-    /*diseño para el boton modificar consulta*/
+    /*diseño para el boton modificar*/
     .form_modificar_elemento button{
         font-size: 0.8rem;
     }
 }
 
 @media (max-width: 480px){
-    /*diseño para el titulo del contenedor modificar consulta*/
-    .contenedor_modificar_elemento h2{
-        font-size: 1.6rem;
-    }
-
-    /*diseño para el section del contenedor modificar consulta*/
+    /*diseño para el section del contenedor modificar consulta y producto*/
     .section_contenedor_modificar_elemento{
         padding: 50px 20px;
+    }
+
+    /*diseño para el titulo del contenedor modificar consulta y producto*/
+    .contenedor_modificar_elemento h2{
+        font-size: 1.6rem;
     }
 }
