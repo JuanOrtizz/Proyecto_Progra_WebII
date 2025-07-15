@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
                         document.body.style.paddingRight = '0'
                     }
                 }).then((result) => {
-                    const overlay = document.getElementById("pantalla_carga") // Obtiene el overlay (pantalla de carga)
-                    overlay.style.display = "flex" // Muestra el overlay (pantalla de carga)
                     if (result.isConfirmed) { // si confirma hace un fetch y elimina el producto con ese id
+                        const overlay = document.getElementById("pantalla_carga") // Obtiene el overlay (pantalla de carga)
+                        overlay.style.display = "flex" // Muestra el overlay (pantalla de carga)
                         fetch(`/dashboard/productos/eliminar-producto/${productoIdAEliminar}/`,{
                         method: 'GET',
                         headers: {
