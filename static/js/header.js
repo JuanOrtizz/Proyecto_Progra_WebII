@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded",  () => {
             if (esPantallaChica()) { // si la pantalla chica lo expande
                 e.stopPropagation() // evito que se propague al document
                 menuUsuarioDropdown.classList.toggle("abierto") // Le pongo la clase abierto al submenu
-                flechaDropdown.classList.toggle("abierta") // le pongo la clase abierta al icon dropdown
+                flechaDropdown.classList.toggle("abierta") // le pongo la clase abierta al icon dropdown del submenu
             }
         })
     }

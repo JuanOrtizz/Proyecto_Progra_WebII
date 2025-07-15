@@ -16,9 +16,8 @@
                         <p>{{ request.user.first_name }}</p>
                         <span class="material-symbols-outlined"  id="flecha_usuario">arrow_drop_down</span>
                     </div>
-
                     <ul id="menu_usuario">
-                        <li><a href="{% url 'cambiar_contraseña' %}" id="enlace_cambiar_contraseña">Cambiar Contraseña</a></li>
+                        <li><a href="{% url 'cambiar-contrasenia' %}" id="enlace_cambiar_contraseña">Cambiar Contraseña</a></li>
                         <li><a href="{% url 'dashboard' %}">Panel</a></li>
                         <li>
                             <form method="POST" action="{% url 'logout' %}">
