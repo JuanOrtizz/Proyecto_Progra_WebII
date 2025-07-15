@@ -34,31 +34,31 @@
 /*estilos para los textos con movimiento*/
 /*diseño texto en movimiento*/
 .contenedor_texto_movimiento {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 1rem;
-  font-weight: 500;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 /*diseño texto en movimiento (COLECCION)*/
 #txtMovimientoColeccion{
-  background-color: var(--colorNegroOscuro);
-  color: var(--colorNaranja);
-   margin-top: 70px;
+    background-color: var(--colorNegroOscuro);
+    color: var(--colorNaranja);
+    margin-top: 70px;
 }
 
 /*diseño texto en movimiento (MARCA)*/
 #txtMovimientoMarca{
-  background-color: var(--colorNegroOscuro);
-  color: var(--colorCelesteOscuro);
-  margin-bottom: 70px;
+    background-color: var(--colorNegroOscuro);
+    color: var(--colorCelesteOscuro);
+    margin-bottom: 70px;
 }
 
 /*diseño contenedor del contenedor del texto*/
 .contenedor_interno_texto {
-  display: flex;
-  width: fit-content;
+    display: flex;
+    width: fit-content;
 }
 
 /*texto izquierda*/
@@ -73,33 +73,33 @@
 
 /*diseño para el contenedor texto*/
 .texto {
-  display: flex;
+    display: flex;
 }
 
 /*diseño para el texto (SPAN) del contenedor*/
 .texto span {
-  margin-right: 50px;
-  white-space: nowrap;
+    margin-right: 50px;
+    white-space: nowrap;
 }
 
 /* animacion del texto para izquierda */
 @keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 /* animacion del texto para derecha*/
 @keyframes scroll-right {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
 }
 
 /*Diseño seccion quienes somos*/

@@ -77,15 +77,6 @@
     outline: none;
 }
 
-/*diseño para la lista de errores*/
-.errorlist ul {
-    margin: 0;
-    padding: 0 5px;
-    list-style: disc inside;
-    font-size: 0.8rem;
-    color: var(--colorGrisOscuro);
-}
-
 /*diseño para el boton de los formularios*/
 .contenedor_form_login button,
 .contenedor_form_recuperacion button{
@@ -110,7 +101,15 @@
     background-color: var(--colorAzul);
 }
 
-/*diseño para errores de login*/
+/*Diseño para el boton recuperar cuenta para esperar un intervalo de 1 minuto*/
+#boton_recuperar_cuenta.deshabilitado,
+#boton_recuperar_cuenta.deshabilitado:hover {
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: var(--colorGris);
+}
+
+/*diseño para errores de LOGIN*/
 .errorlist li{
     padding: 10px 0;
     color: var(--colorRojo);
@@ -119,6 +118,28 @@
     font-weight: 600;
 }
 
+/*diseño para la lista de errores de LOGIN*/
+.errorlist ul {
+    margin: 0;
+    padding: 0 5px;
+    list-style: disc inside;
+    font-size: 0.8rem;
+    color: var(--colorGrisOscuro);
+}
+
+/*diseño para los errores en el span debajo del input (Registro, Validar, Recuperar cuenta y cambiar contraseña)*/
+.error_texto{
+    color: var(--colorRojo);
+    text-align: start;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+/*Estilo para errores en los input (Registro y Validar)*/
+.input_error{
+    border: 2px solid #FF0000 !important;
+}
 
 /*diseño para contenedores texto bottom (Iniciar Sesion y Registrate y Olvide mi contraseña)*/
 .contenedor_texto_bottom_acceso,
@@ -173,64 +194,6 @@
 body.swal2-shown {
     overflow: auto !important;
     padding-right: 0 !important;
-}
-
-/*diseño para los errores en el span debajo del input (Registro, Validar, Recuperar cuenta y cambiar contraseña)*/
-.error_texto{
-    color: var(--colorRojo);
-    text-align: start;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding-left: 5px;
-}
-
-/*Estilo para errores en los input (Registro y Validar)*/
-.input_error{
-    border: 2px solid #FF0000 !important;
-}
-
-/*diseño pantalla de carga (Registro, recuperar cuente y cambiar Contraseña)*/
-#pantalla_carga {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction:column;
-    z-index: 9999;
-    display: none;
-}
-
-/*parrafo de la pantalla de carga (Registro, recuperar cuenta y cambiar contraseña)*/
-#pantalla_carga p{
-    color:var(--colorNaranja);
-    font-size: 1rem;
-    font-weight:600;
-    padding: 10px;
-    box-sizing:border-box;
-}
-
-/*Diseño del componente de Bootstrap para no cargar todo Bootstrap*/
-.spinner-border {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    vertical-align: text-bottom;
-    border: 0.25em solid currentColor;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: spinner-border 0.75s linear infinite;
-}
-
-/*keyframes para la rotacion del spinner*/
-@keyframes spinner-border {
-    100% {
-        transform: rotate(360deg);
-    }
 }
 
 /*color del spinner*/
