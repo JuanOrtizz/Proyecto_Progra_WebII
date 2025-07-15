@@ -51,7 +51,7 @@
     align-items:center;
 }
 
-/*diseño del formulario de contacto*/
+/*diseño del formulario de registro del producto*/
 #contenedor_formulario form{
     display:grid;
     grid-template-columns: 1fr;
@@ -79,31 +79,11 @@
     border-radius: 5px 5px 0 0;
 }
 
-/*diseño para los inputs del formulario*/
-.contenedor_input input,
-.contenedor_input select{
-    width: 100%;
-    height: 40px;
-}
-
-/*diseño para los errores en el span debajo del input*/
-.error_texto{
-    color: var(--colorRojo);
-    text-align: start;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding-left: 5px;
-}
-
-/*Estilo para errores en los input*/
-.input_error{
-    border: 2px solid #FF0000 !important;
-}
-
 /*Diseño para los campos del formulario*/
 #contenedor_formulario input,
-#contenedor_formulario select,
-#contenedor_formulario textarea{
+#contenedor_formulario select{
+    width: 100%;
+    height: 40px;
     font-size: 0.9rem;
     padding:8px;
     border: 2px solid var(--colorNegro);
@@ -113,8 +93,7 @@
 
 /*Diseño para los campos del formulario cuando tienen el foco*/
 #contenedor_formulario input:focus,
-#contenedor_formulario select:focus,
-#contenedor_formulario textarea:focus{
+#contenedor_formulario select:focus{
     border: 2px solid var(--colorAzul);
     outline: none !important;
     box-shadow: none !important;
@@ -156,6 +135,20 @@
 /*diseño para el boton enviar hover*/
 #boton_enviar_form:hover{
     background-color:var(--colorNegroOscuro);
+}
+
+/*diseño para los errores en el span debajo del input*/
+.error_texto{
+    color: var(--colorRojo);
+    text-align: start;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+/*Estilo para errores en los input*/
+.input_error{
+    border: 2px solid #FF0000 !important;
 }
 
 /*Media queries*/
