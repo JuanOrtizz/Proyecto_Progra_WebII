@@ -2,7 +2,8 @@
 {% load static %}
 {% block title %}Registrar Producto | Fresh & Simple{% endblock %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'tienda/css/stylesAgregarProducto.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesRegistrarProducto.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section id="section_contenedor_volver">
@@ -23,7 +24,11 @@
     <button type="submit" id="boton_enviar_form">Registrar</button>
     </form>
 </section>
+<div id="pantalla_carga">
+    <p>Registrando...</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
 {% endblock %}
 {% block extra_js %}
-    <script type="module" src="{% static 'tienda/js/formAgregarProducto.js' %}"></script>
+    <script type="module" src="{% static 'tienda/js/formRegistrarProducto.js' %}"></script>
 {% endblock %}

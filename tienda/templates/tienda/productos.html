@@ -3,6 +3,7 @@
 {% block title %}Panel Productos | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesPaneles.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section id="section_contenedor_volver">
@@ -24,7 +25,7 @@
                 <option value="6" {% if tipo_filtro == "6" %}selected{% endif %}>Camperas</option>
                 <option value="7" {% if tipo_filtro == "7" %}selected{% endif %}>Accesorios</option>
             </select>
-            <a href="{% url 'agregar_producto' %}" class="boton_nuevo_producto">Nuevo Producto</a>
+            <a href="{% url 'registrar-producto' %}" class="boton_nuevo_producto">Nuevo Producto</a>
         </form>
         <div class="contenedor_tabla">
             <table>
@@ -59,7 +60,7 @@
                     </td>
                     <td>
                         <div class="contenedor_acciones">
-                            <a class="boton_modificar" href="{% url 'modificar_producto' producto.id %}">
+                            <a class="boton_modificar" href="{% url 'modificar-producto' producto.id %}">
                                 Modificar
                             </a>
                             <button class="boton_eliminar" data-id ="{{ producto.id }}">
@@ -73,6 +74,10 @@
         </div>
     </div>
 </section>
+<div id="pantalla_carga">
+    <p>Eliminando...</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
 {% endblock %}
 {% block extra_js %}
     <script type = module src="{% static 'tienda/js/eliminarProducto.js' %}"></script>
