@@ -3,6 +3,7 @@
 {% block title %}Panel Consultas | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesPaneles.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section id="section_contenedor_volver">
@@ -19,19 +20,19 @@
         </div>
         <div class="contenedor_contador_consultas">
             <p class="titulo_contador">Total de consultas comerciales: </p>
-            <p id="consultas_comerciales">{{ consultasComerciales }}</p>
+            <p id="consultas_comerciales">{{ consultas_comerciales }}</p>
         </div>
         <div class="contenedor_contador_consultas">
             <p class="titulo_contador">Total de consultas técnicas: </p>
-            <p id="consultas_tecnicas">{{ consultasTecnicas }}</p>
+            <p id="consultas_tecnicas">{{ consultas_tecnicas }}</p>
         </div>
         <div class="contenedor_contador_consultas">
             <p class="titulo_contador">Total de consultas de RRHH: </p>
-            <p id="consultas_rrhh">{{ consultasRRHH }}</p>
+            <p id="consultas_rrhh">{{ consultas_rrhh }}</p>
         </div>
         <div class="contenedor_contador_consultas">
             <p class="titulo_contador">Total de consultas generales: </p>
-            <p id="consultas_generales">{{ consultasGenerales }}</p>
+            <p id="consultas_generales">{{ consultas_generales }}</p>
         </div>
     </div>
     <div class="contenedor_panel">
@@ -59,7 +60,7 @@
                                   target="_blank" class="boton_contactar">
                                     Contactar
                                 </a>
-                                <a class="boton_modificar" href="{% url 'modificar_consulta' consulta.id %}">
+                                <a class="boton_modificar" href="{% url 'modificar-consulta' consulta.id %}">
                                     Modificar
                                 </a>
                                 <button class="boton_eliminar" data-id ="{{ consulta.id }}">
@@ -73,6 +74,10 @@
         </div>
     </div>
 </section>
+<div id="pantalla_carga">
+    <p>Eliminando...</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
 {% endblock %}
 {% block extra_js %}
     <script type = module src="{% static 'tienda/js/eliminarConsulta.js' %}"></script>

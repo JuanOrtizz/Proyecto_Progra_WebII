@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Recuperar Contraseña | Fresh & Simple {% endblock %}
+{% block title %}Recuperar Cuenta | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesFormsAcceso.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section class="contenedor_recuperacion">
@@ -12,11 +13,12 @@
             {% csrf_token %}
             {% for input in form %}
                 <div class="contenedor_field">
+                    {{ input.label_tag }}
                     {{ input }}
                     <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
                 </div>
             {% endfor %}
-            <button type="submit">Recuperar</button>
+            <button id="boton_recuperar_cuenta" type="submit">Recuperar</button>
         </form>
         <div class="contenedor_texto_bottom_acceso">
             <a href="{% url 'login' %}">Iniciar Sesión</a>
@@ -30,5 +32,5 @@
 </div>
 {% endblock %}
 {% block extra_js %}
-    <script type="module" src="{% static 'tienda/js/formRecuperarContrasenia.js' %}"></script>
+    <script type="module" src="{% static 'tienda/js/formRecuperarCuenta.js' %}"></script>
 {% endblock %}

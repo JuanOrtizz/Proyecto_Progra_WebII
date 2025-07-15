@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Modificar Consulta | Fresh & Simple {% endblock %}
+{% block title %}Modificar Consulta | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesModificarElemento.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section id="section_contenedor_volver">
@@ -34,6 +35,10 @@
         </form>
     </div>
 </section>
+<div id="pantalla_carga">
+    <p>Modificando...</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
 {% endblock %}
 {% block extra_js %}
     <script type="module" src="{% static 'tienda/js/modificarConsulta.js' %}"></script>
