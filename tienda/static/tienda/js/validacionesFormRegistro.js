@@ -1,3 +1,5 @@
+import {textoErrorInput, eliminarErrorInput} from './erroresInputs.js'
+
 // funcion para validar el formulario
 export function validarFormulario(formData){
     let esValido = true // al comienzo siempre va a ser valido
@@ -28,33 +30,13 @@ export function validarFormulario(formData){
         else if (llave === "email"){
             if(!validarInputEmail(input, valor)) esValido = false
         }
-        else if (llave === "contraseña"){
-            if(!validarInputContraseña(input, valor))esValido = false
+        else if (llave === "contrasenia"){
+            if(!validarInputContrasenia(input, valor))esValido = false
         }else if (llave === 'codigo'){
             if(!validarInputCodigo(input, valor))esValido = false
         }
     }
     return esValido
-}
-
-// funcion para aplicar error (span)
-function textoErrorInput(input, mensaje) {
-    const errorSpan = document.getElementById(`error-${input.id}`)
-    if (errorSpan) {
-        errorSpan.textContent = mensaje
-        errorSpan.style.display = 'block'
-        input.classList.add("input_error")
-    }
-}
-
-// funcion para eliminar error (span)
-function eliminarErrorInput(input) {
-    const errorSpan = document.getElementById(`error-${input.id}`)
-    if (errorSpan) {
-        errorSpan.textContent = ''
-        errorSpan.style.display = 'none'
-        input.classList.remove("input_error")
-    }
 }
 
 // Validaciones propias para cada campo
@@ -77,20 +59,20 @@ function validarInputNombreCompleto(input, valor){
 //validar input email
 function validarInputEmail(input, valor){
     const patron = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/ // verifica si es un email valido
-    if(valor.length >= 6 && valor.length <= 100){
+    if(valor.length >= 6 && valor.length <= 254){
         if (!patron.test(valor)){
             textoErrorInput(input, "El email no es válido")
             return false
         }
     }else{
-        textoErrorInput(input, "Email: de 6 a 100 caracteres")
+        textoErrorInput(input, "Email: de 6 a 254 caracteres")
         return false
     }
     return true
 }
 
 //validar input contraseña
-function validarInputContraseña(input, valor) {
+function validarInputContrasenia(input, valor) {
     const patron = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/
     if (valor.length >= 8 && valor.length <= 20) {
         if (!patron.test(valor)) {
@@ -98,12 +80,13 @@ function validarInputContraseña(input, valor) {
             return false
         }
     } else {
-        textoErrorInput(input, "Contraseña: 8 a 20 caracteres")
+        textoErrorInput(input, "Contraseña: de 8 a 20 caracteres")
         return false
     }
     return true
 }
 
+//Validar input codigo (Validar cuenta)
 function validarInputCodigo(input,valor){
      if (valor.length != 6) {
         textoErrorInput(input, "El código debe tener 6 dígitos")

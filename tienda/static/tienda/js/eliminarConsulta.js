@@ -17,21 +17,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
             consultaIdAEliminar = boton.getAttribute('data-id') // Obtiene el data-id (Consulta)
             if(consultaIdAEliminar){
                 Swal.fire({ // Muestra alerta
-                  title: "¿Estás seguro que querés eliminar esta consulta?",
-                  text: "No podrás revertir esto",
-                  icon: "warning",
-                  showCancelButton: true,
-                  confirmButtonColor: "#3085d6",
-                  cancelButtonColor: "#d33",
-                  confirmButtonText: "Sí Eliminar",
-                  didOpen: () =>{ // agrego esto ya que sino recalcula con esta clase y sube el footer para evitar scroll
-                    document.body.classList.remove('swal2-height-auto')
-                    document.body.style.overflow = 'auto'
-                    document.body.style.paddingRight = '0'
-                  }
+                    title: "¿Estás seguro que querés eliminar esta consulta?",
+                    text: "No podrás revertir esto",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí Eliminar",
+                    didOpen: () =>{ // agrego esto ya que sino recalcula con esta clase y sube el footer para evitar scroll
+                        document.body.classList.remove('swal2-height-auto')
+                        document.body.style.overflow = 'auto'
+                        document.body.style.paddingRight = '0'
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) { // si confirma hace un fetch y elimina la consulta con ese id
-                        fetch(`/dashboard/consultas/eliminarConsulta/${consultaIdAEliminar}/`,{
+                        const overlay = document.getElementById("pantalla_carga") // Obtiene el overlay (pantalla de carga)
+                        overlay.style.display = "flex" // Muestra el overlay (pantalla de carga)
+                        fetch(`/dashboard/consultas/eliminar-consulta/${consultaIdAEliminar}/`,{
                         method: 'GET',
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -44,11 +46,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
                                 row.remove() // elimina de la tabla
 
                                 // actualizo los contadores de consultas
-                                document.getElementById('total_consultas').textContent = data.totalConsultas
-                                document.getElementById('consultas_comerciales').textContent = data.consultasComerciales
-                                document.getElementById('consultas_tecnicas').textContent = data.consultasTecnicas
-                                document.getElementById('consultas_rrhh').textContent = data.consultasRRHH
-                                document.getElementById('consultas_generales').textContent = data.consultasGenerales
+                                document.getElementById('total_consultas').textContent = data.total_consultas
+                                document.getElementById('consultas_comerciales').textContent = data.consultas_comerciales
+                                document.getElementById('consultas_tecnicas').textContent = data.consultas_tecnicas
+                                document.getElementById('consultas_rrhh').textContent = data.consultas_rrhh
+                                document.getElementById('consultas_generales').textContent = data.consultas_generales
 
                                 generarAlertExito("Se ha eliminado con éxito.") // muestra alerta
 
@@ -57,6 +59,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
                         .catch(error =>{
                             console.error("Error al eliminar:", error)
                         })
+                        .finally(() =>{
+                                overlay.style.display = "none" // oculta el overlay (pantalla de carga)
+                            }
+                        )
                     }
                 })
             }

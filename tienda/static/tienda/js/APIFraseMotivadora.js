@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // Funcion asincrona para obtener la frase desde el backend
 async function obtenerFrase(parrafoFrase) {
     try {
-        const response = await fetch('/obtener_frase/')
-        const data = await response.json();
-        if(parrafoFrase){
-            parrafoFrase.textContent = data.frase
+        const response = await fetch('/obtener-frase/')
+        const data = await response.json()
+        if(data.frase){
+            if(parrafoFrase){
+                parrafoFrase.textContent = data.frase
+            }
         }
     } catch (error) {
         console.error('Error al obtener la frase:', error)
