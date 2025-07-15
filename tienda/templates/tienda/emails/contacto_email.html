@@ -1,0 +1,22 @@
+{% load static %}
+<html>
+    <body style="font-family: Arial, sans-serif; background-color: #F7F7F7; padding: 30px;">
+        <div style="max-width: 600px; margin: auto; background-color: #FFFFFF; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
+            <h2 style="color: #2E8A99; text-align: center;">¡Hola {{ nombre }}!</h2>
+            <p style="font-size: 16px; color: #4A4A4A; text-align: center;">
+                Hemos recibido tu consulta y nuestro equipo se pondrá en contacto contigo a la brevedad.<br><br>
+                <strong>Email:</strong> {{ email }}<br><br>
+                <strong>Teléfono:</strong> {{ telefono }}<br><br>
+                <strong>Categoría del mensaje:</strong> {{ categoria_mensaje }}<br><br>
+                <strong>Mensaje enviado:</strong><br>
+                <em style="display:inline-block; margin-top:10px;">{{ mensaje }}</em>
+            </p>
+            <p style="font-size: 15px; color: #4A4A4A; text-align: center;">
+                 Gracias por comunicarte con <strong style="color: #FF6363;">Fresh & Simple</strong>.
+            </p>
+            <p style="margin-top: 40px; font-size: 12px; text-align: center; color: #888888;">
+                Si no realizaste esta consulta o necesitas ayuda, por favor contáctanos.
+            </p>
+        </div>
+    </body>
+</html>

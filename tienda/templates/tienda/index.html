@@ -10,7 +10,6 @@
       <h1>Fácil de llevar, difícil de igualar.</h1>
    </div>
 </section>
-
 <div id="txtMovimientoColeccion" class="contenedor_texto_movimiento">
    <div id="txtIzquierda" class="contenedor_interno_texto">
       <div class="texto">
@@ -20,7 +19,6 @@
       </div>
   </div>
 </div>
-
 <section id="contenedor_nosotros">
    <div id="contenedor_texto_nosotros">
       <h2>¿Quiénes somos?</h2>
@@ -34,8 +32,6 @@
       <img src="{% static 'tienda/img/imagen_quienes_somos.webp'%}" alt="Imagen_Sobre_Nosotros">
    </div>
 </section>
-
-<!--div con el texto en movimiento-->
 <div id="txtMovimientoMarca" class="contenedor_texto_movimiento">
    <div id="txtDerecha" class="contenedor_interno_texto">
       <div class="texto">
@@ -45,7 +41,6 @@
       </div>
   </div>
 </div>
-
 <section class="section_contenedores_index contenedor_izquierda">
    <div class="contenedor_texto">
       <h3>Nuestras colecciones</h3>
@@ -55,7 +50,6 @@
       <a href="{% url 'colecciones' %}">Ver Colecciones</a>
    </div>
 </section>
-
 <section class="section_contenedores_index contenedor_izquierda">
    <div class="contenedor_texto">
       <h3>Contacta con nosotros</h3>
@@ -65,12 +59,10 @@
       <a href="{% url 'contacto' %}">Contáctanos</a>
    </div>
 </section>
-
 <div class="contenedor_frase_motivadora">
    <h2>La frase que te motiva a vestirte bien</h2>
    <p id="frase_motivadora">Cargando...</p>
 </div>
-
 {% endblock %}
 {% block extra_js %}
    <script src="{% static 'tienda/js/index.js' %}"></script>
