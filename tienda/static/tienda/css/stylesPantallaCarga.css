@@ -1,0 +1,48 @@
+/*diseño pantalla de carga*/
+#pantalla_carga {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* fondo gris oscuro*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+    z-index: 9999;
+    display: none; /* oculto por defecto */
+}
+
+/*parrafo de la pantalla de carga*/
+#pantalla_carga p{
+    color:var(--colorNaranja);
+    font-size: 1rem;
+    font-weight:600;
+    padding: 10px;
+    box-sizing:border-box;
+}
+
+/*Diseño del componente de Bootstrap para no cargar todo Bootstrap*/
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+}
+
+/*keyframes para la rotacion del spinner*/
+@keyframes spinner-border {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*color del spinner*/
+.spinner-border.text-light {
+    color: var(--colorNaranja);
+}

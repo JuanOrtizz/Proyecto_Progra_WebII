@@ -1,4 +1,4 @@
-/* diseño seccion "colecciones"*/
+/* diseño section "colecciones"*/
 #section_contenedor_colecciones{
     height: auto;
     width: 100%;
@@ -97,7 +97,7 @@
 }
 
 @media (max-width: 480px){
-        /* diseño seccion "colecciones"*/
+    /* diseño seccion "colecciones"*/
     #section_contenedor_colecciones{
         padding: 60px 20px;
     }
