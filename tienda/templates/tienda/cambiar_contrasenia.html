@@ -1,23 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Recuperar Contraseña | Fresh & Simple {% endblock %}
+{% block title %}Cambiar Contraseña | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesFormsAcceso.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section class="contenedor_recuperacion">
     <div class="contenedor_form_recuperacion">
+        {% if validlink or request.user.is_authenticated%}
         <h2>Cambiá tu contraseña</h2>
         <form method="POST" id="form_recuperacion" novalidate>
             {% csrf_token %}
             {% for input in form %}
                 <div class="contenedor_field">
+                    {{ input.label_tag}}
                     {{ input }}
                     <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
                 </div>
             {% endfor %}
             <button type="submit">Cambiar contraseña</button>
         </form>
+        {% else %}
+            <h2>Este enlace de recuperación es inválido o ya fue usado.</h2>
+        {% endif %}
     </div>
 </section>
 <div id="pantalla_carga">

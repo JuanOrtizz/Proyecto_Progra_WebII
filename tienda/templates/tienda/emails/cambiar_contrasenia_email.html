@@ -1,0 +1,24 @@
+{% load static %}
+<html>
+    <body style="font-family: Arial, sans-serif; background-color: #F7F7F7; padding: 30px;">
+        <div style="max-width: 600px; margin: auto; background-color: #FFFFFF; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="{{ logoUrl }}" alt="Logo de Fresh & Simple" style="max-width: 200px; height: auto;">
+            </div>
+            <h2 style="color: #2E8A99; text-align: center;">Recuperar cuenta. Fresh &amp; Simple</h2>
+            <p style="font-size: 16px; color: #4A4A4A; text-align: center;">
+                Hola {{ usuario.first_name }}!<br><br>
+                Para recuperar tu cuenta, hacé clic en el siguiente botón:<br><br>
+                <a href="{{ protocolo }}://{{ dominio }}{% url 'recuperar-contrasenia-confirmar' uidb64=uid token=token %}"
+                   style="display: inline-block; background-color: #2E8A99; color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                    Cambiar Contraseña
+                </a><br><br>
+                Si no fuiste vos, por favor contactanos.<br><br>
+                <strong style="color: #FF6363;">Fresh &amp; Simple</strong>
+            </p>
+            <p style="margin-top: 40px; font-size: 12px; text-align: center; color: #888888;">
+                Este es un correo automático, por favor no respondas a este mensaje.
+            </p>
+        </div>
+    </body>
+</html>

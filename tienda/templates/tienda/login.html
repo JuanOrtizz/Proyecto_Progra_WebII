@@ -21,18 +21,18 @@
             {% endif %}
              {% for field in form %}
                 <div class = "contenedor_field">
-                  {{ field.label_tag }}
-                  {{ field.errors }}
-                  {{ field }}
-                  {% if field.help_text %}
-                    <span>{{ field.help_text }}</span>
-                  {% endif %}
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <span>{{ field.help_text }}</span>
+                    {% endif %}
                 </div>
             {% endfor %}
             <button type="submit">Ingresar</button>
         </form>
         <div class="contenedor_texto_bottom_recuperacion">
-            <a href="{% url 'recuperar_contraseña' %}">Olvidé mi contraseña</a>
+            <a href="{% url 'recuperar-cuenta' %}">Olvidé mi contraseña</a>
         </div>
         <div class="contenedor_texto_bottom_acceso">
             <p>¿No tenés cuenta?</p>
