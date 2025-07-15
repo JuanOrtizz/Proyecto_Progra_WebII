@@ -4,24 +4,24 @@ import {textoErrorInput, eliminarErrorInput} from './erroresInputs.js'
 
 document.addEventListener('DOMContentLoaded', ()=>{
     // capturo el formulario y el token
-    const formularioRecuperarContraseña = document.getElementById("form_recuperacion")
+    const formularioRecuperarCuenta = document.getElementById("form_recuperacion")
     const csrfToken = document.querySelector('[name = csrfmiddlewaretoken]').value
 
     // Evento para evitar que se mande el form
-    formularioRecuperarContraseña.addEventListener('submit', (e) =>{
+    formularioRecuperarCuenta.addEventListener('submit', (e) =>{
         // evita recargar la pagina al mandar el formulario
         e.preventDefault()
         // captura los datos del formulario
-        const formData = new FormData(formularioRecuperarContraseña)
+        const formData = new FormData(formularioRecuperarCuenta)
         // valida los campos
         if(validarFormulario(formData)){
-            enviarFormulario(formData, csrfToken, formularioRecuperarContraseña)
+            enviarFormulario(formData, csrfToken, formularioRecuperarCuenta)
         }
     })
 })
 
 // funcion async para utilizar await y manejar asincronia
-async function enviarFormulario(formData, csrfToken, formularioRecuperarContraseña){
+async function enviarFormulario(formData, csrfToken, formularioRecuperarCuenta){
     const overlay = document.getElementById("pantalla_carga") // Obtiene el overlay (pantalla de carga)
     overlay.style.display = "flex" // Muestra el overlay (pantalla de carga)
     const botonFormulario = document.getElementById("boton_recuperar_cuenta")
@@ -40,7 +40,7 @@ async function enviarFormulario(formData, csrfToken, formularioRecuperarContrase
         const data = await response.json()
         if(data.success){
             generarAlertExito(data.message)
-            formularioRecuperarContraseña.reset()
+            formularioRecuperarCuenta.reset()
             //Deshabilito el boton y le agrego la clase
             botonFormulario.disabled = true
             botonFormulario.classList.add("deshabilitado")
