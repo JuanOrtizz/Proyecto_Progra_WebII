@@ -162,6 +162,8 @@ nav li a:hover::after {
 
 /*diseño contenedor usuario (si esta logeado, contiene el logo y el nombre del usuario)*/
 #contenedor_usuario {
+    min-width:100px;
+    max-width:100px;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -195,6 +197,9 @@ nav li a:hover::after {
     color: var(--colorBlanco);
     transition: color 0.5s ease;
     font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
 }
 
 /*diseño span del contenedor usuario (Icon usuario)*/
@@ -404,6 +409,7 @@ footer p{
 
     /*diseño contenedor usuario (si esta logeado, contiene el logo y el nombre del usuario)*/
     #contenedor_usuario {
+        max-width:none;
         justify-content: start;
         width: 100%;
     }
@@ -466,6 +472,7 @@ footer p{
         padding: 0 10px;
     }
 
+    /*diseño menu hamburguesa (BUTTON)*/
     #menu_hamburguesa{
         font-size: 1.6rem;
     }
