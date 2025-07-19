@@ -46,7 +46,7 @@
 }
 
 /*diseño para el contenedor del input del form de login y recuperacion*/
-.contenedor_field{
+.contenedor_input{
     height:auto;
     width:100%;
     padding:5px 0;
@@ -54,13 +54,13 @@
 }
 
 /*diseño para los labels del form*/
-.contenedor_field label {
+.contenedor_input label {
     display: block;
     font-weight: 600;
 }
 
 /*diseño para los input del form*/
-.contenedor_field input {
+.contenedor_input input {
     width: 100%;
     padding: 8px;
     border: 2px solid var(--colorNegro);
@@ -72,7 +72,7 @@
 }
 
 /*diseño para los input del form hover*/
-.contenedor_field input:focus {
+.contenedor_input input:focus {
     border-color: var(--colorAzul);
     outline: none;
 }
@@ -216,12 +216,12 @@ body.swal2-shown {
     }
 
     /*diseño para los labels del form*/
-    .contenedor_field label {
+    .contenedor_input label {
         font-size: 1rem;
     }
 
     /*diseño para los input del form*/
-    .contenedor_field input {
+    .contenedor_input input {
         font-size: 0.8rem;
     }
 
@@ -250,12 +250,12 @@ body.swal2-shown {
     }
 
     /*diseño para los labels del form*/
-    .contenedor_field label {
+    .contenedor_input label {
         font-size: 0.9rem;
     }
 
     /*diseño para los input del form*/
-    .contenedor_field input {
+    .contenedor_input input {
         font-size: 0.8rem;
     }
 
@@ -285,15 +285,4 @@ body.swal2-shown {
     .contenedor_form_recuperacion h2{
         font-size: 1.4rem;
     }
-
-    /*diseño para los labels del form*/
-    .contenedor_field label {
-        font-size: 0.9rem;
-    }
-
-    /*diseño para los input del form*/
-    .contenedor_field input {
-        font-size: 0.8rem;
-    }
-
 }
