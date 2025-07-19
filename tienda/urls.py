@@ -2,10 +2,8 @@ from django.urls import path, include, re_path
 from . import views
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
-from .views import ConsultasViewSet, ProductosViewSet, ObtenerFraseAPIView, CustomPasswordResetView, \
-    CustomPasswordResetConfirmView, CustomPasswordChangeView, MediaServeView
-from django.conf import settings
-from django.conf.urls.static import static
+from .views import ConsultasViewSet, ProductosViewSet, ObtenerFraseAPIView, CustomPasswordResetView, CustomPasswordResetConfirmView, CustomPasswordChangeView, MediaServeView, CustomLoginView
+
 
 #declaro el router y los endpoints para Consultas y Productos
 router = DefaultRouter()
@@ -18,7 +16,7 @@ urlpatterns = [
     path('locales/', views.locales, name='locales'), #path para los locales
     path('contacto/', views.contacto, name="contacto"), #path para el formulario de contacto
     path('coleccion/<str:tipo>/', views.coleccion_filtrada, name='coleccion-filtrada'), #path para las colecciones filtradas (Por ejemplo buzos)
-    path('login/', auth_views.LoginView.as_view(template_name='tienda/login.html'), name='login'),  # path para el login
+    path('login/', CustomLoginView.as_view(), name='login'),  # path para el login
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # path para el logout
     path('registro/', views.registro, name="registro"), #path para el registro
     path('validar-registro/', views.validar_registro, name="validar-registro"), #path para validar el registro

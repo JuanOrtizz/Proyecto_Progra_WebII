@@ -3,30 +3,19 @@
 {% block title %}Inicio de Sesión | Fresh & Simple{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'tienda/css/stylesFormsAcceso.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
 {% endblock %}
 {% block content %}
 <section class="contenedor_login">
     <div class="contenedor_form_login">
         <h2>Iniciar Sesión</h2>
-        <form method="POST" class="form_login">
+        <form method="POST" id="form_login" novalidate>
             {% csrf_token %}
-            {% if form.non_field_errors %}
-                <div class="errorlist">
-                    <ul>
-                      {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                      {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-             {% for field in form %}
-                <div class = "contenedor_field">
-                    {{ field.label_tag }}
-                    {{ field.errors }}
-                    {{ field }}
-                    {% if field.help_text %}
-                        <span>{{ field.help_text }}</span>
-                    {% endif %}
+             {% for input in form %}
+                <div class = "contenedor_input">
+                    {{ input.label_tag }}
+                    {{ input }}
+                    <span class="error_texto" id="error-{{ input.id_for_label }}"></span>
                 </div>
             {% endfor %}
             <button type="submit">Ingresar</button>
@@ -40,5 +29,11 @@
         </div>
     </div>
 </section>
+<div id="pantalla_carga">
+    <p>Ingresando...</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
 {% endblock %}
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+    <script type="module" src="{% static 'tienda/js/formLogin.js' %}"></script>
+{% endblock %}
