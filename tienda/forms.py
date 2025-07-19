@@ -6,25 +6,25 @@ from django.forms import Select
 # Formulario de contacto en contacto.html
 class ContactoForm(forms.Form):
     nombre = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Nombre y Apellido', 'id': 'nombre'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Nombre y Apellido', 'id': 'id_nombre'}),
         max_length=100,
         required=True
     )
 
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={'placeholder': 'Email', 'id': 'email'}),
+        widget=forms.EmailInput(attrs={'placeholder': 'Email', 'id': 'id_email'}),
         max_length=254,
         required=True,
     )
 
     telefono = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Teléfono', 'id': 'telefono' }),
+        widget=forms.TextInput(attrs={'placeholder': 'Teléfono', 'id': 'id_telefono' }),
         max_length=25,
         required=True
     )
 
     mensaje = forms.CharField(
-        widget=forms.Textarea(attrs={'placeholder': 'Coloca tu mensaje aquí...', 'id': 'mensaje'})
+        widget=forms.Textarea(attrs={'placeholder': 'Coloca tu mensaje aquí...', 'id': 'id_mensaje'})
     )
 
     #Validaciones del formulario
@@ -71,13 +71,13 @@ class ContactoForm(forms.Form):
 #Formulario de producto (Insert y Update)
 class ProductoForm(forms.Form):
     nombre = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Nombre del producto', 'id': 'nombre'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Nombre del producto', 'id': 'id_nombre'}),
         max_length=100,
         required=True
     )
 
     precio = forms.DecimalField(
-        widget=forms.NumberInput(attrs={'placeholder': 'Precio', 'id': 'precio'}),
+        widget=forms.NumberInput(attrs={'placeholder': 'Precio', 'id': 'id_precio'}),
         max_digits=10,
         decimal_places=2,
         required=True,
@@ -170,17 +170,17 @@ class ProductoForm(forms.Form):
 class RegistroForm(forms.Form):
     nombre = forms.CharField(
         max_length=100,
-        widget = forms.TextInput(attrs={'placeholder': 'Nombre', 'id': 'nombre'}),
+        widget = forms.TextInput(attrs={'placeholder': 'Nombre', 'id': 'id_nombre'}),
     )
     apellido = forms.CharField(
         max_length=100,
-        widget = forms.TextInput(attrs={'placeholder': 'Apellido', 'id': 'apellido'}),
+        widget = forms.TextInput(attrs={'placeholder': 'Apellido', 'id': 'id_apellido'}),
     )
     email = forms.EmailField(
         max_length=320,
-        widget = forms.EmailInput(attrs={'placeholder': 'Email', 'id': 'email'}),
+        widget = forms.EmailInput(attrs={'placeholder': 'Email', 'id': 'id_email'}),
     )
-    contrasenia = forms.CharField( max_length=20, widget=forms.PasswordInput(attrs={'placeholder' : 'Contraseña', 'id' : 'contrasenia'}))
+    contrasenia = forms.CharField( max_length=20, widget=forms.PasswordInput(attrs={'placeholder' : 'Contraseña', 'id' : 'id_contrasenia'}))
 
     #Validaciones del formulario
     #Validacion de nombre
@@ -230,7 +230,7 @@ class RegistroForm(forms.Form):
 
 # Formulario para validar el registro con el codigo
 class ValidarCodigoForm(forms.Form):
-    codigo = forms.CharField(max_length=6,widget = forms.TextInput(attrs={'placeholder': 'Colocá el código acá', 'id': 'codigo'}),)
+    codigo = forms.CharField(max_length=6,widget = forms.TextInput(attrs={'placeholder': 'Colocá el código acá', 'id': 'id_codigo'}),)
 
     def clean_codigo(self):
         codigo = self.cleaned_data.get('codigo','').strip()
