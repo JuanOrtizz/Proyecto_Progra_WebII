@@ -5,7 +5,7 @@ export function validarFormulario(formData){
 
     // recorre cada input del formulario y realiza las validaciones con sus metodos
     for(let [llave, valor] of formData.entries()){
-        const input = document.getElementById(llave)
+        const input = document.getElementById(`id_${llave}`)
         if (!input) {
             continue
         }
@@ -44,7 +44,6 @@ function validarInputNombre(input, valor){
     if(valor.length >= 2 && valor.length <= 100){
         if (!patron.test(valor)){
             textoErrorInput(input, "El nombre no es válido")
-            console.log("error")
             return false
         }
     }else{

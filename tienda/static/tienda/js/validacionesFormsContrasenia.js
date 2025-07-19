@@ -7,7 +7,7 @@ export function validarFormulario(formData){
 
     // recorre cada input del formulario y realiza las validaciones con sus metodos
     for(let [llave, valor] of formData.entries()){
-        const input = document.getElementById("id_" + llave)
+        const input = document.getElementById(`id_${llave}`)
         if (!input) {
             continue
         }
