@@ -13,7 +13,7 @@
         <form method="POST" id="form_recuperacion" novalidate>
             {% csrf_token %}
             {% for input in form %}
-                <div class="contenedor_field">
+                <div class="contenedor_input">
                     {{ input.label_tag}}
                     {{ input }}
                     <span class="error_texto" id="error-{{ input.id_for_label }}"></span>

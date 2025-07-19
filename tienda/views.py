@@ -1,6 +1,12 @@
+import mimetypes
+import requests
+import os
 from django.conf import settings
+from django.http import HttpResponse, Http404
+from django.views import View
+from django.contrib.auth import login
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView, PasswordResetView
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordChangeView, PasswordResetView, LoginView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponseForbidden
 from django.template.loader import render_to_string
@@ -17,13 +23,6 @@ from rest_framework import viewsets
 from .serializers import ConsultasSerializer, ProductosSerializer
 from django.contrib.auth.models import User
 from django.urls import reverse
-import requests
-import os
-from django.templatetags.static import static
-from django.conf import settings
-from django.http import HttpResponse, Http404
-from django.views import View
-import mimetypes
 
 #Vista index
 def pagina_index(request):
@@ -177,6 +176,7 @@ def registro(request):
                 send_mail(asunto, mensaje_texto, settings.EMAIL_HOST_USER, [destinatario], fail_silently=False, html_message=mensaje_html)
                 return JsonResponse({'success': True, 'message': "Te enviamos un código de verificación de cuenta. A continuación te redirigiremos a la verificación de cuenta...", 'redirect_url': reverse('validar-registro')})
             except Exception as e:
+                del request.session['usuario_a_validar'] #Si falla el envio, borro esto de la sesion para mayor seguridad
                 return JsonResponse({"success": False, "errors": f"Error al enviar correo: {e}"})
         else:
             return JsonResponse({"success": False, "errors": form.errors})
@@ -202,8 +202,9 @@ def validar_registro(request):
             codigo = form.cleaned_data['codigo'].strip() #Capturo el codigo del formulario
 
             #Obtengo el usuario
-            usuario_validado = User.objects.get(id=id_usuario)
-            if not usuario_validado:
+            try:
+                usuario_validado = User.objects.get(id=id_usuario)
+            except User.DoesNotExist:
                 return JsonResponse({"success": False, "errors": "Usuario inválido."})
 
             #Si el usuario ya esta registrado
@@ -277,9 +278,9 @@ def registrar_producto(request):
 
             #Obtengo los datos del formulario
             nombre = form.cleaned_data["nombre"].strip()
-            precio = form.cleaned_data["precio"].strip()
-            tipo = form.cleaned_data["tipo"].strip()
-            imagen = form.cleaned_data['imagen'].strip()
+            precio = form.cleaned_data["precio"]
+            tipo = form.cleaned_data["tipo"]
+            imagen = form.cleaned_data['imagen']
 
             if Productos.objects.filter(nombre = nombre).exists():
                 return JsonResponse({"success": False, "errors": "Ya existe un producto con ese nombre."})
@@ -315,7 +316,7 @@ def modificar_producto(request, producto_id):
 
             # obtengo los datos del formulario que pudo haber realizado cambios
             producto.nombre = form.cleaned_data["nombre"].strip()
-            producto.precio = form.cleaned_data["precio"].strip()
+            producto.precio = form.cleaned_data["precio"]
 
             if producto.nombre == nombre_antiguo and producto.precio == precio_antiguo:
                 return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
@@ -434,7 +435,7 @@ class ObtenerFraseAPIView(APIView):
     def get(self, request):
         # obtengo frase
         url = "https://zenquotes.io/api/quotes/"
-        response = requests.get(url)
+        response = requests.get(url, timeout=5)
 
         # Si no pudo obtener la frase
         if response.status_code != 200:
@@ -489,14 +490,12 @@ class CustomPasswordResetView(PasswordResetView):
             'token': token,
         }
 
-        logo_url = f"{context['protocolo']}://{context['dominio']}{static('img/logo_fys.webp')}"
-        context['logoUrl'] = logo_url
         # Mando el mail
         try:
             # obtengo el mensaje html mediante la plantilla y le paso todas las variables que necesita la plantilla por el contexto
             message_html = render_to_string('tienda/emails/cambiar_contrasenia_email.html', context)
             send_mail(
-                subject='Recuperar contraseña - Fresh & Simple',
+                subject='Recuperar cuenta - Fresh & Simple',
                 message='',
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[email],
@@ -538,9 +537,30 @@ class CustomPasswordChangeView(PasswordChangeView):
     def form_invalid(self, form):
         return JsonResponse({'success': False, 'errors': form.errors})
 
+#Sobreescribo la clase LoginView de Autenticacion de Django para personalizacion (Login)
+class CustomLoginView(LoginView):
+    template_name = 'tienda/login.html'
+
+    # funcion para redirigir a inicio si esta logeado
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')  # redirige a index.html
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        user = form.get_user()  # obtengo el usuario
+        login(self.request, user)  # inicio sesion
+        redirect_url = self.get_success_url()  # usa el LOGIN_REDIRECT_URL de settings
+        return JsonResponse({'success': True, 'redirect_url': redirect_url})
+
+    def form_invalid(self, form):
+        return JsonResponse({'success': False, 'errors': form.errors})
+
 #Clase para servir los archivos con DEBUG=FALSE en produccion
 class MediaServeView(View):
     def get(self, request, path):
+        if '..' in path or path.startswith('/'):
+            raise Http404
         full_path = os.path.join(settings.MEDIA_ROOT, path)
         if os.path.exists(full_path):
             with open(full_path, 'rb') as f:
