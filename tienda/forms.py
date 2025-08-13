@@ -94,13 +94,13 @@ class ProductoForm(forms.Form):
             ('6', 'Campera'),
             ('7', 'Accesorio')
         ],
-        widget=Select(attrs={'id': 'tipo'}),
+        widget=Select(attrs={'id': 'id_tipo'}),
     )
 
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={
             'placeholder': 'Carga la imagen del producto',
-            'id': 'imagen',
+            'id': 'id_imagen',
             'class': 'input_file',
             'accept': '.webp'
         })

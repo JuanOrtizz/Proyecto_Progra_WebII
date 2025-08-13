@@ -4,7 +4,7 @@ import {textoErrorInput, eliminarErrorInput} from './erroresInputs.js'
 
 document.addEventListener('DOMContentLoaded', ()=>{
     // capturo el select para aplicarle un estilo para mejorar UX
-    const selectTipoProducto = document.getElementById("tipo")
+    const selectTipoProducto = document.getElementById("id_tipo")
     selectTipoProducto.addEventListener('change',()=>{
         asignarClaseSelect(selectTipoProducto, selectTipoProducto.value.trim())
     })
@@ -59,7 +59,7 @@ async function enviarFormulario(formData, csrfToken, formularioProducto){
             else{ // Sino (errores en formulario), muestro mediante un for estos errores provenientes de forms.py
                 for (let campo in errores) {
                     const mensaje = errores[campo][0]
-                    const input = document.getElementById(input)
+                    const input = document.getElementById(`id_${campo}`)
                     if (input) {
                         textoErrorInput(input, mensaje)
                     }
