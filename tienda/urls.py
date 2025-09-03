@@ -16,6 +16,7 @@ urlpatterns = [
     path('locales/', views.locales, name='locales'), #path para los locales
     path('contacto/', views.contacto, name="contacto"), #path para el formulario de contacto
     path('coleccion/<str:tipo>/', views.coleccion_filtrada, name='coleccion-filtrada'), #path para las colecciones filtradas (Por ejemplo buzos)
+    path('coleccion/<str:tipo>/<int:producto_id>', views.producto_detalles, name='producto-detalles'), #path para los detalles del producto
     path('login/', CustomLoginView.as_view(), name='login'),  # path para el login
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # path para el logout
     path('registro/', views.registro, name="registro"), #path para el registro

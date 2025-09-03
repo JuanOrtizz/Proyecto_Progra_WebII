@@ -10,13 +10,16 @@
         <h1>{{ tipo }}</h1>
         <div class="productos">
             {% for prenda in prendas %}
+            <a class="enlace_card" href="{% url 'producto-detalles' prenda.get_tipo_display prenda.id %}">
                 <div class="card">
                     <div class="imagen">
                         <img src="{{ prenda.imagen_url_final }}" alt="{{ prenda.nombre }}">
                     </div>
                     <h3 class="titulo_card">{{ prenda.nombre }}</h3>
                     <p class="precio_card">${{ prenda.precio }}</p>
+                    <button class="boton_card">Agregar al carrito</button>
                 </div>
+            </a>
             {% empty %}
                 <p id="parrafo_productos_vacios">No hay productos disponibles en esta colección.</p>
             {% endfor %}
