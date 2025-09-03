@@ -83,6 +83,10 @@ class ProductoForm(forms.Form):
         required=True,
     )
 
+    descripcion = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Coloca la descripción del producto aquí...', 'id': 'id_descripcion'}),
+    )
+
     tipo = forms.ChoiceField(
         choices=[
             ('', 'Selecciona una opción'),
@@ -137,6 +141,13 @@ class ProductoForm(forms.Form):
             raise forms.ValidationError("El precio no es válido (Máximo 2 decimales)")
         return precio
 
+    #Validacion de descripcion
+    def clean_descripcion(self):
+        descripcion =self.cleaned_data.get('descripcion', '').strip()
+        if len(descripcion) < 2 or len(descripcion) > 500:
+            raise forms.ValidationError("Descripción: de 2 a 500 caracteres.")
+        return descripcion
+
     #validacion tipo producto
     def clean_tipo(self):
         tipo = self.cleaned_data.get('tipo','')
@@ -165,6 +176,25 @@ class ProductoForm(forms.Form):
             raise forms.ValidationError(f"La imagen no puede superar los {max_tamano_mb} MB")
 
         return imagen
+
+#Formulario de agregar al carrito (Pagina detalles producto)
+class AgregarCarritoForm(forms.Form):
+    cantidad = forms.ChoiceField(
+        choices=[
+            ('1', '1'),
+            ('2', '2'),
+            ('3', '3'),
+            ('4', '4'),
+            ('5', '5'),
+            ('6', '6'),
+            ('7', '7'),
+            ('8', '8'),
+            ('9', '9'),
+            ('10', '10')
+        ],
+        widget=Select(attrs={'id': 'id_cantidad'}),
+        label="Cantidad (Máximo 10)"
+    )
 
 # Formulario para el registro de usuario
 class RegistroForm(forms.Form):
