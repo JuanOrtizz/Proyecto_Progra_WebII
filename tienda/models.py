@@ -29,6 +29,7 @@ class Productos(models.Model):
     # Columnas de la DB
     nombre = models.CharField(max_length=100, unique = True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
+    descripcion = models.TextField(default="Sin descripción")
     tipo = models.CharField(max_length=1, choices=tipos)
     imagen = models.ImageField(upload_to='prendas/', null=True, blank=True)
 
