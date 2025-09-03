@@ -32,6 +32,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Precio</th>
+                    <th>Descripción</th>
                     <th>Tipo</th>
                     <th>Acciones</th>
                 </tr>
@@ -39,6 +40,7 @@
                 <tr id="producto-{{ producto.id }}">
                     <td><div class="contenido_td">{{ producto.nombre }}</div></td>
                     <td><div class="contenido_td">${{ producto.precio }}</div></td>
+                    <td><div class="contenido_td">{{ producto.descripcion }} </div></td>
                     <td>
                         <div class="contenido_td">
                             {% if producto.tipo == "1" %}
