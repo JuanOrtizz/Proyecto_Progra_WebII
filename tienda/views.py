@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm
+from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm, AgregarCarritoForm
 from .models import Consultas, Productos, UsuariosPermitidos
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
@@ -113,6 +113,38 @@ def coleccion_filtrada(request, tipo):
                 prenda.imagen_url_final = prenda.imagen.url #Agrego la imagen que le corresponde si existe
 
     return render(request, 'tienda/coleccion_filtrada.html', {'prendas': prendas,'tipo': tipo.capitalize()})
+
+#Vista detalles producto
+def producto_detalles(request, tipo, producto_id):
+    producto_filtrado = Productos.objects.get(id = producto_id)
+    #Agrego una imagen default si el path de la imagen es invalido o no existe la imagen en media
+
+    producto_filtrado.imagen_url_final = '/static/tienda/img/default_prenda.webp' #Agrego una imagen default al principio
+    if producto_filtrado.imagen:
+        imagen_path = os.path.join(settings.MEDIA_ROOT, producto_filtrado.imagen.name)
+        if os.path.exists(imagen_path):
+            producto_filtrado.imagen_url_final = producto_filtrado.imagen.url #Agrego la imagen que le corresponde si existe
+
+    if request.method == "POST":  # Si el metodo de respuesta es post
+        form = AgregarCarritoForm(request.POST)
+        # Verifico si el form es valido
+        if form.is_valid():
+            # Obtengo los datos del formulario
+            cantidad = form.cleaned_data["cantidad"].strip()
+
+            # Guardo en el carrito
+            # Devolver y mostrar notificacion de que se agrego al carrito
+            """
+                        if :
+                return JsonResponse({"success": True, "Hola"})
+            else:
+                return JsonResponse({"success": False, "errors": form.errors})
+            """
+
+    else:
+        form = AgregarCarritoForm()
+
+    return render(request, 'tienda/producto_detalles.html', {'form' :form,'producto': producto_filtrado})
 
 #Vista registro
 def registro(request):
@@ -279,6 +311,7 @@ def registrar_producto(request):
             #Obtengo los datos del formulario
             nombre = form.cleaned_data["nombre"].strip()
             precio = form.cleaned_data["precio"]
+            descripcion = form.cleaned_data["descripcion"].strip()
             tipo = form.cleaned_data["tipo"]
             imagen = form.cleaned_data['imagen']
 
@@ -289,6 +322,7 @@ def registrar_producto(request):
             producto = Productos(
                 nombre = nombre,
                 precio = precio,
+                descripcion = descripcion,
                 tipo = tipo,
                 imagen = imagen
             )
@@ -313,12 +347,14 @@ def modificar_producto(request, producto_id):
             #obtengo los valores (antiguos) del formulario
             nombre_antiguo = producto.nombre
             precio_antiguo = producto.precio
+            descripcion_antigua = producto.descripcion
 
             # obtengo los datos del formulario que pudo haber realizado cambios
             producto.nombre = form.cleaned_data["nombre"].strip()
             producto.precio = form.cleaned_data["precio"]
+            producto.descripcion = form.cleaned_data["descripcion"].strip()
 
-            if producto.nombre == nombre_antiguo and producto.precio == precio_antiguo:
+            if producto.nombre == nombre_antiguo and producto.precio == precio_antiguo and producto.descripcion == descripcion_antigua:
                 return JsonResponse({"success": False, "errors": "No realizaste modificaciones."})
             elif Productos.objects.filter(nombre=producto.nombre).exclude(id=producto.id).exists():
                 return JsonResponse({"success": False, "errors": "Ya existe un producto con ese nombre."})
@@ -333,6 +369,7 @@ def modificar_producto(request, producto_id):
         form = ProductoForm(initial={
             'nombre': producto.nombre,
             'precio': producto.precio,
+            'descripcion' : producto.descripcion,
             'tipo': producto.tipo,
             'imagen': producto.imagen
         })
