@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ producto.nombre|capfirst }} | Fresh & Simple{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesDetallesProducto.css' %}">
+    <link rel="stylesheet" href="{% static 'tienda/css/stylesPantallaCarga.css' %}">
+{% endblock %}
+{% block content %}
+<section class="contenedor_producto">
+    <div class="contenedor_imagen_producto">
+        <img src="{{ producto.imagen_url_final }}" alt="{{ prenda.nombre }}">
+    </div>
+    <div class="contenedor_detalles_producto">
+        <h2>{{ producto.nombre }}</h2>
+        <h3>${{ producto.precio }}</h3>
+        <p>{{ producto.descripcion }}</p>
+        <form>
+            {% csrf_token %}
+            {% for input in form %}
+                <div class="contenedor_input">
+                    {{ input.label_tag }}
+                    {{ input }}
+                </div>
+            {% endfor %}
+            <button type="submit">Agregar al carrito</button>
+        </form>
+    </div>
+</section>
+<div id="pantalla_carga">
+    <p>Comprando...</p>
+    <div class="spinner-border text-light" role="status"></div>
+</div>
+{% endblock %}
+{% block extra_js %}
+
+{% endblock %}
