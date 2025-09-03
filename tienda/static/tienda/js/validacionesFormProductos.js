@@ -27,8 +27,12 @@ export function validarFormulario(formData){
             else if (llave === "nombre"){
                 if(!validarInputNombre(input, valor)) esValido = false
             }
-            else if (llave === "precio"){
+            else if (llave === "precio")
+            {
                 if(!validarInputPrecio(input, valor)) esValido = false
+            }
+            else if(llave === "descripcion"){
+                if(!validarTextareaDescripcion(input, valor)) esValido = false
             }
             else if (llave === "tipo"){
                 if(!validarSelectTipoProducto(input, valor)) esValido = false
@@ -69,6 +73,15 @@ function validarInputPrecio(input, valor){
         }
     }else{
         textoErrorInput(input, "El precio no es válido (Máximo 2 decimales)")
+        return false
+    }
+    return true
+}
+
+// validar textarea Descripcion
+function validarTextareaDescripcion(input, valor){
+    if(valor.length < 2 || valor.length > 500){
+        textoErrorInput(input, "Descripción: de 2 a 500 caracteres")
         return false
     }
     return true
