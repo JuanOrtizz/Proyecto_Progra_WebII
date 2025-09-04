@@ -15,10 +15,10 @@ from django.utils.http import urlsafe_base64_encode
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .decorators import administrador_required
 from .forms import ContactoForm, ProductoForm, RegistroForm, ValidarCodigoForm, AgregarCarritoForm
-from .models import Consultas, Productos, UsuariosPermitidos
+from .models import Consultas, Productos, CodigoValidacion, generar_codigo, expiracion_codigo
 from django.core.mail import send_mail
-from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .serializers import ConsultasSerializer, ProductosSerializer
 from django.contrib.auth.models import User
@@ -162,11 +162,9 @@ def registro(request):
             email = form.cleaned_data["email"].strip()
             contrasenia = form.cleaned_data["contrasenia"].strip()
 
-            # Verifica en la tabla si hay un usuario permitido con ese email
-            try:
-                usuario_permitido = UsuariosPermitidos.objects.get(email=email)
-            except UsuariosPermitidos.DoesNotExist: # Si no existe devuelve el error informando que no esta autorizado al registro
-                return JsonResponse({"success": False, "errors": "Acceso restringido. No estás autorizado."})
+            #Variables
+            usuario = None
+            codigo_validacion = None
 
             #valido si ya hay un usuario registrado con ese email
             if User.objects.filter(email__iexact=email, is_active=True).exists():
@@ -177,6 +175,20 @@ def registro(request):
                 usuario.first_name = nombre
                 usuario.last_name = apellido
                 usuario.set_password(contrasenia)
+
+                #Obtengo para actualizar o creo el codigo de usuario
+                actualizar_codigo_validacion, creado = CodigoValidacion.objects.get_or_create(usuario = usuario)
+
+                #Si ya existe el codigo, lo actualizo
+                if not creado:
+                    actualizar_codigo_validacion.codigo = generar_codigo() #genero un nuevo codigo
+                    actualizar_codigo_validacion.expiracion = expiracion_codigo() #actualizo la expiracion
+                    actualizar_codigo_validacion.usado = False #lo marco como no usado
+                    actualizar_codigo_validacion.save() #guardo los cambios
+
+                #Guardo el codigo en la variable para mandarlo por email
+                codigo_validacion = actualizar_codigo_validacion
+
             else:# Usuario nuevo (no existe en la DB)
                 # Creo el usuario de Django
                 usuario = User.objects.create_user(
@@ -187,8 +199,12 @@ def registro(request):
                     last_name=apellido,
                     is_active=False  # le pongo asi para que no pueda iniciar sesion hasta que no valide
                 )
+                #Guardo en la DB
+                usuario.save()
+                #Creo el codigo
+                codigo_validacion = CodigoValidacion.objects.create(usuario = usuario)
 
-            usuario.save()
+            #Guardo en sesion el id para validarlo
             request.session['usuario_a_validar'] = usuario.id  # guardo el id en sesion
 
             # enviar mail con el codigo
@@ -196,12 +212,12 @@ def registro(request):
                 # Renderizo el template del email con contexto para mandar por el email
                 context = {
                     'nombre': nombre,
-                    'codigo' : usuario_permitido.codigo_validacion
+                    'codigo' : codigo_validacion.codigo
                 }
 
                 # declaro variables con los valores para el mail
                 asunto = "Validación de cuenta - Fresh & Simple"
-                mensaje_texto = f"Tu código de validación es: {usuario_permitido.codigo_validacion}\n\nPor favor, ingresa este código en el sitio para validar tu cuenta."
+                mensaje_texto = f"Tu código de validación es: {codigo_validacion.codigo}\n\nPor favor, ingresa este código en el sitio para validar tu cuenta."
                 # obtengo el mensaje html mediante la plantilla y le paso todas las variables que necesita la plantilla por el contexto
                 mensaje_html = render_to_string('tienda/emails/registro_email.html', context)
                 destinatario = email
@@ -233,23 +249,28 @@ def validar_registro(request):
         if form.is_valid():
             codigo = form.cleaned_data['codigo'].strip() #Capturo el codigo del formulario
 
-            #Obtengo el usuario
+            #Obtengo el usuario y el codigo de validacion
             try:
                 usuario_validado = User.objects.get(id=id_usuario)
-            except User.DoesNotExist:
+                codigo_validacion = CodigoValidacion.objects.get(usuario=usuario_validado)
+            except (User.DoesNotExist, CodigoValidacion.DoesNotExist):
                 return JsonResponse({"success": False, "errors": "Usuario inválido."})
 
             #Si el usuario ya esta registrado
             if usuario_validado.is_active:
                 return JsonResponse({'success': False, 'errors': "Ya hay una cuenta registrada con este email."})
 
-            #Si el codigo no es valido
-            if not UsuariosPermitidos.objects.filter(email__iexact = usuario_validado.email , codigo_validacion=codigo).exists():
-                return JsonResponse({'success': False, 'errors': "Código inválido."})
+            #Si el codigo no es valido o expiro
+            if codigo_validacion.codigo != codigo or not codigo_validacion.es_valido():
+                return JsonResponse({'success': False, 'errors': "Código inválido o expirado."})
 
             # Actualizo el usuario en la DB como activo
             usuario_validado.is_active=True
             usuario_validado.save()
+
+            # Marco el codigo como usado
+            codigo_validacion.usado = True
+            codigo_validacion.save()
 
             #Vacio los datos de sesion
             del request.session['usuario_a_validar']
@@ -262,12 +283,12 @@ def validar_registro(request):
     return render(request, 'tienda/validar_registro.html', {'form': form})
 
 #Vista Dashboard
-@login_required()
+@administrador_required
 def dashboard (request):
     return render(request, 'tienda/dashboard.html')
 
 #vista Consultas
-@login_required()
+@administrador_required
 def consultas(request):
     consultas_lista = Consultas.objects.all()
     contador_consultas_total = 0
@@ -290,7 +311,7 @@ def consultas(request):
     return render(request, 'tienda/consultas.html', {'consultas': consultas_lista, 'total_consultas': contador_consultas_total, 'consultas_comerciales': contador_consultas_comerciales, 'consultas_tecnicas': contador_consultas_tecnicas, 'consultas_rrhh' : contador_consultas_rrhh, 'consultas_generales' :contador_consultas_generales})
 
 #Vista Productos
-@login_required()
+@administrador_required
 def productos(request):
     #Filtro para filtrar mediante el select los productos registrados
     tipo_filtro = request.GET.get('tipo', '')
@@ -301,7 +322,7 @@ def productos(request):
     return render(request, 'tienda/productos.html', {'productos': productos_lista, 'tipo_filtro': tipo_filtro})
 
 #Vista registrar producto
-@login_required()
+@administrador_required
 def registrar_producto(request):
     if request.method == "POST":  # Si el metodo de respuesta es post
         form = ProductoForm(request.POST, request.FILES)
@@ -336,7 +357,7 @@ def registrar_producto(request):
     return render (request, 'tienda/registrar_producto.html', {'form': form})
 
 #Vista modificar producto
-@login_required()
+@administrador_required
 def modificar_producto(request, producto_id):
     producto = get_object_or_404(Productos, id=producto_id) # obtengo el Producto
 
@@ -380,7 +401,7 @@ def modificar_producto(request, producto_id):
     return render(request, 'tienda/modificar_producto.html', {'form': form})
 
 #vista Eliminar producto
-@login_required()
+@administrador_required
 def eliminar_producto(request, producto_id):
     producto = get_object_or_404(Productos, id=producto_id)
 
@@ -396,7 +417,7 @@ def eliminar_producto(request, producto_id):
     return JsonResponse({"success": True})
 
 #Vista Modificar Consulta
-@login_required()
+@administrador_required
 def modificar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consultas, id=consulta_id) # obtengo la Consulta
 
@@ -441,7 +462,7 @@ def modificar_consulta(request, consulta_id):
     return render(request, 'tienda/modificar_consulta.html', {'form': form})
 
 #Vista para eliminar una consulta
-@login_required()
+@administrador_required
 def eliminar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consultas, id = consulta_id)
     consulta.delete() #elimino la consulta
@@ -533,7 +554,7 @@ class CustomPasswordResetView(PasswordResetView):
             message_html = render_to_string('tienda/emails/cambiar_contrasenia_email.html', context)
             send_mail(
                 subject='Recuperar cuenta - Fresh & Simple',
-                message='',
+                message='Sigue las instrucciones para recuperar tu cuenta.',
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[email],
                 fail_silently=False,
