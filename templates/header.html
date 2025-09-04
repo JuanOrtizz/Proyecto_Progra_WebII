@@ -1,3 +1,4 @@
+{% load grupo_tags %}
 <header>
     <nav>
         <a id="titulo_nav" href="{% url 'index' %}">Fresh & Simple</a>
@@ -18,7 +19,10 @@
                     </div>
                     <ul id="menu_usuario">
                         <li><a href="{% url 'cambiar-contrasenia' %}" id="enlace_cambiar_contraseña">Cambiar Contraseña</a></li>
-                        <li><a href="{% url 'dashboard' %}">Panel</a></li>
+                        {% if request.user|in_group:"administrador" %}
+                            <li><a href="{% url 'dashboard' %}">Panel</a></li>
+                        {% endif %}
+
                         <li>
                             <form method="POST" action="{% url 'logout' %}">
                                 {% csrf_token %}
