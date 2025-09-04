@@ -43,6 +43,7 @@
     flex-wrap:wrap;
 }
 
+/*Diseño del enlace que envuelve a la card del producto para redirigir a sus detalles*/
 .enlace_card{
     text-decoration:none;
 }
@@ -104,8 +105,10 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin:0;
 }
 
+/*Diseño de boton agregar al carrito de la card*/
 .boton_card{
     border-radius: 5px;
     border: 2px solid var(--colorAzul);
@@ -116,11 +119,13 @@
     transition:background-color 0.5s ease, color 0.5s ease;
 }
 
+/*Diseño para el boton agregar al carrito de la card HOVER*/
 .boton_card:hover{
     background-color: var(--colorAzul);
     color: var(--colorBlanco);
 }
 
+/*Diseño para el hover de la card del producto*/
 .card:hover{
     box-shadow: 0px 10px 13px rgba(0, 0, 0, 0.3);
 }
@@ -154,6 +159,11 @@
         font-size: 0.9rem;
     }
 
+    /*Diseño de boton agregar al carrito de la card*/
+    .boton_card{
+        font-size: 0.8rem;
+    }
+
     /*Diseño para cuando no hay productos*/
     #parrafo_productos_vacios{
         padding: 30px;
@@ -171,16 +181,22 @@
     /*diseño contenedor de productos*/
     .productos{
         grid-template-columns: repeat(2, 1fr);
+        gap:5px;
     }
 
     /*diseño del titulo del producto (Nombre)*/
     .titulo_card {
-        font-size:0.8rem;
+        font-size:0.9rem;
     }
 
     /*Diseño del precio del producto*/
     .precio_card {
         font-size: 0.8rem;
+    }
+
+    /*Diseño de boton agregar al carrito de la card*/
+    .boton_card{
+        font-size: 0.7rem;
     }
 
     /*Diseño para cuando no hay productos*/
