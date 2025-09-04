@@ -82,8 +82,14 @@
 /*Diseño para los campos del formulario*/
 #contenedor_formulario input,
 #contenedor_formulario select{
-    width: 100%;
     height: 40px;
+}
+
+/*Diseño para los campos del formulario*/
+#contenedor_formulario input,
+#contenedor_formulario textarea,
+#contenedor_formulario select{
+    width: 100%;
     font-size: 0.9rem;
     padding:8px;
     border: 2px solid var(--colorNegro);
@@ -93,6 +99,7 @@
 
 /*Diseño para los campos del formulario cuando tienen el foco*/
 #contenedor_formulario input:focus,
+#contenedor_formulario textarea:focus,
 #contenedor_formulario select:focus{
     border: 2px solid var(--colorAzul);
     outline: none !important;
@@ -101,6 +108,7 @@
 
 /*diseño para agregarle un color de texto a los placeholders*/
 #contenedor_formulario input::placeholder,
+#contenedor_formulario input::textarea,
 #contenedor_formulario select:invalid {
   color: var(--colorNegro); /* gris claro para "Tipo de empleo" */
 }
@@ -115,6 +123,11 @@
 /*diseño para agregarle un color al fondo del select cuando tenga una opcion valida*/
 .select_seleccionado{
     background-color: #E8F0FE;
+}
+
+/*Diseño para evitar resize del textarea*/
+#contenedor_formulario textarea{
+    resize:none;
 }
 
 /*diseño del boton Enviar*/
