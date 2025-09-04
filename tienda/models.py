@@ -1,4 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
+import secrets
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 # Tabla consulta
 class Consultas(models.Model):
@@ -36,11 +40,22 @@ class Productos(models.Model):
     class Meta:
         db_table = 'productos'
 
-#Tabla Usuarios Permitidos
-class UsuariosPermitidos(models.Model):
-    nombre = models.CharField(max_length=100)
-    email = models.EmailField(max_length=254, unique=True)
-    codigo_validacion = models.CharField(max_length=6)
+#Funcion para generar codigo aleatorio
+def generar_codigo(longitud=6):
+    return ''.join(secrets.choice('0123456789') for _ in range(longitud))
 
-    class Meta:
-        db_table = 'usuarios_permitidos'
+#Funcion para la expiracion del codigo luego de 10 minutos
+def expiracion_codigo():
+    return timezone.now() + timedelta(minutes=1)
+
+#Modelo codigo de validacion
+class CodigoValidacion(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE) #Usuario Django
+    codigo = models.CharField(max_length=6, default=generar_codigo) #Codigo con la funcion
+    creado = models.DateTimeField(auto_now_add=True) #Fecha y hora que se creo el primer codigo
+    expiracion = models.DateTimeField(default=expiracion_codigo) #Expiracion en 10 minutos
+    usado = models.BooleanField(default=False) #Detecta si fue usado o no
+
+    #Validacion si fue usado o no
+    def es_valido(self):
+        return not self.usado and timezone.now() <= self.expiracion
