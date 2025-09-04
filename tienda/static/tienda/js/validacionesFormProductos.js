@@ -62,19 +62,22 @@ function validarInputNombre(input, valor){
 // validar input precio producto
 function validarInputPrecio(input, valor){
     const regexPrecio = /^\d{1,7}(\.\d{1,2})?$/;
-    if (regexPrecio.test(valor)){
-        const valorNumerico = parseFloat(valor)
-        if(valorNumerico < 1){
-            textoErrorInput(input, "Precio mínimo: $1")
-            return false
-        }else if (valorNumerico > 9999999.99){
-            textoErrorInput(input, "Precio máximo: $9.999.999,99")
-            return false
-        }
-    }else{
+    //Convierto el valor a numero para hacer las comparaciones
+    const valorNumerico = parseFloat(valor)
+
+    if(valorNumerico < 1){
+        textoErrorInput(input, "Precio mínimo: $1")
+        return false
+    }else if (valorNumerico > 9999999.99){
+        textoErrorInput(input, "Precio máximo: $9.999.999,99")
+        return false
+    }
+
+    if (!regexPrecio.test(valor)){
         textoErrorInput(input, "El precio no es válido (Máximo 2 decimales)")
         return false
     }
+
     return true
 }
 
