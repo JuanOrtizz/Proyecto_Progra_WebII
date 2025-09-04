@@ -1,3 +1,4 @@
+/*Diseño contenedor general del producto*/
 .contenedor_producto{
     display:flex;
     justify-content:center;
@@ -7,33 +8,36 @@
     box-sizing:border-box;
 }
 
+/*Diseño del contenedor para la imagen del producto*/
 .contenedor_imagen_producto{
     flex: 1;
-    max-width: 40%;
+    max-width: 50%;
     background: rgb(241, 241, 241);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/*Diseño de la imagen*/
 .contenedor_imagen_producto img{
     max-width: 100%;
-    max-height: auto;
     max-height: 600px;
     object-fit: contain;
     display: block;
 }
 
+/*Diseño del contenedor de detalles del producto*/
 .contenedor_detalles_producto{
     display: flex;
     flex-direction: column;
     flex: 1;
-    max-width:60%;
+    max-width:50%;
     height: 100%;
     padding: 10px;
     gap: 10px;
 }
 
+/*Diseño para los textos del producto (Titulo, precio, descripcion)*/
 .contenedor_detalles_producto h2,
 .contenedor_detalles_producto h3,
 .contenedor_detalles_producto p{
@@ -43,24 +47,48 @@
     overflow-wrap: break-word;
 }
 
+/*Diseño para el titulo*/
 .contenedor_detalles_producto h2{
     font-size: 2rem;
 }
 
+/*Diseño para el precio*/
 .contenedor_detalles_producto h3{
     font-size: 1.6rem;
 }
 
+/*Diseño para la descripcion*/
 .contenedor_detalles_producto p{
     font-size: 1rem;
 }
 
+/*Diseño para el formulario de agregar producto al carrito*/
 .contenedor_detalles_producto form{
     display:flex;
     flex-direction: column;
     gap: 20px;
 }
 
+/*Diseño para contenedor del select (cantidad)*/
+.contenedor_input{
+    display:flex;
+    flex-direction:column;
+    gap: 5px;
+}
+
+/*Diseño para el label (Cantidad)*/
+.contenedor_input label{
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/*Diseño del select (Cantidad)*/
+.contenedor_input select{
+    padding:10px;
+    border-radius:5px;
+}
+
+/*Diseño para el boton agregar al carrito*/
 .contenedor_detalles_producto form button{
     padding: 10px;
     border-radius: 5px;
@@ -73,22 +101,99 @@
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+/*Diseño para el boton agregar al carrito HOVER*/
 .contenedor_detalles_producto form button:hover{
     background-color: var(--colorAzul);
     color:var(--colorBlanco);
 }
 
-.contenedor_input{
-    display:flex;
-    flex-direction:column;
-    gap: 5px;
+/*Media queries*/
+@media (max-width: 1024px){
+
+    /*Diseño contenedor general del producto*/
+    .contenedor_producto{
+        flex-direction:column;
+        padding: 80px 100px;
+    }
+
+    /*Diseño del contenedor para la imagen del producto*/
+    .contenedor_imagen_producto{
+        max-width: 100%;
+    }
+
+    /*Diseño de la imagen*/
+    .contenedor_imagen_producto img{
+        max-height: 500px;
+    }
+
+    /*Diseño del contenedor de detalles del producto*/
+    .contenedor_detalles_producto{
+        max-width:100%;
+    }
+
+    /*Diseño para el titulo*/
+    .contenedor_detalles_producto h2{
+        font-size: 1.8rem;
+    }
+
+    /*Diseño para el precio*/
+    .contenedor_detalles_producto h3{
+        font-size: 1.4rem;
+    }
+
+    /*Diseño para la descripcion*/
+    .contenedor_detalles_producto p{
+        font-size: 0.9rem;
+    }
+
+    /*Diseño para el label (Cantidad)*/
+    .contenedor_input label{
+        font-size: 0.9rem;
+    }
+
+    /*Diseño para el boton agregar al carrito*/
+    .contenedor_detalles_producto form button{
+        font-size: 0.9rem;
+    }
+}
+@media (max-width: 768px){
+
+    /*Diseño contenedor general del producto*/
+    .contenedor_producto{
+        gap: 10px;
+        padding: 60px 80px;
+    }
+
+    /*Diseño de la imagen*/
+    .contenedor_imagen_producto img{
+        max-height: 400px;
+    }
+
+    /*Diseño para el titulo*/
+    .contenedor_detalles_producto h2{
+        font-size: 1.6rem;
+    }
+
+    /*Diseño para el precio*/
+    .contenedor_detalles_producto h3{
+        font-size: 1.2rem;
+    }
+
+    /*Diseño para la descripcion*/
+    .contenedor_detalles_producto p{
+        font-size: 0.9rem;
+    }
+
+    /*Diseño para el formulario de agregar producto al carrito*/
+    .contenedor_detalles_producto form{
+        gap: 20px;
+    }
 }
 
-.contenedor_input label{
-    font-weight: 600;
-}
+@media (max-width: 480px){
 
-.contenedor_input select{
-    padding:10px;
-    border-radius:5px;
+    /*Diseño contenedor general del producto*/
+    .contenedor_producto{
+        padding: 60px 40px;
+    }
 }
